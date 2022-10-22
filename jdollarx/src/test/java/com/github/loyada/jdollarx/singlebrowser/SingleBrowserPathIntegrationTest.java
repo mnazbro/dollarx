@@ -43,7 +43,7 @@ public class SingleBrowserPathIntegrationTest {
     @Before
     public void setup() {
         driverMock = mock(ChromeDriver.class);
-        InBrowserSinglton.driver = driverMock;
+        InBrowserSingleton.driver = driverMock;
         webElement = mock(RemoteWebElement.class);
         webElement2 = mock(RemoteWebElement.class);
 

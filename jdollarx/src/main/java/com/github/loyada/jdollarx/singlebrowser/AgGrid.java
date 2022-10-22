@@ -29,14 +29,14 @@ import java.util.stream.IntStream;
 import static com.github.loyada.jdollarx.BasicPath.*;
 import static com.github.loyada.jdollarx.ElementProperties.*;
 import static com.github.loyada.jdollarx.singlebrowser.AgGrid.SortDirection.getAllClasses;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.clickAt;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.clickOn;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.findAll;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.getCssClasses;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollElement;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollElementWithStepOverride;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.clickAt;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.clickOn;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.findAll;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.getCssClasses;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scrollElement;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scrollElementWithStepOverride;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -318,7 +318,7 @@ public class AgGrid {
     private WebElement getWebElForHeader(Path columnHeader, boolean virtualized) {
         return virtualized ?
                 findHeader(columnHeader) :
-                InBrowserSinglton.find(columnHeader);
+                InBrowserSingleton.find(columnHeader);
     }
 
     private void findColumnMapping() {
@@ -378,7 +378,7 @@ public class AgGrid {
     }
 
     private void checkAndAdaptToCorrectAgGridVersion() {
-        if (!InBrowserSinglton.isPresent(tableHorizontalScroll)) {
+        if (!InBrowserSingleton.isPresent(tableHorizontalScroll)) {
             tableHorizontalScroll = tableViewport;
         }
     }
@@ -782,7 +782,7 @@ public class AgGrid {
 
     private List<Integer> getCurrentIndexes() {
         final Path anyRow = ROW.inside(tableContent).and(contains(AgGrid.CELL));
-        List<String> indexes = InBrowserSinglton.getAttributeOfAll(anyRow, "row-index");
+        List<String> indexes = InBrowserSingleton.getAttributeOfAll(anyRow, "row-index");
         return indexes.stream()
                 .map(Integer::parseInt)
                 .collect(toList());
@@ -850,7 +850,7 @@ public class AgGrid {
                 rowInTable,
                 (r, cell) -> r.that(contains(cell))
         );
-        InBrowserSinglton.find(theRow);
+        InBrowserSingleton.find(theRow);
         return theRow;
     }
 
@@ -865,7 +865,7 @@ public class AgGrid {
     }
 
     private void verifyAGridIsPresent() {
-        InBrowserSinglton.find(HEADER_CELL.inside(headerWrapper));
+        InBrowserSingleton.find(HEADER_CELL.inside(headerWrapper));
     }
 
     /**

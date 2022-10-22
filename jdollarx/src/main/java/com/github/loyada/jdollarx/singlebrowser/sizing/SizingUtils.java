@@ -6,8 +6,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
 import static java.lang.String.format;
 
 class SizingUtils {

@@ -6,7 +6,7 @@ import org.openqa.selenium.Point;
 import java.util.Map;
 
 import static com.github.loyada.jdollarx.BasicPath.html;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.*;
 import static com.github.loyada.jdollarx.singlebrowser.sizing.SizingUtils.*;
 
 /**

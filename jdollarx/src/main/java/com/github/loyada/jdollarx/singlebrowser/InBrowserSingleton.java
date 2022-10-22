@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit;
  * A simplified API built to interact with a single instance of a running browser.
  * See {@link com.github.loyada.jdollarx.InBrowser} for an API that supports multiple browser instances.
  */
-public final class InBrowserSinglton {
+public final class InBrowserSingleton {
     public static WebDriver driver;
     private static int implicitTimeout;
     private static TimeUnit timeoutUnit;
 
     /**
-     * Convert from a InBrowserSinglton to an non-singleton instance of InBrowser
+     * Convert from a InBrowserSingleton to an non-singleton instance of InBrowser
      * @return a new instance of InBrowser
      */
     private static InBrowser getBrowser() { return InBrowser.fromSingleton();}
@@ -335,8 +335,8 @@ public final class InBrowserSinglton {
      * @param unit similar to Selenium API
      */
     public static void setImplicitTimeout(int implicitTimeout, TimeUnit unit) {
-        InBrowserSinglton.implicitTimeout = implicitTimeout;
-        InBrowserSinglton.timeoutUnit = unit;
+        InBrowserSingleton.implicitTimeout = implicitTimeout;
+        InBrowserSingleton.timeoutUnit = unit;
         driver.manage().timeouts().implicitlyWait(implicitTimeout, unit);
     }
 

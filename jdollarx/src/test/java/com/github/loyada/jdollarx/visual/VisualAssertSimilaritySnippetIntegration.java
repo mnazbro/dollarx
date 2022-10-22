@@ -3,7 +3,7 @@ package com.github.loyada.jdollarx.visual;
 import com.github.loyada.jdollarx.DriverSetup;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
+import com.github.loyada.jdollarx.singlebrowser.SingletonBrowserImage;
 import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
 import com.github.loyada.jdollarx.singlebrowser.sizing.WindowResizer;
 import org.junit.After;
@@ -28,11 +28,11 @@ import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.element;
 import static com.github.loyada.jdollarx.BasicPath.header;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextContaining;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.captureWindowToFile;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scroll;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollElement;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollTo;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.captureWindowToFile;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scroll;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scrollElement;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scrollTo;
 import static java.util.Objects.requireNonNull;
 
 public class VisualAssertSimilaritySnippetIntegration {
@@ -81,7 +81,7 @@ public class VisualAssertSimilaritySnippetIntegration {
                 .that(hasAggregatedTextContaining("thePasswordInput"));
         Path pre = firstOccurrenceOf(element.inside(div.inside(el)));
         scrollElement(pre).right(50);
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
         img.assertImageIsSimilarToExpectedWithFilter(
                 filterCodeSnippetImage,
                 referenceCodeSnippetImage,
@@ -103,7 +103,7 @@ public class VisualAssertSimilaritySnippetIntegration {
         Path pre = firstOccurrenceOf(element.inside(div.inside(el)));
         scrollElement(pre).right(1);
 
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
         try (ElementResizer elementResizer = new ElementResizer(el, 660, 248)) {
 
             img.assertImageIsSimilarToExpectedWithFilter(
@@ -122,7 +122,7 @@ public class VisualAssertSimilaritySnippetIntegration {
         el = div
                 .withClass("highlight-java")
                 .that(hasAggregatedTextContaining("thePasswordInput"));
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
 //        File fileRuster = Files.createTempFile(java.nio.file.Path.of("/tmp"), "image-", ".png").toFile();
 //        img.captureToFile(fileRuster);
 //        ImageIO.write(img.getFuzzyErrorImage(referenceCodeSnippetImage).get(), "png", fileRuster);
@@ -145,7 +145,7 @@ public class VisualAssertSimilaritySnippetIntegration {
         el = div
                 .withClass("highlight-java")
                 .that(hasAggregatedTextContaining("thePasswordInput"));
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
 
         try (ElementResizer elementResizer = new ElementResizer(el, 660, 248)) {
             img.assertImageIsSimilarToExpectedWithFilter(
@@ -164,7 +164,7 @@ public class VisualAssertSimilaritySnippetIntegration {
         scrollTo(header.containing(anchor.withText("predefined elements")));
         el = div.withClass("highlight-java")
                 .that(hasAggregatedTextContaining("thePasswordInput"));
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
       //  File fileRuster = Files.createTempFile(java.nio.file.Path.of("/tmp"), "image-", ".png").toFile();
       //  img.captureToFile(fileRuster);
       //  ImageIO.write(img.getFuzzyErrorImage(referenceCodeSnippetImage).get(), "png", fileRuster);
@@ -185,7 +185,7 @@ public class VisualAssertSimilaritySnippetIntegration {
         scrollTo(header.containing(anchor.withText("predefined elements")));
         el = div.withClass("highlight-java")
                 .that(hasAggregatedTextContaining("thePasswordInput"));
-        SingltonBrowserImage img =  new SingltonBrowserImage(el);
+        SingletonBrowserImage img =  new SingletonBrowserImage(el);
         File fileRuster = Files.createTempFile(java.nio.file.Path.of("/tmp"), "image-", ".png").toFile();
         img.captureToFile(fileRuster);
         ImageIO.write(img.getFuzzyErrorImage(referenceCodeSnippetImage).get(), "png", fileRuster);
@@ -207,7 +207,7 @@ public class VisualAssertSimilaritySnippetIntegration {
 
         try (WindowResizer windowResizer = new WindowResizer(1400, 768)) {
             scrollTo(header.containing(anchor.withText("predefined elements")));
-            SingltonBrowserImage.assertWindowIsSimilarToExpected(refImage, 50);
+            SingletonBrowserImage.assertWindowIsSimilarToExpected(refImage, 50);
         }
     }
 
@@ -219,7 +219,7 @@ public class VisualAssertSimilaritySnippetIntegration {
 
         try (WindowResizer windowResizer = new WindowResizer(1400, 768)) {
             scrollTo(header.containing(anchor.withText("predefined elements")));
-            SingltonBrowserImage.assertWindowIsSimilarToExpectedWithFilter(
+            SingletonBrowserImage.assertWindowIsSimilarToExpectedWithFilter(
                     filterCodeSnippetImage,
                     refImage,
                     100);

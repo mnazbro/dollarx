@@ -1,7 +1,7 @@
 package com.github.loyada.jdollarx;
 
 
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 
 /**
  * A wrapper around Selenium WebDriver, used for interaction with the browser.
- * In case only a single instance of the browser is used, {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton}
+ * In case only a single instance of the browser is used, {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton}
  * offers a simpler API.
  */
 public class InBrowser {
@@ -39,9 +39,9 @@ public class InBrowser {
     }
 
     public static InBrowser fromSingleton() {
-        InBrowser browser = new InBrowser(InBrowserSinglton.driver);
-        browser.timeoutUnit = InBrowserSinglton.getTimeoutUnit();
-        browser.implicitTimeout = InBrowserSinglton.getImplicitTimeout();
+        InBrowser browser = new InBrowser(InBrowserSingleton.driver);
+        browser.timeoutUnit = InBrowserSingleton.getTimeoutUnit();
+        browser.implicitTimeout = InBrowserSingleton.getImplicitTimeout();
         return browser;
     }
 

@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.findAll;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.findAll;
 import static java.lang.String.format;
 
 /**
  * Several utilities that are useful for troubleshooting of existing browser pages.
- * The utilities assume the use of {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton}.
+ * The utilities assume the use of {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton}.
  */
 public final class DebugUtil {
 
@@ -39,7 +39,7 @@ public final class DebugUtil {
      * Get all matches of the path as a list of {@link Element}.
      * JSoup {@link Element} are a nice, readable way to examine DOM objects.
      * This is useful for troubleshooting.
-     * This method relies on {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton}, and on the library JSoup.
+     * This method relies on {@link com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton}, and on the library JSoup.
      *
      * @param el the path we are looking for
      * @return all the elements that match it in the current page

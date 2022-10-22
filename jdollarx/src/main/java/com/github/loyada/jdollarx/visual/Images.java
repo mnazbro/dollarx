@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
 import static java.lang.String.format;
 
 

@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.loyada.jdollarx.BasicPath.*;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isDisplayed;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isNotDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;

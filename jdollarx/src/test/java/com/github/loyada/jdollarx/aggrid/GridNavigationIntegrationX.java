@@ -18,9 +18,9 @@ import static com.github.loyada.jdollarx.BasicPath.button;
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextEqualTo;
 import static com.github.loyada.jdollarx.ElementProperties.hasId;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.clickOn;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.clickOn;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GridNavigationIntegrationX {

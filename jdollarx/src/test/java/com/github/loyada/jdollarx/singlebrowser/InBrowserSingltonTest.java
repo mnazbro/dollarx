@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class InBrowserSingltonTest {
+public class InBrowserSingletonTest {
     private WebDriver driverMock;
     private WebElement webElement;
 
@@ -25,7 +25,7 @@ public class InBrowserSingltonTest {
     public void setup() {
         driverMock = mock(WebDriver.class);
 
-        InBrowserSinglton.driver = driverMock;
+        InBrowserSingleton.driver = driverMock;
         webElement = mock(WebElement.class);
         when(driverMock.findElement(By.xpath("//div"))).thenReturn(webElement);
         when(driverMock.findElements(By.xpath("//div"))).thenReturn(Arrays.asList(webElement, webElement));
@@ -34,22 +34,22 @@ public class InBrowserSingltonTest {
 
     @Test
     public void basicFindElement() {
-        assertThat(InBrowserSinglton.find(BasicPath.div), is(equalTo(webElement)));
+        assertThat(InBrowserSingleton.find(BasicPath.div), is(equalTo(webElement)));
     }
 
     @Test
     public void basicFindElements() {
-        assertThat(InBrowserSinglton.findAll(BasicPath.div), is(equalTo(Arrays.asList(webElement, webElement))));
+        assertThat(InBrowserSingleton.findAll(BasicPath.div), is(equalTo(Arrays.asList(webElement, webElement))));
     }
 
     @Test
     public void numberOfAppearancesTest() {
-        assertThat(InBrowserSinglton.numberOfAppearances(BasicPath.div), is(2));
+        assertThat(InBrowserSingleton.numberOfAppearances(BasicPath.div), is(2));
     }
 
     @Test
     public void isPresentTest() {
-        assertThat(InBrowserSinglton.isPresent(BasicPath.div), is(equalTo(true)));
+        assertThat(InBrowserSingleton.isPresent(BasicPath.div), is(equalTo(true)));
     }
 
     @Test
@@ -57,32 +57,32 @@ public class InBrowserSingltonTest {
         when(webElement.isEnabled()).thenReturn(true);
         when(webElement.isDisplayed()).thenReturn(true);
 
-        InBrowserSinglton.clickOn(BasicPath.div);
+        InBrowserSingleton.clickOn(BasicPath.div);
         verify(webElement).click();
     }
 
     @Test
     public void isSelectedTest() {
         when(webElement.isSelected()).thenReturn(true);
-        assertThat(InBrowserSinglton.isSelected(BasicPath.div), is(equalTo(true)));
+        assertThat(InBrowserSingleton.isSelected(BasicPath.div), is(equalTo(true)));
         when(webElement.isSelected()).thenReturn(false);
-        assertThat(InBrowserSinglton.isSelected(BasicPath.div), is(equalTo(false)));
+        assertThat(InBrowserSingleton.isSelected(BasicPath.div), is(equalTo(false)));
     }
 
     @Test
     public void isDisplayedTest() {
         when(webElement.isDisplayed()).thenReturn(true);
-        assertThat(InBrowserSinglton.isDisplayed(BasicPath.div), is(equalTo(true)));
+        assertThat(InBrowserSingleton.isDisplayed(BasicPath.div), is(equalTo(true)));
         when(webElement.isDisplayed()).thenReturn(false);
-        assertThat(InBrowserSinglton.isDisplayed(BasicPath.div), is(equalTo(false)));
+        assertThat(InBrowserSingleton.isDisplayed(BasicPath.div), is(equalTo(false)));
     }
 
     @Test
     public void isEnabledTest() {
         when(webElement.isEnabled()).thenReturn(true);
-        assertThat(InBrowserSinglton.isEnabled(BasicPath.div), is(equalTo(true)));
+        assertThat(InBrowserSingleton.isEnabled(BasicPath.div), is(equalTo(true)));
         when(webElement.isEnabled()).thenReturn(false);
-        assertThat(InBrowserSinglton.isEnabled(BasicPath.div), is(equalTo(false)));
+        assertThat(InBrowserSingleton.isEnabled(BasicPath.div), is(equalTo(false)));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class InBrowserSingltonTest {
         when(driverMock.manage()).thenReturn(optionsMock);
         when(optionsMock.timeouts()).thenReturn(timeoutsMock);
 
-        InBrowserSinglton.setImplicitTimeout(5, TimeUnit.SECONDS);
-        assertThat(InBrowserSinglton.getImplicitTimeoutInMillisec(), is(equalTo(5000L)));
+        InBrowserSingleton.setImplicitTimeout(5, TimeUnit.SECONDS);
+        assertThat(InBrowserSingleton.getImplicitTimeoutInMillisec(), is(equalTo(5000L)));
     }
 }

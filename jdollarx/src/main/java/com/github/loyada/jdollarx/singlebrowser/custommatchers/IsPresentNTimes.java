@@ -6,7 +6,7 @@ import com.github.loyada.jdollarx.PathParsers;
 import com.github.loyada.jdollarx.RelationOperator;
 import com.github.loyada.jdollarx.custommatchers.CustomMatchersUtil;
 import com.github.loyada.jdollarx.custommatchers.CustomMatchersUtil.NTimesMatcher;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -43,15 +43,15 @@ public class IsPresentNTimes {
 
 
     public Matcher<Path> times(){
-        return new NTimesMatcher(nTimes, exactly, new InBrowser(InBrowserSinglton.driver));
+        return new NTimesMatcher(nTimes, exactly, new InBrowser(InBrowserSingleton.driver));
     }
 
     public Matcher<Path> timesOrMore(){
-        return new NTimesMatcher(nTimes, orMore, new InBrowser(InBrowserSinglton.driver));
+        return new NTimesMatcher(nTimes, orMore, new InBrowser(InBrowserSingleton.driver));
     }
 
     public Matcher<Path> timesOrLess(){
-        return new NTimesMatcher(nTimes, orLess, new InBrowser(InBrowserSinglton.driver));
+        return new NTimesMatcher(nTimes, orLess, new InBrowser(InBrowserSingleton.driver));
     }
 
 }

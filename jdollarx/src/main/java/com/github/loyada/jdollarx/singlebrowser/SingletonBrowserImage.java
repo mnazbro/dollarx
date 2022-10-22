@@ -17,7 +17,7 @@ import java.util.Optional;
  * It supports both accurate and fuzzy assertion.
  * It provides utility functions to display an element in a separate window.
  */
-public class SingltonBrowserImage {
+public class SingletonBrowserImage {
 
   private final Path el;
 
@@ -25,7 +25,7 @@ public class SingltonBrowserImage {
    *
    * @param el The element the represents the image we are interested in
    */
-  public SingltonBrowserImage(Path el) {
+  public SingletonBrowserImage(Path el) {
     this.el = el;
   }
 
@@ -248,7 +248,7 @@ public class SingltonBrowserImage {
   }
 
   private static InBrowser browser() {
-    return new InBrowser(InBrowserSinglton.driver);
+    return new InBrowser(InBrowserSingleton.driver);
   }
 
 }

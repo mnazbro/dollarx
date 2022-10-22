@@ -1,7 +1,7 @@
 package com.github.loyada.jdollarxexample;
 
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.*;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.Path;
 
@@ -12,8 +12,8 @@ import static com.github.loyada.jdollarx.ElementProperties.*;
 
 public class MeetupExample {
       public static void main(String[] argc) throws Operations.OperationFailedException {
-          InBrowserSinglton.driver = DriverSetup.createStandardChromeDriver();
-          InBrowserSinglton.driver.get("http://www.meetup.com");
+          InBrowserSingleton.driver = DriverSetup.createStandardChromeDriver();
+          InBrowserSingleton.driver.get("http://www.meetup.com");
 
           Path viewableItem = div.withClasses("carousel-cell", "is-selected");
           dragAndDrop(firstOccurrenceOf(viewableItem)).to(firstOccurrenceOf(viewableItem));
@@ -35,6 +35,6 @@ public class MeetupExample {
           clickAt(anchor.withText("timothy fagan"));
           clickAt(anchor.inside(span.that(hasId("member-profile-photo"))));
 
-          InBrowserSinglton.driver.quit();
+          InBrowserSingleton.driver.quit();
     }
 }

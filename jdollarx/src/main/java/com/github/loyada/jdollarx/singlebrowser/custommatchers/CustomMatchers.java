@@ -6,7 +6,7 @@ import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.custommatchers.HasText;
 import com.github.loyada.jdollarx.custommatchers.IsPresent;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,7 +30,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementSelection
 public final class CustomMatchers {
 
     private static Wait<WebDriver> getWaiter() {
-         return new FluentWait<>(InBrowserSinglton.driver).
+         return new FluentWait<>(InBrowserSingleton.driver).
         withTimeout(1, TimeUnit.SECONDS)
         .pollingEvery(100, TimeUnit.MILLISECONDS)
         .ignoring(NoSuchElementException.class);
@@ -65,7 +65,7 @@ public final class CustomMatchers {
      * @return a matcher that checks if an element is present in the browser
      */
     public static Matcher<Path> isPresent() {
-        return  new IsPresent().in(new InBrowser(InBrowserSinglton.driver));
+        return  new IsPresent().in(new InBrowser(InBrowserSingleton.driver));
     }
 
     /**
@@ -80,7 +80,7 @@ public final class CustomMatchers {
      * @return a custom Hamcrest matcher
      */
     public static Matcher<Path> hasText(String text) {
-        InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+        InBrowser browser = new InBrowser(InBrowserSingleton.driver);
         return new HasText(text).in(browser);
     }
 
@@ -94,7 +94,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isDisplayed() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {
@@ -137,7 +137,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isNotDisplayed() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {
@@ -181,7 +181,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isSelected() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {
@@ -223,7 +223,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isNotSelected() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {
@@ -266,7 +266,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isEnabled() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {
@@ -304,7 +304,7 @@ public final class CustomMatchers {
     public static Matcher<Path> isAbsent() {
         return new TypeSafeMatcher<Path>() {
             private Path el;
-            private final InBrowser browser = new InBrowser(InBrowserSinglton.driver);
+            private final InBrowser browser = new InBrowser(InBrowserSingleton.driver);
 
             @Override
             public String toString() {

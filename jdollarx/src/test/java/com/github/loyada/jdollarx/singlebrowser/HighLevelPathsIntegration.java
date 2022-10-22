@@ -24,9 +24,9 @@ import static com.github.loyada.jdollarx.BasicPath.input;
 import static com.github.loyada.jdollarx.BasicPath.option;
 import static com.github.loyada.jdollarx.BasicPath.select;
 import static com.github.loyada.jdollarx.ElementProperties.hasId;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.clickOn;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.clickOn;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isPresent;
 import static com.github.loyada.jdollarx.utils.PathShortNames.parentOf;
 import static java.lang.Boolean.*;
@@ -214,7 +214,7 @@ public class HighLevelPathsIntegration {
 
     @Test
     public void selectOption() {
-        InBrowserSinglton.setImplicitTimeout( 5000, MILLISECONDS);
+        InBrowserSingleton.setImplicitTimeout( 5000, MILLISECONDS);
         load_html_file("input-example3.html");
         Path myOption = option.withText("Wyoming");
         Path dropdown = select.parentOf(myOption);
@@ -291,7 +291,7 @@ public class HighLevelPathsIntegration {
     public void waiterWorks() {
         load_html_file("input-example3.html");
         Path disabledButton = BasicPath.lastOccurrenceOf(button);
-        InBrowserSinglton.setImplicitTimeout(3, TimeUnit.SECONDS);
+        InBrowserSingleton.setImplicitTimeout(3, TimeUnit.SECONDS);
         long start = System.currentTimeMillis();
         try {
             clickOn(disabledButton);
@@ -307,13 +307,13 @@ public class HighLevelPathsIntegration {
     public void waitUntilStableWaits() {
         load_html_file("input-example3.html");
         long start = System.currentTimeMillis();
-        int numOfIterations1 = InBrowserSinglton.waitUntilStable(element, 10);
+        int numOfIterations1 = InBrowserSingleton.waitUntilStable(element, 10);
         long timeElapsed1 = System.currentTimeMillis() - start;
         assertThat((int)timeElapsed1, lessThan(200));
-        InBrowserSinglton.driver.get("https://www.ag-grid.com/example.php");
+        InBrowserSingleton.driver.get("https://www.ag-grid.com/example.php");
         start = System.currentTimeMillis();
         // Now change the browser screen size repeatedly to change rows
-        int numOfIterations2 = InBrowserSinglton.waitUntilStable(AgGrid.rowOfGrid(div.that(hasId("myGrid"))), 5000);
+        int numOfIterations2 = InBrowserSingleton.waitUntilStable(AgGrid.rowOfGrid(div.that(hasId("myGrid"))), 5000);
         long timeElapsed2 = System.currentTimeMillis() - start;
         System.out.printf("numOfIterations2: %d, timeElapsed2: %d%n", numOfIterations2, timeElapsed2);
     }
@@ -321,23 +321,23 @@ public class HighLevelPathsIntegration {
     @Test
     public void countingElements() {
         load_html_file("input-example3.html");
-        int count = InBrowserSinglton.countAll(input);
-        assertThat(count, equalTo(InBrowserSinglton.findAll(input).size()));
+        int count = InBrowserSingleton.countAll(input);
+        assertThat(count, equalTo(InBrowserSingleton.findAll(input).size()));
     }
 
     @Test
     public void isCoveredWorks() {
         load_html_file("cover.html");
-        assertTrue(InBrowserSinglton.isCovered(button));
-        assertTrue(InBrowserSinglton.isCovered(div.withClass("container")));
-        assertFalse(InBrowserSinglton.isCovered(firstOccurrenceOf(div.withClass("box"))));
-        assertFalse(InBrowserSinglton.isCovered(firstOccurrenceOf(div.withClass("box"))));
+        assertTrue(InBrowserSingleton.isCovered(button));
+        assertTrue(InBrowserSingleton.isCovered(div.withClass("container")));
+        assertFalse(InBrowserSingleton.isCovered(firstOccurrenceOf(div.withClass("box"))));
+        assertFalse(InBrowserSingleton.isCovered(firstOccurrenceOf(div.withClass("box"))));
 
     }
     @Test
     public void timeoutOverrideWorks() {
         load_html_file("input-example3.html");
-        InBrowserSinglton.setImplicitTimeout(3, TimeUnit.SECONDS);
+        InBrowserSingleton.setImplicitTimeout(3, TimeUnit.SECONDS);
 
         long start = System.currentTimeMillis();
         try(TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(100, TimeUnit.MILLISECONDS)) {

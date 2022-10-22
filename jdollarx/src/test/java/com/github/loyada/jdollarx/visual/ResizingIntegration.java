@@ -2,7 +2,7 @@ package com.github.loyada.jdollarx.visual;
 
 import com.github.loyada.jdollarx.DriverSetup;
 import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
+import com.github.loyada.jdollarx.singlebrowser.SingletonBrowserImage;
 import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
 import com.github.loyada.jdollarx.singlebrowser.sizing.WindowResizer;
 import org.junit.AfterClass;
@@ -17,8 +17,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import static com.github.loyada.jdollarx.BasicPath.paragraph;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.find;
 import static com.github.loyada.jdollarx.visual.VisualAssertSimilarityIntegration.load_html_file;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
@@ -50,7 +50,7 @@ public class ResizingIntegration {
             try (ElementResizer elementResizer = new ElementResizer(myElement, 600, 400)) {
                 assertThat(elementResizer.getVisibleHeight(), equalTo(400L));
                 assertThat(elementResizer.getVisibleWidth(), equalTo(600L));
-                new SingltonBrowserImage(myElement).captureToFile(new File("tmpimge.png"));
+                new SingletonBrowserImage(myElement).captureToFile(new File("tmpimge.png"));
             }
             assertThat(windowResizer.getTotalHeight(), equalTo( 1000L));
             assertThat(windowResizer.getTotalWidth(), lessThanOrEqualTo(1420L));
@@ -64,7 +64,7 @@ public class ResizingIntegration {
             // I do it only because this is not a "real" test.
             Thread.sleep(1000);
             try (ElementResizer elementResizer = new ElementResizer(myElement, 700, 500)) {
-                new SingltonBrowserImage(myElement).captureToFile(new File("tmpimge.png"));
+                new SingletonBrowserImage(myElement).captureToFile(new File("tmpimge.png"));
             }
             BufferedImage img =  ImageIO.read(new FileInputStream(new File("tmpimge.png")));
             assertThat(img.getHeight(), equalTo(500));

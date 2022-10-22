@@ -22,7 +22,7 @@ public class Obscure  extends ElementObscure implements AutoCloseable {
      * @param element the path of the element to obscure
      */
     public Obscure(Path element) {
-        super(new InBrowser(InBrowserSinglton.driver), element);
+        super(new InBrowser(InBrowserSingleton.driver), element);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Obscure  extends ElementObscure implements AutoCloseable {
      * @param elements the elements to obscure
      */
     public Obscure(List<Path> elements) {
-        super(new InBrowser(InBrowserSinglton.driver), elements);
+        super(new InBrowser(InBrowserSingleton.driver), elements);
     }
 
     /**
@@ -42,6 +42,6 @@ public class Obscure  extends ElementObscure implements AutoCloseable {
      * @param strict in strict mode, if the element is not found, it throws am exception and stops
      */
     public Obscure(List<Path> elements, boolean strict) {
-        super(new InBrowser(InBrowserSinglton.driver), elements, strict);
+        super(new InBrowser(InBrowserSingleton.driver), elements, strict);
     }
 }

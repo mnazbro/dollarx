@@ -2,7 +2,7 @@ package com.github.loyada.jdollarx.aggrid;
 
 import com.github.loyada.jdollarx.*;
 import com.github.loyada.jdollarx.singlebrowser.AgGrid;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
 import org.hamcrest.Matchers;
 import org.junit.*;
@@ -17,8 +17,8 @@ import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.image;
 import static com.github.loyada.jdollarx.ElementProperties.*;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextEqualTo;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.clickOn;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.clickOn;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.AgGridMatchers.isPresent;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -29,7 +29,7 @@ public class GridAssertionIntegration {
     public static void setup() {
         driver = DriverSetup.createStandardChromeDriver();
         driver.get("https://www.ag-grid.com/example.php");
-        InBrowserSinglton.setImplicitTimeout(1, TimeUnit.MILLISECONDS);
+        InBrowserSingleton.setImplicitTimeout(1, TimeUnit.MILLISECONDS);
     }
 
 

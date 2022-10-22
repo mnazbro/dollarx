@@ -17,14 +17,14 @@ public class TemporaryChangedTimeout  implements AutoCloseable {
      * @param unit unit of the timeout
      */
     public TemporaryChangedTimeout(int implicitTimeout, TimeUnit unit) {
-        this.savedTimeout = InBrowserSinglton.getImplicitTimeout();
-        this.savedUnit = InBrowserSinglton.getTimeoutUnit();
-        InBrowserSinglton.setImplicitTimeout(implicitTimeout, unit);
+        this.savedTimeout = InBrowserSingleton.getImplicitTimeout();
+        this.savedUnit = InBrowserSingleton.getTimeoutUnit();
+        InBrowserSingleton.setImplicitTimeout(implicitTimeout, unit);
     }
 
 
     @Override
     public void close() throws Exception {
-        InBrowserSinglton.setImplicitTimeout(this.savedTimeout, this.savedUnit);
+        InBrowserSingleton.setImplicitTimeout(this.savedTimeout, this.savedUnit);
     }
 }

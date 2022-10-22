@@ -6,7 +6,7 @@ import com.github.loyada.jdollarx.highlevelapi.RadioInput;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 
 /**
  * High-level API to define a with high level instance of radio input

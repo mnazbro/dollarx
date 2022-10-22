@@ -3,7 +3,7 @@ package com.github.loyada.jdollarx.visual;
 import com.github.loyada.jdollarx.BasicPath;
 import com.github.loyada.jdollarx.DriverSetup;
 import com.github.loyada.jdollarx.InBrowser;
-import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
+import com.github.loyada.jdollarx.singlebrowser.SingletonBrowserImage;
 import com.github.loyada.jdollarx.singlebrowser.sizing.WindowResizer;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import static com.github.loyada.jdollarx.BasicPath.canvas;
 import static com.github.loyada.jdollarx.BasicPath.firstOccurrenceOf;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 
 public class CaptureElementIntegration {
 
@@ -52,7 +52,7 @@ public class CaptureElementIntegration {
       try (WindowResizer windowResizer = new WindowResizer(1600, 1200)) {
 
           File fileCanvas = Files.createTempFile(Path.of("/tmp"), "canvas-", ".png").toFile();
-          SingltonBrowserImage image = new SingltonBrowserImage(canvas);
+          SingletonBrowserImage image = new SingletonBrowserImage(canvas);
           image.captureCanvasToFile(fileCanvas);
           System.out.println("captured as canvas");
 
@@ -83,7 +83,7 @@ public class CaptureElementIntegration {
         driver.get(url);
 
         File imageFile = Files.createTempFile(Path.of("/tmp"), "image-", ".png").toFile();
-        SingltonBrowserImage image = new SingltonBrowserImage(firstOccurrenceOf(BasicPath.image));
+        SingletonBrowserImage image = new SingletonBrowserImage(firstOccurrenceOf(BasicPath.image));
         image.captureImgSourceToFile(imageFile);
         System.out.println("captured image source");
 

@@ -5,7 +5,7 @@ import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.highlevelapi.CheckBox;
 
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 
 
 

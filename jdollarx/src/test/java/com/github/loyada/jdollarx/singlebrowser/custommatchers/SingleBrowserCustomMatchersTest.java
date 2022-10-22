@@ -2,7 +2,7 @@ package com.github.loyada.jdollarx.singlebrowser.custommatchers;
 
 
 import com.github.loyada.jdollarx.BasicPath;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -38,7 +38,7 @@ public class SingleBrowserCustomMatchersTest {
     @Before
     public void setup() {
         driver = mock(WebDriver.class);
-        InBrowserSinglton.driver = driver;
+        InBrowserSingleton.driver = driver;
     }
 
     @Test

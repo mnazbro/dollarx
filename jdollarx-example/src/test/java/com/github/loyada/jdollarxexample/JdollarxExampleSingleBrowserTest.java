@@ -9,7 +9,7 @@ import org.junit.Test;
 import static com.github.loyada.jdollarx.BasicPath.*;
 
 import static com.github.loyada.jdollarx.Operations.*;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.*;
 
 import static com.github.loyada.jdollarx.ElementProperties.*;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isPresent;

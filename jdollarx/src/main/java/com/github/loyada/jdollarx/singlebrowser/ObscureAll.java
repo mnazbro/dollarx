@@ -22,7 +22,7 @@ public class ObscureAll extends AllElementsObscure implements AutoCloseable {
      * @param element the path of the element to obscure
      */
     public ObscureAll(Path element) {
-        super(new InBrowser(InBrowserSinglton.driver), element);
+        super(new InBrowser(InBrowserSingleton.driver), element);
     }
 
     /**
@@ -32,7 +32,7 @@ public class ObscureAll extends AllElementsObscure implements AutoCloseable {
      * @param elements the elements to obscure
      */
     public ObscureAll(List<Path> elements) {
-        super(new InBrowser(InBrowserSinglton.driver), elements);
+        super(new InBrowser(InBrowserSingleton.driver), elements);
     }
 
     /**
@@ -42,6 +42,6 @@ public class ObscureAll extends AllElementsObscure implements AutoCloseable {
      * @param strict in strict mode, if the element is not found, it throws am exception and stops
      */
     public ObscureAll(List<Path> elements, boolean strict) {
-        super(new InBrowser(InBrowserSinglton.driver), elements, strict);
+        super(new InBrowser(InBrowserSingleton.driver), elements, strict);
     }
 }

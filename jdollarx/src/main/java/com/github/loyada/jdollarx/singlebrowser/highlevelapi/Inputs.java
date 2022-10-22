@@ -3,13 +3,13 @@ package com.github.loyada.jdollarx.singlebrowser.highlevelapi;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.github.loyada.jdollarx.BasicPath.input;
 import static com.github.loyada.jdollarx.BasicPath.textNode;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
 
 /**
  * High-level API to define and interact with various input elements.
@@ -147,7 +147,7 @@ public final class Inputs {
 
     public static void selectDropdownOption(Path dropdownContent, Path myOption) {
         InBrowser browser = new InBrowser(driver);
-        browser.setImplicitTimeout((int)InBrowserSinglton.getImplicitTimeoutInMillisec(), TimeUnit.MILLISECONDS);
+        browser.setImplicitTimeout((int)InBrowserSingleton.getImplicitTimeoutInMillisec(), TimeUnit.MILLISECONDS);
         com.github.loyada.jdollarx.highlevelapi.Inputs.selectDropdownOption(
                 browser, dropdownContent, myOption);
     }

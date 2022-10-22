@@ -5,7 +5,7 @@ import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.singlebrowser.AgGrid;
 import com.github.loyada.jdollarx.singlebrowser.AgGridHighLevelOperations;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -127,6 +127,6 @@ public class AgGridMatchers {
     private static int getTimeoutInMillis() {
         return (timeoutMillisecOverride >= 0 ?
                 timeoutMillisecOverride :
-                (int)InBrowserSinglton.getImplicitTimeoutInMillisec());
+                (int)InBrowserSingleton.getImplicitTimeoutInMillisec());
     }
 }

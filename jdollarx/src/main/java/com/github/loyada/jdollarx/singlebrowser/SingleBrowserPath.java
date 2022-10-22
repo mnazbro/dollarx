@@ -198,7 +198,7 @@ public final class SingleBrowserPath implements Path {
      * @return the WebElement
      */
     public WebElement find() {
-        return InBrowserSinglton.find(path);
+        return InBrowserSingleton.find(path);
     }
 
     /**
@@ -206,7 +206,7 @@ public final class SingleBrowserPath implements Path {
      * @return a list of all WebElements with this path
      */
     public List<WebElement> findAll() {
-        return InBrowserSinglton.findAll(path);
+        return InBrowserSingleton.findAll(path);
     }
 
     /**
@@ -214,35 +214,35 @@ public final class SingleBrowserPath implements Path {
      * @return the WebElement that was scrolled to
      */
     public WebElement scrollTo() {
-        return InBrowserSinglton.scrollTo(path);
+        return InBrowserSingleton.scrollTo(path);
     }
 
     /**
      * hover over the element with this path in the browser
      */
     public void hover() {
-        InBrowserSinglton.hoverOver(path);
+        InBrowserSingleton.hoverOver(path);
     }
 
     /**
      * right click at the location of this element
      */
     public void rightClick() {
-        InBrowserSinglton.rightClick(path);
+        InBrowserSingleton.rightClick(path);
     }
 
     /**
      * click at the location of this element
      */
     public void click() {
-        InBrowserSinglton.clickAt(path);
+        InBrowserSingleton.clickAt(path);
     }
 
     /**
      * doubleclick at the location of this element
      */
     public void doubleClick() {
-        InBrowserSinglton.doubleClickOn(path);
+        InBrowserSingleton.doubleClickOn(path);
     }
 
     /**
@@ -257,7 +257,7 @@ public final class SingleBrowserPath implements Path {
      * @return DragAndDrop instance. See examples for usage.
      */
     public Operations.DragAndDrop dragAndDrop() {
-        return InBrowserSinglton.dragAndDrop(path);
+        return InBrowserSingleton.dragAndDrop(path);
     }
 
     /**
@@ -273,7 +273,7 @@ public final class SingleBrowserPath implements Path {
      * @throws Operations.OperationFailedException - operation failed. Includes root cause.
      */
     public void sendKeys(CharSequence... charsToSend) throws Operations.OperationFailedException {
-         InBrowserSinglton.sendKeys(charsToSend).to(path);
+         InBrowserSingleton.sendKeys(charsToSend).to(path);
     }
 
     @Override

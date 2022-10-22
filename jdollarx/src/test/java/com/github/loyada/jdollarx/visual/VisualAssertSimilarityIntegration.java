@@ -2,7 +2,7 @@ package com.github.loyada.jdollarx.visual;
 
 import com.github.loyada.jdollarx.DriverSetup;
 import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
+import com.github.loyada.jdollarx.singlebrowser.SingletonBrowserImage;
 import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,9 +23,9 @@ import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.header;
 import static com.github.loyada.jdollarx.BasicPath.paragraph;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextContaining;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scroll;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollTo;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scroll;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSingleton.scrollTo;
 import static java.util.Objects.requireNonNull;
 
 public class VisualAssertSimilarityIntegration {
@@ -67,7 +67,7 @@ public class VisualAssertSimilarityIntegration {
         scrollTo(paragraph.withTextContaining("Logical operations on properties"));
 
         try (ElementResizer elementResizer = new ElementResizer(el, 805, 409)) {
-            SingltonBrowserImage img = new SingltonBrowserImage(el);
+            SingletonBrowserImage img = new SingletonBrowserImage(el);
             img.captureToFile(new File("chart-ref.png"));
             img.assertImageIsSimilarToExpectedWithFilter(filterChartImage, referenceChartImage, 1000);
         }
@@ -88,7 +88,7 @@ public class VisualAssertSimilarityIntegration {
         scrollTo(paragraph.withTextContaining("Logical operations on properties"));
 
         try (ElementResizer elementResizer = new ElementResizer(el, 805, 409)) {
-            SingltonBrowserImage img = new SingltonBrowserImage(el);
+            SingletonBrowserImage img = new SingletonBrowserImage(el);
             img.assertImageIsEqualToExpectedWithShiftAndCrop(referenceChartImage, 1);
         }
     }
