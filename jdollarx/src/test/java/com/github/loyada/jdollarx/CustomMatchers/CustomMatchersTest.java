@@ -1,15 +1,5 @@
 package com.github.loyada.jdollarx.CustomMatchers;
 
-import com.github.loyada.jdollarx.ElementProperties;
-import com.github.loyada.jdollarx.InBrowser;
-import com.github.loyada.jdollarx.Operations;
-import com.github.loyada.jdollarx.custommatchers.CustomMatchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.html;
 import static com.github.loyada.jdollarx.BasicPath.span;
@@ -27,6 +17,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.github.loyada.jdollarx.ElementProperties;
+import com.github.loyada.jdollarx.InBrowser;
+import com.github.loyada.jdollarx.Operations;
+import com.github.loyada.jdollarx.custommatchers.CustomMatchers;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class CustomMatchersTest {
     InBrowser browser;
@@ -52,12 +52,8 @@ public class CustomMatchersTest {
     public void isPresentWithRetriesFailure() {
         when(browser.isPresent(any())).thenReturn(false);
         try {
-            Operations.doWithRetries(
-                    () -> assertThat(div, CustomMatchers.isPresentIn(browser)),
-                    5,
-                    10
+            Operations.doWithRetries(() -> assertThat(div, CustomMatchers.isPresentIn(browser)), 5, 10);
 
-            );
             fail("should fail");
         } catch (AssertionError e) {
             assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains div\n     but: div is absent")));
@@ -67,13 +63,9 @@ public class CustomMatchersTest {
 
     @Test
     public void isPresentWithRetriesSuccess() {
-        when(browser.isPresent(any())).thenReturn(false,false, true);
-        Operations.doWithRetries(
-                    () -> assertThat(div, CustomMatchers.isPresentIn(browser)),
-                    5,
-                    10
+        when(browser.isPresent(any())).thenReturn(false, false, true);
+        Operations.doWithRetries(() -> assertThat(div, CustomMatchers.isPresentIn(browser)), 5, 10);
 
-        );
         verify(browser, times(3)).isPresent(div);
     }
 
@@ -96,12 +88,15 @@ public class CustomMatchersTest {
 
     @Test
     public void isAbsentFailed() {
-        when(browser.isPresent(eq(html.that(ElementProperties.not(contains(div)))))).thenThrow(new NoSuchElementException(""));
+        when(browser.isPresent(eq(html.that(ElementProperties.not(contains(div))))))
+                .thenThrow(new NoSuchElementException(""));
         try {
             assertThat(div, CustomMatchers.isAbsentFrom(browser));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
         }
     }
 
@@ -129,19 +124,26 @@ public class CustomMatchersTest {
             assertThat(browser, CustomMatchers.hasNoElement(div));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
         }
     }
 
     @Test
     public void isPresentNTimesVariationFailed() {
-        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(exactly))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(exactly)))
+                .thenThrow(new NoSuchElementException(""));
         when(browser.numberOfAppearances(any())).thenReturn(1);
         try {
             assertThat(span.inside(div), CustomMatchers.isPresent(5).timesIn(browser));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains (span, inside div) 5 times\n     but: (span, inside div) appears 1 time")));
+            assertThat(
+                    e.getMessage(),
+                    is(
+                            equalTo(
+                                    "\nExpected: browser page contains (span, inside div) 5 times\n     but: (span, inside div) appears 1 time")));
         }
     }
 
@@ -155,18 +157,23 @@ public class CustomMatchersTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void isPresentNTimesInvalidInput() {
-            assertThat(span, CustomMatchers.isPresent(0).timesIn(browser));
+        assertThat(span, CustomMatchers.isPresent(0).timesIn(browser));
     }
 
     @Test
     public void isPresentNTimesOrMoreFailed() {
-        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(orMore))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(orMore)))
+                .thenThrow(new NoSuchElementException(""));
         when(browser.numberOfAppearances(any())).thenReturn(1);
         try {
             assertThat(span.inside(div), CustomMatchers.isPresent(5).timesOrMoreIn(browser));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains (span, inside div) at least 5 times\n     but: (span, inside div) appears 1 time")));
+            assertThat(
+                    e.getMessage(),
+                    is(
+                            equalTo(
+                                    "\nExpected: browser page contains (span, inside div) at least 5 times\n     but: (span, inside div) appears 1 time")));
         }
     }
 
@@ -176,16 +183,20 @@ public class CustomMatchersTest {
         assertThat(span.inside(div), CustomMatchers.isPresent(5).timesOrMoreIn(browser));
     }
 
-
     @Test
     public void isPresentNTimesOrLessFailed() {
-        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(orLess))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(any(), eq(5), eq(orLess)))
+                .thenThrow(new NoSuchElementException(""));
         when(browser.numberOfAppearances(any())).thenReturn(1);
         try {
             assertThat(span.inside(div), CustomMatchers.isPresent(5).timesOrLessIn(browser));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains (span, inside div) at most 5 times\n     but: (span, inside div) appears 1 time")));
+            assertThat(
+                    e.getMessage(),
+                    is(
+                            equalTo(
+                                    "\nExpected: browser page contains (span, inside div) at most 5 times\n     but: (span, inside div) appears 1 time")));
         }
     }
 
@@ -198,57 +209,71 @@ public class CustomMatchersTest {
     @Test
     public void hasElementNTimesFailed() {
         when(browser.numberOfAppearances(div)).thenReturn(2);
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(exactly))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(exactly)))
+                .thenThrow(new NoSuchElementException(""));
 
         try {
             assertThat(browser, CustomMatchers.hasElements(div).present(5).times());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains div 5 times\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: browser page contains div 5 times\n     but: div appears 2 times")));
         }
     }
 
     @Test
     public void hasElementNTimesSuccess() {
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(exactly))).thenReturn(mock(WebElement.class));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(exactly)))
+                .thenReturn(mock(WebElement.class));
         assertThat(browser, CustomMatchers.hasElements(div).present(2).times());
     }
 
     @Test
     public void hasElementNTimesOrMoreFailed() {
         when(browser.numberOfAppearances(div)).thenReturn(2);
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(orMore))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(orMore)))
+                .thenThrow(new NoSuchElementException(""));
 
         try {
             assertThat(browser, CustomMatchers.hasElements(div).present(5).timesOrMore());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains at least div 5 times\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo(
+                            "\nExpected: browser page contains at least div 5 times\n     but: div appears 2 times")));
         }
     }
 
     @Test
     public void hasElementNTimesOrMoreSuccess() {
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(orMore))).thenReturn(mock(WebElement.class));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(orMore)))
+                .thenReturn(mock(WebElement.class));
         assertThat(browser, CustomMatchers.hasElements(div).present(2).timesOrMore());
     }
 
     @Test
     public void hasElementNTimesOrLessFailed() {
         when(browser.numberOfAppearances(div)).thenReturn(2);
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(orLess))).thenThrow(new NoSuchElementException(""));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(5), eq(orLess)))
+                .thenThrow(new NoSuchElementException(""));
 
         try {
             assertThat(browser, CustomMatchers.hasElements(div).present(5).timesOrLess());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains at most div 5 times\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo(
+                            "\nExpected: browser page contains at most div 5 times\n     but: div appears 2 times")));
         }
     }
 
     @Test
     public void hasElementNTimesOrLessSuccess() {
-        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(orLess))).thenReturn(mock(WebElement.class));
+        when(browser.findPageWithNumberOfOccurrences(eq(div), eq(2), eq(orLess)))
+                .thenReturn(mock(WebElement.class));
         assertThat(browser, CustomMatchers.hasElements(div).present(2).timesOrLess());
     }
 
@@ -284,5 +309,4 @@ public class CustomMatchersTest {
             assertThat(e.getMessage(), is(equalTo("\nExpected: div is enabled\n     but: div is not enabled")));
         }
     }
-
 }

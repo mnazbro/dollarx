@@ -4,10 +4,9 @@ import com.github.loyada.jdollarx.BasicPath;
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.Path;
-import org.openqa.selenium.WebElement;
-
 import java.util.List;
 import java.util.Optional;
+import org.openqa.selenium.WebElement;
 
 /**
  * An implementation of {@link Path} that is tailored to a singleton browser, thus allows some additional API's
@@ -16,7 +15,7 @@ import java.util.Optional;
 public final class SingleBrowserPath implements Path {
     private final BasicPath path;
 
-    //elements
+    // elements
     public static final SingleBrowserPath element = new SingleBrowserPath(BasicPath.element);
     public static final SingleBrowserPath div = new SingleBrowserPath(BasicPath.div);
     public static final SingleBrowserPath span = new SingleBrowserPath(BasicPath.span);
@@ -24,8 +23,8 @@ public final class SingleBrowserPath implements Path {
     public static final SingleBrowserPath button = new SingleBrowserPath(BasicPath.button);
     public static final SingleBrowserPath unorderedList = new SingleBrowserPath(BasicPath.unorderedList);
     public static final SingleBrowserPath input = new SingleBrowserPath(BasicPath.input);
-    public static final SingleBrowserPath anchor =new SingleBrowserPath(BasicPath.anchor);
-    public static final SingleBrowserPath form =new SingleBrowserPath(BasicPath.form);
+    public static final SingleBrowserPath anchor = new SingleBrowserPath(BasicPath.anchor);
+    public static final SingleBrowserPath form = new SingleBrowserPath(BasicPath.form);
     public static final SingleBrowserPath html = new SingleBrowserPath(BasicPath.html);
     public static final SingleBrowserPath body = new SingleBrowserPath(BasicPath.body);
     public static final SingleBrowserPath header1 = new SingleBrowserPath(BasicPath.header1);
@@ -38,8 +37,7 @@ public final class SingleBrowserPath implements Path {
     public static final SingleBrowserPath svg = new SingleBrowserPath(BasicPath.svg);
     public static final SingleBrowserPath section = new SingleBrowserPath(BasicPath.section);
 
-
-    public SingleBrowserPath(BasicPath path){
+    public SingleBrowserPath(BasicPath path) {
         this.path = path;
     }
 
@@ -75,7 +73,7 @@ public final class SingleBrowserPath implements Path {
 
     @Override
     public Path describedBy(String description) {
-        return new SingleBrowserPath((BasicPath)path.describedBy(description));
+        return new SingleBrowserPath((BasicPath) path.describedBy(description));
     }
 
     @Override
@@ -83,112 +81,110 @@ public final class SingleBrowserPath implements Path {
         return path.insideTopLevel();
     }
 
-
     @Override
     public Path or(Path another) {
-        return new SingleBrowserPath((BasicPath)path.or(another));
+        return new SingleBrowserPath((BasicPath) path.or(another));
     }
 
     @Override
     public Path that(ElementProperty... prop) {
-        return new SingleBrowserPath((BasicPath)path.that(prop));
+        return new SingleBrowserPath((BasicPath) path.that(prop));
     }
 
     @Override
     public Path and(ElementProperty... prop) {
-        return new SingleBrowserPath((BasicPath)path.and(prop));
+        return new SingleBrowserPath((BasicPath) path.and(prop));
     }
 
     @Override
     public Path inside(Path another) {
-        return new SingleBrowserPath((BasicPath)path.inside(another));
+        return new SingleBrowserPath((BasicPath) path.inside(another));
     }
 
     @Override
     public Path afterSibling(Path another) {
-        return new SingleBrowserPath((BasicPath)path.afterSibling(another));
+        return new SingleBrowserPath((BasicPath) path.afterSibling(another));
     }
 
     @Override
     public Path immediatelyAfterSibling(Path another) {
-         return new SingleBrowserPath((BasicPath)path.immediatelyAfterSibling(another));
+        return new SingleBrowserPath((BasicPath) path.immediatelyAfterSibling(another));
     }
 
     @Override
     public Path after(Path another) {
-        return new SingleBrowserPath((BasicPath)path.after(another));
+        return new SingleBrowserPath((BasicPath) path.after(another));
     }
 
     @Override
     public Path beforeSibling(Path another) {
-        return new SingleBrowserPath((BasicPath)path.beforeSibling(another));
+        return new SingleBrowserPath((BasicPath) path.beforeSibling(another));
     }
 
     @Override
     public Path immediatelyBeforeSibling(Path another) {
-        return new SingleBrowserPath((BasicPath)path.immediatelyBeforeSibling(another));
+        return new SingleBrowserPath((BasicPath) path.immediatelyBeforeSibling(another));
     }
 
     @Override
     public Path before(Path another) {
-        return new SingleBrowserPath((BasicPath)path.before(another));
+        return new SingleBrowserPath((BasicPath) path.before(another));
     }
 
     @Override
     public Path childOf(Path another) {
-        return new SingleBrowserPath((BasicPath)path.childOf(another));
+        return new SingleBrowserPath((BasicPath) path.childOf(another));
     }
 
     @Override
     public Path parentOf(Path another) {
-        return new SingleBrowserPath((BasicPath)path.parentOf(another));
+        return new SingleBrowserPath((BasicPath) path.parentOf(another));
     }
 
     @Override
     public Path containing(Path another) {
-        return new SingleBrowserPath((BasicPath)path.containing(another));
+        return new SingleBrowserPath((BasicPath) path.containing(another));
     }
 
     @Override
     public Path contains(Path another) {
-        return new SingleBrowserPath((BasicPath)path.contains(another));
+        return new SingleBrowserPath((BasicPath) path.contains(another));
     }
 
     @Override
     public Path ancestorOf(Path another) {
-        return new SingleBrowserPath((BasicPath)path.ancestorOf(another));
+        return new SingleBrowserPath((BasicPath) path.ancestorOf(another));
     }
 
     @Override
     public Path descendantOf(Path another) {
-        return new SingleBrowserPath((BasicPath)path.descendantOf(another));
+        return new SingleBrowserPath((BasicPath) path.descendantOf(another));
     }
 
     @Override
     public Path withGlobalIndex(Integer index) {
-        return new SingleBrowserPath((BasicPath)path.withGlobalIndex(index));
+        return new SingleBrowserPath((BasicPath) path.withGlobalIndex(index));
     }
 
     @Override
     public Path withClass(String cssClass) {
-        return new SingleBrowserPath((BasicPath)path.withClass(cssClass));
+        return new SingleBrowserPath((BasicPath) path.withClass(cssClass));
     }
 
     @Override
     public Path withClasses(String... cssClasses) {
-        return new SingleBrowserPath((BasicPath)path.withClasses(cssClasses));
+        return new SingleBrowserPath((BasicPath) path.withClasses(cssClasses));
     }
 
     @Override
     public Path withText(String txt) {
-        return new SingleBrowserPath((BasicPath)path.withText(txt));
+        return new SingleBrowserPath((BasicPath) path.withText(txt));
     }
 
     @Override
     public Path withTextContaining(String txt) {
-        return new SingleBrowserPath((BasicPath)path.withTextContaining(txt));
+        return new SingleBrowserPath((BasicPath) path.withTextContaining(txt));
     }
-
 
     /////////// ACTIONS ////////////////////////////////////
     ////////////////////////////////////////////////////////
@@ -273,7 +269,7 @@ public final class SingleBrowserPath implements Path {
      * @throws Operations.OperationFailedException - operation failed. Includes root cause.
      */
     public void sendKeys(CharSequence... charsToSend) throws Operations.OperationFailedException {
-         InBrowserSinglton.sendKeys(charsToSend).to(path);
+        InBrowserSinglton.sendKeys(charsToSend).to(path);
     }
 
     @Override

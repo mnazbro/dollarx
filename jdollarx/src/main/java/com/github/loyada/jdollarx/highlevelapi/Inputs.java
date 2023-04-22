@@ -1,16 +1,5 @@
 package com.github.loyada.jdollarx.highlevelapi;
 
-import com.github.loyada.jdollarx.InBrowser;
-import com.github.loyada.jdollarx.Operations.OperationFailedException;
-import com.github.loyada.jdollarx.Path;
-import com.google.common.base.Strings;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import static com.github.loyada.jdollarx.BasicPath.*;
 import static com.github.loyada.jdollarx.ElementProperties.contains;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextEqualTo;
@@ -20,6 +9,16 @@ import static com.github.loyada.jdollarx.HighLevelPaths.hasType;
 import static com.github.loyada.jdollarx.NPath.exactly;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import com.github.loyada.jdollarx.InBrowser;
+import com.github.loyada.jdollarx.Operations.OperationFailedException;
+import com.github.loyada.jdollarx.Path;
+import com.google.common.base.Strings;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 
 /**
  * High-level API to define and interact with various input elements.
@@ -58,10 +57,10 @@ public final class Inputs {
         Path fieldNameEl = element.that(hasAggregatedTextEqualTo(fieldName)).and(not(contains(input)));
 
         // note: we ensure the ancestor is not too high up in the DOM hierarchy
-        Path ancestor = element.afterSibling(fieldNameEl).that(
-                contains(exactly(1).occurrencesOf(input)));
-        return (input.inside(ancestor)).or(
-                input.afterSibling(fieldNameEl))
+        Path ancestor =
+                element.afterSibling(fieldNameEl).that(contains(exactly(1).occurrencesOf(input)));
+        return (input.inside(ancestor))
+                .or(input.afterSibling(fieldNameEl))
                 .describedBy(String.format("input following field \"%s\"", fieldName));
     }
 
@@ -74,10 +73,9 @@ public final class Inputs {
         Path fieldNameEl = element.that(hasAggregatedTextEqualTo(fieldName));
 
         // note: we ensure the ancestor is not too high up in the DOM hierarchy
-        Path ancestor = element.immediatelyBeforeSibling(fieldNameEl).that(
-                contains(exactly(1).occurrencesOf(input)));
-        return lastOccurrenceOf((input.inside(ancestor)).or(
-                input.immediatelyBeforeSibling(fieldNameEl)))
+        Path ancestor = element.immediatelyBeforeSibling(fieldNameEl)
+                .that(contains(exactly(1).occurrencesOf(input)));
+        return lastOccurrenceOf((input.inside(ancestor)).or(input.immediatelyBeforeSibling(fieldNameEl)))
                 .describedBy(String.format("input before field \"%s\"", fieldName));
     }
 
@@ -148,25 +146,19 @@ public final class Inputs {
         Inputs.clearInputInternal(browser, field, false);
     }
 
-
     private static void sendDeletionKeys(InBrowser browser, int length, Path field) throws OperationFailedException {
-        String keysBack = IntStream.range(0, length)
-                .mapToObj(i-> Keys.BACK_SPACE)
-                .collect(Collectors.joining());
-        String keysDel = IntStream.range(0, length)
-            .mapToObj(i-> Keys.DELETE)
-                .collect(Collectors.joining());
-        browser.sendKeys(keysBack+keysDel).to(field);
+        String keysBack =
+                IntStream.range(0, length).mapToObj(i -> Keys.BACK_SPACE).collect(Collectors.joining());
+        String keysDel = IntStream.range(0, length).mapToObj(i -> Keys.DELETE).collect(Collectors.joining());
+        browser.sendKeys(keysBack + keysDel).to(field);
     }
 
-    private static void sendDeletionKeys(InBrowser browser, int length, WebElement field) throws OperationFailedException {
-        String keysBack = IntStream.range(0, length)
-                .mapToObj(i-> Keys.BACK_SPACE)
-                .collect(Collectors.joining());
-        String keysDel = IntStream.range(0, length)
-                .mapToObj(i-> Keys.DELETE)
-                .collect(Collectors.joining());
-        browser.sendKeys(keysBack+keysDel).to(field);
+    private static void sendDeletionKeys(InBrowser browser, int length, WebElement field)
+            throws OperationFailedException {
+        String keysBack =
+                IntStream.range(0, length).mapToObj(i -> Keys.BACK_SPACE).collect(Collectors.joining());
+        String keysDel = IntStream.range(0, length).mapToObj(i -> Keys.DELETE).collect(Collectors.joining());
+        browser.sendKeys(keysBack + keysDel).to(field);
     }
 
     private static void clearInputInternal(InBrowser browser, Path field, boolean enforce)
@@ -192,12 +184,12 @@ public final class Inputs {
         boolean anythingLeft = true;
         int num_of_tries_left = enforce ? MAX_NUM_OF_TRIES_TO_CLEAR_INPUT : 3;
         int lastLength = Integer.MAX_VALUE;
-        while(anythingLeft && num_of_tries_left>0) {
-            num_of_tries_left-=1;
+        while (anythingLeft && num_of_tries_left > 0) {
+            num_of_tries_left -= 1;
             String currentValue = browser.find(field).getAttribute("value");
-            if (enforce && (currentValue.length()>lastLength || num_of_tries_left<1))
-                throw new OperationFailedException("clearing input does not work. Is this an" +
-                        " autocomplete or another custom input?");
+            if (enforce && (currentValue.length() > lastLength || num_of_tries_left < 1))
+                throw new OperationFailedException(
+                        "clearing input does not work. Is this an" + " autocomplete or another custom input?");
             lastLength = currentValue.length();
 
             if (!Strings.isNullOrEmpty(currentValue)) {
@@ -212,8 +204,7 @@ public final class Inputs {
         }
     }
 
-    private static void clearInputInternal(InBrowser browser, WebElement field)
-            throws OperationFailedException {
+    private static void clearInputInternal(InBrowser browser, WebElement field) throws OperationFailedException {
         // sometimes clear() works. Try that first.
         String value = field.getAttribute("value");
         if (Strings.isNullOrEmpty(value)) {
@@ -235,12 +226,12 @@ public final class Inputs {
         boolean anythingLeft = true;
         int num_of_tries_left = MAX_NUM_OF_TRIES_TO_CLEAR_INPUT;
         int lastLength = Integer.MAX_VALUE;
-        while(anythingLeft && num_of_tries_left>0) {
-            num_of_tries_left-=1;
+        while (anythingLeft && num_of_tries_left > 0) {
+            num_of_tries_left -= 1;
             String currentValue = field.getAttribute("value");
-            if (currentValue.length()>lastLength || num_of_tries_left<1)
-                throw new OperationFailedException("clearing input does not work. Is this an" +
-                        " autocomplete or another custom input?");
+            if (currentValue.length() > lastLength || num_of_tries_left < 1)
+                throw new OperationFailedException(
+                        "clearing input does not work. Is this an" + " autocomplete or another custom input?");
             lastLength = currentValue.length();
 
             if (!Strings.isNullOrEmpty(currentValue)) {
@@ -254,8 +245,6 @@ public final class Inputs {
             anythingLeft = currentValue.length() > 0;
         }
     }
-
-
 
     /**
      * Perform a selection of an option in a select element.
@@ -279,8 +268,7 @@ public final class Inputs {
      * @param text the text to enter in the input field
      * @throws OperationFailedException failed to perform the operation
      */
-    public static void changeInputValue(InBrowser browser, Path field, String text)
-            throws OperationFailedException {
+    public static void changeInputValue(InBrowser browser, Path field, String text) throws OperationFailedException {
         browser.clickOn(field);
         clearInput(browser, field);
         browser.sendKeys(text).to(field);
@@ -340,7 +328,7 @@ public final class Inputs {
      */
     public static void changeInputValueWithEnter(InBrowser browser, Path field, String text)
             throws OperationFailedException {
-       changeInputValue(browser, field, text);
+        changeInputValue(browser, field, text);
         browser.sendKeys(Keys.ENTER).to(field);
     }
 
@@ -377,8 +365,9 @@ public final class Inputs {
         Path dropdown = element.parentOf(dropdownContent);
         Predicate<WebElement> isVisible = el -> {
             WebElement visibleContent = browser.find(dropdown);
-            int bottomOfList = visibleContent.getSize().height + visibleContent.getLocation().getY();
-            return el.isDisplayed() && (el.getLocation().y  + el.getSize().height <= bottomOfList);
+            int bottomOfList = visibleContent.getSize().height
+                    + visibleContent.getLocation().getY();
+            return el.isDisplayed() && (el.getLocation().y + el.getSize().height <= bottomOfList);
         };
 
         browser.scrollElement(dropdown).toTopCorner();

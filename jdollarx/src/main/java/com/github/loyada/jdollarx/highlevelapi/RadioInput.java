@@ -1,21 +1,20 @@
 package com.github.loyada.jdollarx.highlevelapi;
 
+import static com.github.loyada.jdollarx.BasicPath.input;
+import static com.github.loyada.jdollarx.highlevelapi.Inputs.*;
+
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
-import org.openqa.selenium.NoSuchElementException;
-
 import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.BasicPath.input;
-import static com.github.loyada.jdollarx.highlevelapi.Inputs.*;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * High-level API to define and interact with.
  * High level API's are not optimized. A definition of an element may interact with the browser
  * to understand the structure of the DOM.
  */
-public class RadioInput{
+public class RadioInput {
     private final String asString;
     private Path radio;
     private final InBrowser browser;
@@ -27,7 +26,7 @@ public class RadioInput{
     public RadioInput(InBrowser browser, Path thePath) {
         this.radio = thePath;
         this.asString = "radio button with definition of " + thePath;
-        this.browser =browser;
+        this.browser = browser;
     }
 
     /**
@@ -37,7 +36,7 @@ public class RadioInput{
     public RadioInput(InBrowser browser, ElementProperty... props) {
         this.radio = radioType(input).that(props);
         this.asString = input.describedBy("radio button").that(props).toString();
-        this.browser =browser;
+        this.browser = browser;
     }
 
     /**
@@ -50,11 +49,12 @@ public class RadioInput{
      * @param timeUnit - the current time unit of the implicit wait
      * @return a RadioInput instance
      */
-    public static RadioInput withTextUnknownDOM(InBrowser browser, String text, int originalImplicitWait, TimeUnit timeUnit) {
-        browser.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.MILLISECONDS );
+    public static RadioInput withTextUnknownDOM(
+            InBrowser browser, String text, int originalImplicitWait, TimeUnit timeUnit) {
+        browser.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.MILLISECONDS);
         try {
-           Path labeledInput =  inputForLabel(browser, text);
-           return new RadioInput(browser, radioType(labeledInput.or(inputFollowedByUnlabeledText(text))));
+            Path labeledInput = inputForLabel(browser, text);
+            return new RadioInput(browser, radioType(labeledInput.or(inputFollowedByUnlabeledText(text))));
         } catch (NoSuchElementException e) {
             return withUnlabeledText(browser, text);
         } finally {

@@ -1,16 +1,5 @@
 package com.github.loyada.jdollarx.singlebrowser;
 
-import com.github.loyada.jdollarx.Operations;
-import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.highlevelapi.Inputs;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
-
 import static com.github.loyada.jdollarx.BasicPath.element;
 import static com.github.loyada.jdollarx.BasicPath.input;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextEqualTo;
@@ -24,14 +13,24 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.github.loyada.jdollarx.Operations;
+import com.github.loyada.jdollarx.Path;
+import com.github.loyada.jdollarx.singlebrowser.highlevelapi.Inputs;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
 /**
  * High level utilities for definitions of simplified grids and operations
  */
 public final class AgGridHighLevelOperations {
-    final private Path gridContainer;
+    private final Path gridContainer;
     public static int retry_duration_in_millisec = 500;
 
-    public AgGridHighLevelOperations(Path gridContainer){
+    public AgGridHighLevelOperations(Path gridContainer) {
         this.gridContainer = gridContainer;
     }
 
@@ -113,8 +112,7 @@ public final class AgGridHighLevelOperations {
     public Path clickOnColumnWithValue(String columnName, String value) {
         AgGrid grid = getMinimalGrid(columnName);
         return retry_if_needed(() -> {
-            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName,
-                    hasAggregatedTextEqualTo(value));
+            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName, hasAggregatedTextEqualTo(value));
             clickAt(myCell);
             return myCell;
         });
@@ -131,13 +129,11 @@ public final class AgGridHighLevelOperations {
     public Path clickOnTextInsideColumnWithValue(String columnName, String value) {
         AgGrid grid = getMinimalGrid(columnName);
         return retry_if_needed(() -> {
-            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName,
-                    hasAggregatedTextEqualTo(value));
+            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName, hasAggregatedTextEqualTo(value));
             clickAt(element.inside(myCell).that(hasSomeText).or(myCell.withText(value)));
             return myCell;
         });
     }
-
 
     /**
      * Ensure a specific cell is visible and return a Path to it
@@ -168,9 +164,7 @@ public final class AgGridHighLevelOperations {
      * @param rowNumber row number
      * @return the cell
      */
-    public Path goToEditModeInCell(
-            String columnName,
-            int rowNumber) {
+    public Path goToEditModeInCell(String columnName, int rowNumber) {
         AgGrid grid = getMinimalGrid(columnName);
         return retry_if_needed(() -> {
             Path myCell = grid.ensureVisibilityOfRowWithIndexAndColumn(rowNumber - 1, columnName);
@@ -186,13 +180,10 @@ public final class AgGridHighLevelOperations {
      * @param value value of cell
      * @return the cell
      */
-    public Path goToEditModeInCell(
-            String columnName,
-            String value) {
+    public Path goToEditModeInCell(String columnName, String value) {
         AgGrid grid = getMinimalGrid(columnName);
         return retry_if_needed(() -> {
-            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName,
-                    hasAggregatedTextEqualTo(value));
+            Path myCell = grid.ensureVisibilityOfCellInColumn(columnName, hasAggregatedTextEqualTo(value));
 
             int index = grid.getRowIndexOfCell(myCell);
             doubleClickOn(myCell);
@@ -206,10 +197,7 @@ public final class AgGridHighLevelOperations {
      * @param rowNumber row number
      * @param option option to choose
      */
-    public void selectInCell(
-            String columnName,
-            int rowNumber,
-            String option) {
+    public void selectInCell(String columnName, int rowNumber, String option) {
         retry_if_needed(() -> {
             goToEditModeInCell(columnName, rowNumber);
             Path myOption = AgGrid.AgListOption.that(hasAggregatedTextEqualTo(option));
@@ -225,10 +213,10 @@ public final class AgGridHighLevelOperations {
      * @return the Path of the row
      */
     public Path getRowOfDisplayedCell(Path cell) {
-        Path row = AgGrid.rowOfGrid(this.gridContainer)
-                .containing(cell);
+        Path row = AgGrid.rowOfGrid(this.gridContainer).containing(cell);
         int rowIndex = AgGrid.getRowIndex(row);
-        return AgGrid.rowOfGrid(this.gridContainer).that(AgGrid.hasIndex(rowIndex))
+        return AgGrid.rowOfGrid(this.gridContainer)
+                .that(AgGrid.hasIndex(rowIndex))
                 .describedBy(String.format("grid row, containing: %s", cell));
     }
 
@@ -238,10 +226,8 @@ public final class AgGridHighLevelOperations {
      * @param rowNumber row number
      * @param newValue new Value
      */
-    public void changeSimpleInputValueByRowNumber(
-            String columnName,
-            int rowNumber,
-            String newValue) throws Operations.OperationFailedException {
+    public void changeSimpleInputValueByRowNumber(String columnName, int rowNumber, String newValue)
+            throws Operations.OperationFailedException {
         Path myCell = goToEditModeInCell(columnName, rowNumber);
         retry_if_needed(() -> {
             try {
@@ -258,10 +244,7 @@ public final class AgGridHighLevelOperations {
      * @param oldValue row number
      * @param newValue new Value
      */
-    public void changeSimpleInputValueByValue(
-            String columnName,
-            String oldValue,
-            String newValue) {
+    public void changeSimpleInputValueByValue(String columnName, String oldValue, String newValue) {
         Path myCell = goToEditModeInCell(columnName, oldValue);
         retry_if_needed(() -> {
             try {
@@ -312,7 +295,7 @@ public final class AgGridHighLevelOperations {
     }
 
     private static void retry_if_needed(Runnable runnable) {
-        Operations.doWithRetries(runnable, 5, retry_duration_in_millisec/5 );
+        Operations.doWithRetries(runnable, 5, retry_duration_in_millisec / 5);
     }
 
     private static <T> T retry_if_needed(Callable<T> callable) {

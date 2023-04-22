@@ -1,5 +1,7 @@
 package com.github.loyada.jdollarx.custommatchers;
 
+import static com.github.loyada.jdollarx.RelationOperator.opAsEnglish;
+import static java.lang.String.format;
 
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
@@ -8,9 +10,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.openqa.selenium.NoSuchElementException;
-
-import static com.github.loyada.jdollarx.RelationOperator.opAsEnglish;
-import static java.lang.String.format;
 
 /**
  * Internal implementation - not to be instantiated directly.
@@ -40,26 +39,28 @@ public class HasElementNTimes {
 
         @Override
         public String toString() {
-            return format("browser page contains%s%s %d time%s",
-                    opAsEnglish(relationOperator), CustomMatchersUtil.wrap(path), nTimes, nTimes!=1 ? "s" : "");
+            return format(
+                    "browser page contains%s%s %d time%s",
+                    opAsEnglish(relationOperator), CustomMatchersUtil.wrap(path), nTimes, nTimes != 1 ? "s" : "");
         }
 
         @Override
         public void describeTo(final Description description) {
-            description.appendText(format("browser page contains%s%s %d time%s",
-                    opAsEnglish(relationOperator), CustomMatchersUtil.wrap(path), nTimes, nTimes!=1 ? "s" : ""));
+            description.appendText(format(
+                    "browser page contains%s%s %d time%s",
+                    opAsEnglish(relationOperator), CustomMatchersUtil.wrap(path), nTimes, nTimes != 1 ? "s" : ""));
         }
 
         @Override
-        protected void describeMismatchSafely(final InBrowser browser, final
-        Description mismatchDescription) {
-            mismatchDescription.appendText(CustomMatchersUtil.wrap(path) + " appears " + foundNTimes + " time" + (foundNTimes!=1 ? "s" : ""));
+        protected void describeMismatchSafely(final InBrowser browser, final Description mismatchDescription) {
+            mismatchDescription.appendText(CustomMatchersUtil.wrap(path) + " appears " + foundNTimes + " time"
+                    + (foundNTimes != 1 ? "s" : ""));
         }
 
         @Override
         protected boolean matchesSafely(final InBrowser browser) {
             foundNTimes = browser.numberOfAppearances(path);
-            try{
+            try {
                 browser.findPageWithNumberOfOccurrences(path, nTimes, relationOperator);
                 return true;
             } catch (NoSuchElementException e) {
@@ -68,11 +69,12 @@ public class HasElementNTimes {
             }
         }
     }
+
     private final Path path;
     private final int nTimes;
 
     public HasElementNTimes(final Path path, final int nTimes) {
-       this.path = path;
+        this.path = path;
         this.nTimes = nTimes;
     }
 
@@ -99,5 +101,4 @@ public class HasElementNTimes {
     public Matcher<InBrowser> timesOrLess() {
         return new NTimesMatcher(path, nTimes, RelationOperator.orLess);
     }
-
 }

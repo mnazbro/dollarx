@@ -1,21 +1,17 @@
 package com.github.loyada.jdollarxexample;
 
-import org.openqa.selenium.logging.LoggingPreferences;
+import static java.util.logging.Level.*;
+import static org.openqa.selenium.logging.LogType.*;
+import static org.openqa.selenium.phantomjs.PhantomJSDriverService.*;
 
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import static org.openqa.selenium.phantomjs.PhantomJSDriverService.*;
-
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import static org.openqa.selenium.logging.LogType.*;
-import static java.util.logging.Level.*;
 
 public class DriverSetup {
     final String CHROME = "chrome";
@@ -33,7 +29,6 @@ public class DriverSetup {
         prefs.enable(BROWSER, ALL);
         return prefs;
     }
-
 
     private DesiredCapabilities withLogSetup(DesiredCapabilities capabilities) {
         if (logEnabled) {
@@ -75,12 +70,10 @@ public class DriverSetup {
         return driver;
     }
 
-
     public static WebDriver createStandardChromeDriver() {
         final String driverPath = System.getenv().get("CHROMEDRIVERPATH");
         WebDriver driver = new DriverSetup(true).getCorrectDriver("chrome", driverPath);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
-
 }

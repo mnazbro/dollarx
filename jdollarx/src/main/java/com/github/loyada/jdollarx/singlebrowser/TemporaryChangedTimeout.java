@@ -2,11 +2,10 @@ package com.github.loyada.jdollarx.singlebrowser;
 
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * An Autocloaseable that allows to temporarily change the implicit timeout
  */
-public class TemporaryChangedTimeout  implements AutoCloseable {
+public class TemporaryChangedTimeout implements AutoCloseable {
     private final int savedTimeout;
     private final TimeUnit savedUnit;
 
@@ -21,7 +20,6 @@ public class TemporaryChangedTimeout  implements AutoCloseable {
         this.savedUnit = InBrowserSinglton.getTimeoutUnit();
         InBrowserSinglton.setImplicitTimeout(implicitTimeout, unit);
     }
-
 
     @Override
     public void close() throws Exception {

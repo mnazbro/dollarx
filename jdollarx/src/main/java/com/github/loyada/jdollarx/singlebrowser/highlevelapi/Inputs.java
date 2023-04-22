@@ -1,15 +1,14 @@
 package com.github.loyada.jdollarx.singlebrowser.highlevelapi;
 
+import static com.github.loyada.jdollarx.BasicPath.input;
+import static com.github.loyada.jdollarx.BasicPath.textNode;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-
 import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.BasicPath.input;
-import static com.github.loyada.jdollarx.BasicPath.textNode;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
 
 /**
  * High-level API to define and interact with various input elements.
@@ -55,8 +54,7 @@ public final class Inputs {
      * @param option The option text
      */
     public static void selectInFieldWithLabel(String labelText, String option) {
-        com.github.loyada.jdollarx.highlevelapi.Inputs.selectInFieldWithLabel(
-                new InBrowser(driver), labelText, option);
+        com.github.loyada.jdollarx.highlevelapi.Inputs.selectInFieldWithLabel(new InBrowser(driver), labelText, option);
     }
 
     /**
@@ -66,8 +64,7 @@ public final class Inputs {
      * @throws Operations.OperationFailedException failed to perform the operation
      */
     public static void changeInputValue(Path field, String text) throws Operations.OperationFailedException {
-        com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValue(
-                new InBrowser(driver), field, text);
+        com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValue(new InBrowser(driver), field, text);
     }
 
     /**
@@ -76,7 +73,8 @@ public final class Inputs {
      * @param text the text to enter in the input field
      * @throws Operations.OperationFailedException failed to perform the operation
      */
-    public static void changeInputValueAssumingElementIsNotReplaced(Path field, String text) throws Operations.OperationFailedException {
+    public static void changeInputValueAssumingElementIsNotReplaced(Path field, String text)
+            throws Operations.OperationFailedException {
         com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueAssumingElementIsNotReplaced(
                 new InBrowser(driver), field, text);
     }
@@ -87,7 +85,8 @@ public final class Inputs {
      * @param text the text to enter in the input field
      * @throws Operations.OperationFailedException failed to perform the operation
      */
-    public static void changeInputValueWithApproximateDeletion(Path field, String text) throws Operations.OperationFailedException {
+    public static void changeInputValueWithApproximateDeletion(Path field, String text)
+            throws Operations.OperationFailedException {
         com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueWithQuickApproximateDeletion(
                 new InBrowser(driver), field, text);
     }
@@ -98,7 +97,8 @@ public final class Inputs {
      * @param text the text to enter in the input field
      * @throws Operations.OperationFailedException failed to perform the operation
      */
-    public static void changeInputValueNonStrictClearing(Path field, String text) throws Operations.OperationFailedException {
+    public static void changeInputValueNonStrictClearing(Path field, String text)
+            throws Operations.OperationFailedException {
         com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueNonStrictClearing(
                 new InBrowser(driver), field, text);
     }
@@ -110,8 +110,7 @@ public final class Inputs {
      * @throws Operations.OperationFailedException failed to perform the operation
      */
     public static void changeInputValueWithEnter(Path field, String text) throws Operations.OperationFailedException {
-        com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueWithEnter(
-                new InBrowser(driver), field, text);
+        com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueWithEnter(new InBrowser(driver), field, text);
     }
 
     /**
@@ -121,11 +120,11 @@ public final class Inputs {
      * @param text the text to enter in the input field
      * @throws Operations.OperationFailedException failed to perform the operation
      */
-    public static void changeInputValueWithEnterApproximateDeletion(Path field, String text) throws Operations.OperationFailedException {
+    public static void changeInputValueWithEnterApproximateDeletion(Path field, String text)
+            throws Operations.OperationFailedException {
         com.github.loyada.jdollarx.highlevelapi.Inputs.changeInputValueWithApproximateDeletionWithEnter(
                 new InBrowser(driver), field, text);
     }
-
 
     /**
      * A generic, reasonable guess of an input field in a form.
@@ -147,9 +146,7 @@ public final class Inputs {
 
     public static void selectDropdownOption(Path dropdownContent, Path myOption) {
         InBrowser browser = new InBrowser(driver);
-        browser.setImplicitTimeout((int)InBrowserSinglton.getImplicitTimeoutInMillisec(), TimeUnit.MILLISECONDS);
-        com.github.loyada.jdollarx.highlevelapi.Inputs.selectDropdownOption(
-                browser, dropdownContent, myOption);
+        browser.setImplicitTimeout((int) InBrowserSinglton.getImplicitTimeoutInMillisec(), TimeUnit.MILLISECONDS);
+        com.github.loyada.jdollarx.highlevelapi.Inputs.selectDropdownOption(browser, dropdownContent, myOption);
     }
-
 }

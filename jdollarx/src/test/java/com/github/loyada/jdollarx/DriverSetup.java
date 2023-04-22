@@ -1,17 +1,15 @@
 package com.github.loyada.jdollarx;
 
+import static java.util.logging.Level.ALL;
+import static java.util.logging.Level.INFO;
+import static org.openqa.selenium.logging.LogType.*;
+
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import static java.util.logging.Level.ALL;
-import static java.util.logging.Level.INFO;
-import static org.openqa.selenium.logging.LogType.*;
 
 public class DriverSetup {
     final Boolean logEnabled;
@@ -30,7 +28,7 @@ public class DriverSetup {
 
     private ChromeOptions getChromeOptions(boolean isHeadless) {
         final ChromeOptions options = new ChromeOptions();
-  //      options.addArguments("start-maximized"); // open Browser in maximized mode
+        //      options.addArguments("start-maximized"); // open Browser in maximized mode
         options.addArguments("--disable-web-security");
         options.addArguments("disable-infobars"); // disabling infobars
         options.addArguments("--disable-extensions"); // disabling extensions
@@ -43,19 +41,18 @@ public class DriverSetup {
         return options;
     }
 
-    private WebDriver getCorrectDriver( String driverPath, boolean isHeadless) {
+    private WebDriver getCorrectDriver(String driverPath, boolean isHeadless) {
         System.setProperty("webdriver.chrome.driver", driverPath);
         return new ChromeDriver(getChromeOptions(isHeadless));
     }
 
     public static WebDriver createStandardChromeDriver() {
-        boolean useHeadless = System.getenv("HEADLESS_TESTING")!=null;
-       return getNew(useHeadless);
+        boolean useHeadless = System.getenv("HEADLESS_TESTING") != null;
+        return getNew(useHeadless);
     }
 
     public static WebDriver createHeadlessChromeDriver() {
         return getNew(true);
-
     }
 
     private static WebDriver getNew(boolean isHeadless) {

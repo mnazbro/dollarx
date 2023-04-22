@@ -3,8 +3,6 @@ package com.github.loyada.jdollarx.singlebrowser;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.visual.AllElementsObscure;
-import com.github.loyada.jdollarx.visual.ElementObscure;
-
 import java.util.List;
 
 /**

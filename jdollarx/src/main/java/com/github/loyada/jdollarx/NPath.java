@@ -37,7 +37,7 @@ public final class NPath {
         }
     }
 
-    public NPath(Path path, int n, RelationOperator qualifier ) {
+    public NPath(Path path, int n, RelationOperator qualifier) {
         this.path = path;
         this.n = n;
         this.qualifier = qualifier;

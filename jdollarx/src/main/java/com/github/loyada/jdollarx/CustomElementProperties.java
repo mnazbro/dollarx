@@ -26,9 +26,8 @@ public final class CustomElementProperties {
      * @param <T> the type of the parameter the above functions expect
      * @return a function that generates an ElementProperty. Use with {@link #hasProperty(Function, Object)}
      */
-    public static  <T> Function<T, ElementProperty> createPropertyGenerator(
-            Function<T,String> xpathCreator,
-            Function<T,String> toStringCreator){
+    public static <T> Function<T, ElementProperty> createPropertyGenerator(
+            Function<T, String> xpathCreator, Function<T, String> toStringCreator) {
         return t -> new ElementProperty() {
             @Override
             public String toXpath() {
@@ -38,7 +37,6 @@ public final class CustomElementProperties {
             public String toString() {
                 return toStringCreator.apply(t);
             }
-
         };
     }
 
@@ -57,10 +55,9 @@ public final class CustomElementProperties {
      * @param <V> the type of the second parameter the above functions expect
      * @return a function that generates an ElementProperty. Use with {@link #hasProperty(BiFunction, Object, Object)}
      */
-    public static  <T, V> BiFunction<T, V, ElementProperty> createPropertyGenerator(
-            BiFunction<T, V, String> xpathCreator,
-            BiFunction<T,V, String> toStringCreator){
-        return (T t, V v)-> new ElementProperty() {
+    public static <T, V> BiFunction<T, V, ElementProperty> createPropertyGenerator(
+            BiFunction<T, V, String> xpathCreator, BiFunction<T, V, String> toStringCreator) {
+        return (T t, V v) -> new ElementProperty() {
             @Override
             public String toXpath() {
                 return xpathCreator.apply(t, v);
@@ -69,7 +66,6 @@ public final class CustomElementProperties {
             public String toString() {
                 return toStringCreator.apply(t, v);
             }
-
         };
     }
 
@@ -101,5 +97,4 @@ public final class CustomElementProperties {
     public static <T, V> ElementProperty hasProperty(BiFunction<T, V, ElementProperty> propertyGen, T t, V v) {
         return propertyGen.apply(t, v);
     }
-
 }

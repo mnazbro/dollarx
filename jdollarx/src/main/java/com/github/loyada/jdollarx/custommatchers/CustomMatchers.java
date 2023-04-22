@@ -1,10 +1,15 @@
 package com.github.loyada.jdollarx.custommatchers;
 
+import static com.github.loyada.jdollarx.BasicPath.html;
+import static com.github.loyada.jdollarx.ElementProperties.contains;
+
 import com.github.loyada.jdollarx.ElementProperties;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.PathOperators;
 import com.github.loyada.jdollarx.PathParsers;
+import java.util.concurrent.TimeUnit;
+import javax.xml.xpath.XPathExpressionException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -16,12 +21,6 @@ import org.openqa.selenium.support.ui.Wait;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import javax.xml.xpath.XPathExpressionException;
-import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.BasicPath.html;
-import static com.github.loyada.jdollarx.ElementProperties.contains;
-
 /**
  * A collection of Hamcrest custom matchers, that are optimized to be as atomic as possible when interacting with the browser or a W3C document,
  * and return useful error messages in case of a failure.
@@ -29,8 +28,8 @@ import static com.github.loyada.jdollarx.ElementProperties.contains;
 public class CustomMatchers {
 
     private static Wait<WebDriver> getWaiter(InBrowser browser) {
-        return new FluentWait<>(browser.getDriver()).
-                withTimeout(1, TimeUnit.SECONDS)
+        return new FluentWait<>(browser.getDriver())
+                .withTimeout(1, TimeUnit.SECONDS)
                 .pollingEvery(100, TimeUnit.MILLISECONDS)
                 .ignoring(NoSuchElementException.class);
     }
@@ -53,8 +52,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final InBrowser browser, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final InBrowser browser, final Description mismatchDescription) {
                 mismatchDescription.appendText(CustomMatchersUtil.wrap(el) + " is absent");
             }
 
@@ -95,7 +93,7 @@ public class CustomMatchers {
      * @return a custom Hamcrest matcher
      */
     public static IsPresent isPresent() {
-       return new IsPresent();
+        return new IsPresent();
     }
 
     /**
@@ -127,7 +125,7 @@ public class CustomMatchers {
      * @return a matcher for the number of times an element is present.
      */
     public static HasElements hasElements(Path path) {
-       return new HasElements(path);
+        return new HasElements(path);
     }
 
     /**
@@ -150,8 +148,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(CustomMatchersUtil.wrap(el) + " is absent");
             }
 
@@ -183,8 +180,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el.toString() + " is absent");
             }
 
@@ -192,7 +188,6 @@ public class CustomMatchers {
             protected boolean matchesSafely(final Path el) {
                 this.el = el;
                 return pathExistsInDocument(document, el);
-
             }
         };
     }
@@ -216,8 +211,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not displayed");
             }
 
@@ -257,8 +251,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is displayed");
             }
 
@@ -298,8 +291,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not selected");
             }
 
@@ -336,8 +328,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not enabled");
             }
 
@@ -367,8 +358,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final InBrowser browser, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final InBrowser browser, final Description mismatchDescription) {
                 mismatchDescription.appendText(el.toString() + " is present");
             }
 
@@ -401,8 +391,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el.toString() + " is present");
             }
 
@@ -435,8 +424,7 @@ public class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el.toString() + " is present");
             }
 
@@ -457,5 +445,4 @@ public class CustomMatchers {
         }
         return nodes.getLength() > 0;
     }
-
 }

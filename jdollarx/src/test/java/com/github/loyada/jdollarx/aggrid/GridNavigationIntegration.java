@@ -1,5 +1,13 @@
 package com.github.loyada.jdollarx.aggrid;
 
+import static com.github.loyada.jdollarx.BasicPath.button;
+import static com.github.loyada.jdollarx.BasicPath.div;
+import static com.github.loyada.jdollarx.BasicPath.image;
+import static com.github.loyada.jdollarx.ElementProperties.*;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 import com.github.loyada.jdollarx.DriverSetup;
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.Path;
@@ -7,25 +15,15 @@ import com.github.loyada.jdollarx.singlebrowser.AgGrid;
 import com.github.loyada.jdollarx.singlebrowser.AgGridHighLevelOperations;
 import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
 import com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.BasicPath.button;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
-import static org.hamcrest.Matchers.equalTo;
-
-import static com.github.loyada.jdollarx.BasicPath.div;
-import static com.github.loyada.jdollarx.BasicPath.image;
-import static com.github.loyada.jdollarx.ElementProperties.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 public class GridNavigationIntegration {
-    Path container  = div.that(hasId("myGrid"));
+    Path container = div.that(hasId("myGrid"));
 
     @BeforeClass
     public static void setup() {
@@ -33,14 +31,13 @@ public class GridNavigationIntegration {
         driver.get("https://www.ag-grid.com/example.php");
     }
 
-
     @Before
     public void refresh() {
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        find( div.withClass("ag-body-viewport"));
+        find(div.withClass("ag-body-viewport"));
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.MILLISECONDS);
-        try(TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
+        try (TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
             clickOn(button.withText("accept all cookies"));
         } catch (Exception ex) {
             // no such button
@@ -49,7 +46,8 @@ public class GridNavigationIntegration {
 
     @AfterClass
     public static void tearDown() {
-        driver.quit();;
+        driver.quit();
+        ;
     }
 
     @Test
@@ -68,11 +66,10 @@ public class GridNavigationIntegration {
 
     @Test
     public void findRowIndexWithScrolling() {
-        Map<String, ElementProperty> rowWithProperties =  Map.of(
+        Map<String, ElementProperty> rowWithProperties = Map.of(
                 "name", hasAggregatedTextEqualTo("Kevin Cole"),
                 "language", hasAggregatedTextEqualTo("english"),
-                "country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png")))
-        );
+                "country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png"))));
         AgGrid grid = getAgGrid();
         // scroll to row
         Integer index1 = grid.findRowIndex(rowWithProperties);
@@ -83,11 +80,10 @@ public class GridNavigationIntegration {
 
     @Test
     public void findRowIndexOfPreviousRowUsingOrderedMap() {
-        Map<String, ElementProperty> rowWithProperties =  Map.of(
+        Map<String, ElementProperty> rowWithProperties = Map.of(
                 "name", hasAggregatedTextEqualTo("Kevin Cole"),
                 "language", hasAggregatedTextEqualTo("english"),
-                "country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png")))
-        );
+                "country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png"))));
         AgGrid grid = getAgGrid();
         // scroll to row
         Integer index1 = grid.findRowIndex(rowWithProperties);
@@ -97,7 +93,7 @@ public class GridNavigationIntegration {
         previousRow.put("language", hasAggregatedTextEqualTo("spanish"));
         previousRow.put("dec", hasAggregatedTextEqualTo("$72,351"));
         int indexFound = grid.findRowIndex(previousRow);
-        assertThat(index1, equalTo(indexFound+1));
+        assertThat(index1, equalTo(indexFound + 1));
     }
 
     @Test
@@ -118,15 +114,12 @@ public class GridNavigationIntegration {
         assertThat(myCell, CustomMatchers.isDisplayed());
     }
 
-
-
     @Test
     public void ensureVisibilityOfColumnWithSpecificIdHighLevel() {
         AgGridHighLevelOperations gridHighLevelOperations = new AgGridHighLevelOperations(div.that(hasId("myGrid")));
         Path octCell = gridHighLevelOperations.getCellInRowWithColumnAndValueById("oct", "jan", "$4,298");
         assertThat(octCell.that(hasAggregatedTextEqualTo("$38,124")), CustomMatchers.isDisplayed());
     }
-
 
     @Test
     public void clickCellByColumnWithSpecificValue() {
@@ -162,12 +155,9 @@ public class GridNavigationIntegration {
         clickAt(cell);
     }
 
-
-
-
     private AgGrid getAgGrid() {
         AgGrid grid = AgGrid.getBuilder()
-                .withHeaders(Arrays.asList( "language", "name", "country", "dec"))
+                .withHeaders(Arrays.asList("language", "name", "country", "dec"))
                 .withRowsAsElementProperties(new ArrayList<>())
                 .containedIn(div.that(hasId("myGrid")))
                 .build();
@@ -175,7 +165,6 @@ public class GridNavigationIntegration {
         grid.overrideTimeoutDuringOperation(1);
         return grid;
     }
-
 
     @Test
     public void clickRow() {

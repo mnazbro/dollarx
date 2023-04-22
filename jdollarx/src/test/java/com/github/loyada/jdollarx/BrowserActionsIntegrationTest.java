@@ -1,5 +1,20 @@
 package com.github.loyada.jdollarx;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,49 +32,37 @@ import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class BrowserActionsIntegrationTest {
     WebDriver driverMock;
+
     @Captor
     private ArgumentCaptor<Collection<Sequence>> captor;
+
     RemoteWebElement webElement, webElement2;
     InBrowser browser;
-
 
     @Before
     public void setup() {
         driverMock = mock(ChromeDriver.class);
         webElement = mock(RemoteWebElement.class);
         webElement2 = mock(RemoteWebElement.class);
-        when(driverMock.findElement(By.xpath("//" + BasicPath.div.getXPath().get()))).thenReturn(webElement);
-        when(driverMock.findElement(By.xpath("//" + BasicPath.span.getXPath().get()))).thenReturn(webElement2);
+        when(driverMock.findElement(By.xpath("//" + BasicPath.div.getXPath().get())))
+                .thenReturn(webElement);
+        when(driverMock.findElement(By.xpath("//" + BasicPath.span.getXPath().get())))
+                .thenReturn(webElement2);
         browser = new InBrowser(driverMock);
     }
 
     @Test
     public void scrollToElementTest() {
-       browser.scroll().to(BasicPath.div);
+        browser.scroll().to(BasicPath.div);
         verify(((Interactive) driverMock)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
         Sequence firstSequence = (Sequence) actions[0];
         assertThat(firstSequence.toJson().get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>) firstSequence.toJson().get("actions");
+        List<Map<String, Object>> ops =
+                (List<Map<String, Object>>) firstSequence.toJson().get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
     }
@@ -83,7 +86,8 @@ public class BrowserActionsIntegrationTest {
         Object[] actions = captor.getAllValues().get(0).toArray();
         Sequence firstSequence = (Sequence) actions[0];
         assertThat(firstSequence.toJson().get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>) firstSequence.toJson().get("actions");
+        List<Map<String, Object>> ops =
+                (List<Map<String, Object>>) firstSequence.toJson().get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
         assertThat(ops.get(1).get("type"), equalTo("pointerDown"));
@@ -109,7 +113,8 @@ public class BrowserActionsIntegrationTest {
         Object[] actions = captor.getAllValues().get(0).toArray();
         Sequence firstSequence = (Sequence) actions[0];
         assertThat(firstSequence.toJson().get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>) firstSequence.toJson().get("actions");
+        List<Map<String, Object>> ops =
+                (List<Map<String, Object>>) firstSequence.toJson().get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
         assertThat(ops.get(1).get("type"), equalTo("pointerDown"));
@@ -126,13 +131,15 @@ public class BrowserActionsIntegrationTest {
         Sequence firstSequence = (Sequence) actions[0];
 
         final int keyboardInd = firstSequence.toJson().get("type").equals("key") ? 0 : 1;
-        List<Map<String, Object>> ops = (List<Map<String, Object>>) ((Sequence)actions[keyboardInd]).toJson().get("actions");
+        List<Map<String, Object>> ops = (List<Map<String, Object>>)
+                ((Sequence) actions[keyboardInd]).toJson().get("actions");
         // first 3 actions are with pointer: move, clickdown, clickup
         List<Map<String, Object>> keysOps = ops.subList(3, ops.size());
         List<Object> keys = keysOps.stream().map(op -> op.get("value")).collect(Collectors.toList());
-        assertEquals(keys, Arrays.asList("x", "x", "y", "y", "z","z" ));
-        List<Object> opsTypesWithKeys = keysOps.stream().map(op -> op.get("type")).collect(Collectors.toList());
-        assertEquals(opsTypesWithKeys, Arrays.asList("keyDown", "keyUp", "keyDown", "keyUp", "keyDown","keyUp" ));
+        assertEquals(keys, Arrays.asList("x", "x", "y", "y", "z", "z"));
+        List<Object> opsTypesWithKeys =
+                keysOps.stream().map(op -> op.get("type")).collect(Collectors.toList());
+        assertEquals(opsTypesWithKeys, Arrays.asList("keyDown", "keyUp", "keyDown", "keyUp", "keyDown", "keyUp"));
     }
 
     @Test
@@ -142,9 +149,10 @@ public class BrowserActionsIntegrationTest {
         Object[] actions = captor.getAllValues().get(0).toArray();
         Sequence firstSequence = (Sequence) actions[0];
         assertThat(firstSequence.toJson().get("type"), equalTo("key"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>) firstSequence.toJson().get("actions");
+        List<Map<String, Object>> ops =
+                (List<Map<String, Object>>) firstSequence.toJson().get("actions");
         List<Object> keys = ops.stream().map(op -> op.get("value")).collect(Collectors.toList());
-        assertEquals(keys, Arrays.asList("x", "x", "y", "y", "z","z" ));
+        assertEquals(keys, Arrays.asList("x", "x", "y", "y", "z", "z"));
     }
 
     @Test
@@ -155,13 +163,13 @@ public class BrowserActionsIntegrationTest {
         Sequence firstSequence = (Sequence) actions[0];
         Map<String, Object> keysActions = firstSequence.toJson();
         assertThat(keysActions.get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>)keysActions.get("actions");
+        List<Map<String, Object>> ops = (List<Map<String, Object>>) keysActions.get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
         assertThat(ops.get(1).get("type"), equalTo("pointerDown"));
         assertThat(ops.get(2).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(2).get("origin"), is(webElement2));
-        assertThat(ops.get(ops.size()-1).get("type"), equalTo("pointerUp"));
+        assertThat(ops.get(ops.size() - 1).get("type"), equalTo("pointerUp"));
     }
 
     @Test
@@ -172,14 +180,14 @@ public class BrowserActionsIntegrationTest {
         Sequence firstSequence = (Sequence) actions[0];
         Map<String, Object> keysActions = firstSequence.toJson();
         assertThat(keysActions.get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>)keysActions.get("actions");
+        List<Map<String, Object>> ops = (List<Map<String, Object>>) keysActions.get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
         assertThat(ops.get(1).get("type"), equalTo("pointerDown"));
         assertThat(ops.get(2).get("type"), equalTo("pointerMove"));
-        assertThat(ops.get(2).get("x"),  is(10));
-        assertThat(ops.get(2).get("y"),  is(10));
-        assertThat(ops.get(ops.size()-1).get("type"), equalTo("pointerUp"));
+        assertThat(ops.get(2).get("x"), is(10));
+        assertThat(ops.get(2).get("y"), is(10));
+        assertThat(ops.get(ops.size() - 1).get("type"), equalTo("pointerUp"));
     }
 
     @Test
@@ -191,7 +199,9 @@ public class BrowserActionsIntegrationTest {
     public void findInsideElement() {
         WebElement el = browser.find(BasicPath.div);
         Path newPath = BasicPath.builder().withUnderlying(el).withXpath("span").build();
-        assertThat(newPath.toString(), org.hamcrest.Matchers.startsWith("under reference element Mock for RemoteWebElement"));
+        assertThat(
+                newPath.toString(),
+                org.hamcrest.Matchers.startsWith("under reference element Mock for RemoteWebElement"));
         assertThat(newPath.toString(), org.hamcrest.Matchers.endsWith("xpath: \"span\""));
         RemoteWebElement el2 = mock(RemoteWebElement.class);
         when(webElement.findElement(By.xpath("span"))).thenReturn(el2);
@@ -201,7 +211,8 @@ public class BrowserActionsIntegrationTest {
     @Test
     public void findAll() {
         List<WebElement> result = Collections.singletonList(webElement);
-        when(driverMock.findElements(By.xpath("//" + BasicPath.div.getXPath().get()))).thenReturn(result);
+        when(driverMock.findElements(By.xpath("//" + BasicPath.div.getXPath().get())))
+                .thenReturn(result);
 
         assertThat(browser.findAll(BasicPath.div), is(equalTo(result)));
     }
@@ -214,7 +225,7 @@ public class BrowserActionsIntegrationTest {
         Sequence firstSequence = (Sequence) actions[0];
         Map<String, Object> firstActions = firstSequence.toJson();
         assertThat(firstActions.get("type"), equalTo("pointer"));
-        Map<String, Object> op = ((List<Map<String, Object>>)firstActions.get("actions")).get(0);
+        Map<String, Object> op = ((List<Map<String, Object>>) firstActions.get("actions")).get(0);
         assertThat(op.get("type"), equalTo("pointerMove"));
         assertThat(op.get("origin"), is(webElement));
     }
@@ -224,10 +235,10 @@ public class BrowserActionsIntegrationTest {
         browser.hoverOver(BasicPath.div);
         verify(((Interactive) driverMock)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
-        Sequence firstSequence = (Sequence)actions[0];
+        Sequence firstSequence = (Sequence) actions[0];
         Map<String, Object> keysActions = firstSequence.toJson();
         assertThat(keysActions.get("type"), equalTo("pointer"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>)keysActions.get("actions");
+        List<Map<String, Object>> ops = (List<Map<String, Object>>) keysActions.get("actions");
         assertThat(ops.get(0).get("type"), equalTo("pointerMove"));
         assertThat(ops.get(0).get("origin"), is(webElement));
     }
@@ -238,9 +249,9 @@ public class BrowserActionsIntegrationTest {
         browser.sendKeys("x").toBrowser();
         verify(((Interactive) driverMock), times(2)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
-        Map<String, Object> firstActions = ((Sequence)actions[0]).toJson();
+        Map<String, Object> firstActions = ((Sequence) actions[0]).toJson();
         assertThat(firstActions.get("type"), equalTo("key"));
-        Map<String, Object> op = ((List<Map<String, Object>>)firstActions.get("actions")).get(0);
+        Map<String, Object> op = ((List<Map<String, Object>>) firstActions.get("actions")).get(0);
         assertThat(op.get("type"), equalTo("keyDown"));
         assertThat(op.get("value"), equalTo(Keys.SHIFT.toString()));
     }
@@ -250,10 +261,11 @@ public class BrowserActionsIntegrationTest {
         browser.releaseKey(Keys.SHIFT).inBrowser();
         verify(((Interactive) driverMock)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
-        Sequence firstSequence = (Sequence)actions[0];
+        Sequence firstSequence = (Sequence) actions[0];
         assertThat(firstSequence.toJson().get("type"), equalTo("key"));
-        List<Map<String, Object>> keyOps = (List<Map<String, Object>>) firstSequence.toJson().get("actions");
-        Map<String, Object> keyDownOp = keyOps.get(keyOps.size()-1);
+        List<Map<String, Object>> keyOps =
+                (List<Map<String, Object>>) firstSequence.toJson().get("actions");
+        Map<String, Object> keyDownOp = keyOps.get(keyOps.size() - 1);
         assertThat(keyDownOp.get("type"), equalTo("keyUp"));
         assertThat(keyDownOp.get("value"), equalTo(Keys.SHIFT.toString()));
     }
@@ -265,15 +277,16 @@ public class BrowserActionsIntegrationTest {
 
         verify(((Interactive) driverMock), times(2)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
-        final int keyBoardIndex =  ((Sequence)actions[1]).toJson().get("type").equals("key") ? 1 : 0 ;
-        Map<String, Object> keysActions = ((Sequence)actions[keyBoardIndex]).toJson();
+        final int keyBoardIndex = ((Sequence) actions[1]).toJson().get("type").equals("key") ? 1 : 0;
+        Map<String, Object> keysActions = ((Sequence) actions[keyBoardIndex]).toJson();
         assertThat(keysActions.get("type"), equalTo("key"));
-        List<Map<String, Object>> ops = (List<Map<String, Object>>)keysActions.get("actions");
+        List<Map<String, Object>> ops = (List<Map<String, Object>>) keysActions.get("actions");
         // first 3 operation is mouse move, click down, click up
-        assertThat(ops.stream().map(op -> op.get("type") ).collect(Collectors.toList()), equalTo(Arrays.asList("pause", "pause", "pause", "keyDown" )));
+        assertThat(
+                ops.stream().map(op -> op.get("type")).collect(Collectors.toList()),
+                equalTo(Arrays.asList("pause", "pause", "pause", "keyDown")));
         assertThat(ops.get(3).get("value"), equalTo(Keys.SHIFT.toString()));
     }
-
 
     @Test
     public void releaseKeyOnElement() throws Operations.OperationFailedException {
@@ -281,93 +294,104 @@ public class BrowserActionsIntegrationTest {
         verify(((Interactive) driverMock)).perform(captor.capture());
         Object[] actions = captor.getAllValues().get(0).toArray();
         final int index;
-        if (((Sequence)actions[1]).toJson().get("type").equals("key")) {
+        if (((Sequence) actions[1]).toJson().get("type").equals("key")) {
             index = 1;
-        }
-        else index = 0;
-        assertThat(((Sequence)actions[1-index]).toJson().get("type"), equalTo("pointer"));
-        List<Map<String, Object>> keyOps = (List<Map<String, Object>>) ((Sequence)actions[index]).toJson().get("actions");
-        Map<String, Object> keyDownOp = keyOps.get(keyOps.size()-1);
+        } else index = 0;
+        assertThat(((Sequence) actions[1 - index]).toJson().get("type"), equalTo("pointer"));
+        List<Map<String, Object>> keyOps =
+                (List<Map<String, Object>>) ((Sequence) actions[index]).toJson().get("actions");
+        Map<String, Object> keyDownOp = keyOps.get(keyOps.size() - 1);
         assertThat(keyDownOp.get("type"), equalTo("keyUp"));
         assertThat(keyDownOp.get("value"), equalTo(Keys.SHIFT.toString()));
     }
 
     @Test
     public void numberOfAppearances0() {
-        when(driverMock.findElement(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenThrow(new NoSuchElementException(""));
-        assertThat( browser.numberOfAppearances(BasicPath.listItem), is(0));
+        when(driverMock.findElement(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenThrow(new NoSuchElementException(""));
+        assertThat(browser.numberOfAppearances(BasicPath.listItem), is(0));
     }
 
     @Test
     public void numberOfAppearances2() {
         List<WebElement> result = Arrays.asList(webElement, webElement);
-        when(driverMock.findElements(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenReturn(result);
-        assertThat( browser.numberOfAppearances(BasicPath.listItem), is(2));
+        when(driverMock.findElements(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenReturn(result);
+        assertThat(browser.numberOfAppearances(BasicPath.listItem), is(2));
     }
 
     @Test
     public void isPresentFalse() {
-        when(driverMock.findElement(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenThrow(new NoSuchElementException(""));
-        assertThat( browser.isPresent(BasicPath.listItem), is(false));
+        when(driverMock.findElement(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenThrow(new NoSuchElementException(""));
+        assertThat(browser.isPresent(BasicPath.listItem), is(false));
     }
 
     @Test
     public void isPresentTrue() {
-        assertThat( browser.isPresent(BasicPath.div), is(true));
+        assertThat(browser.isPresent(BasicPath.div), is(true));
     }
 
     @Test
     public void isDisplayedYes() {
         when(webElement.isDisplayed()).thenReturn(true);
-        assertThat( browser.isDisplayed(BasicPath.div), is(true));
+        assertThat(browser.isDisplayed(BasicPath.div), is(true));
     }
 
     @Test
     public void isDisplayedNo() {
         when(webElement.isDisplayed()).thenReturn(false);
-        assertThat( browser.isDisplayed(BasicPath.div), is(false));
+        assertThat(browser.isDisplayed(BasicPath.div), is(false));
     }
 
     @Test
     public void isDisplayedDoesNotExist() {
-        when(driverMock.findElement(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenThrow(new NoSuchElementException(""));
-        assertThat( browser.isDisplayed(BasicPath.listItem), is(false));
+        when(driverMock.findElement(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenThrow(new NoSuchElementException(""));
+        assertThat(browser.isDisplayed(BasicPath.listItem), is(false));
     }
 
     @Test
     public void isSelectedYes() {
         when(webElement.isSelected()).thenReturn(true);
-        assertThat( browser.isSelected(BasicPath.div), is(true));
+        assertThat(browser.isSelected(BasicPath.div), is(true));
     }
 
     @Test
     public void isSelectedNo() {
         when(webElement.isSelected()).thenReturn(false);
-        assertThat( browser.isSelected(BasicPath.div), is(false));
+        assertThat(browser.isSelected(BasicPath.div), is(false));
     }
 
     @Test
     public void isSelectedDoesNotExist() {
-        when(driverMock.findElement(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenThrow(new NoSuchElementException(""));
-        assertThat( browser.isSelected(BasicPath.listItem), is(false));
+        when(driverMock.findElement(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenThrow(new NoSuchElementException(""));
+        assertThat(browser.isSelected(BasicPath.listItem), is(false));
     }
 
     @Test
     public void isEnabledYes() {
         when(webElement.isEnabled()).thenReturn(true);
-        assertThat( browser.isEnabled(BasicPath.div), is(true));
+        assertThat(browser.isEnabled(BasicPath.div), is(true));
     }
 
     @Test
     public void isEnabledNo() {
         when(webElement.isEnabled()).thenReturn(false);
-        assertThat( browser.isEnabled(BasicPath.div), is(false));
+        assertThat(browser.isEnabled(BasicPath.div), is(false));
     }
 
     @Test
     public void isEnableDoesNotExist() {
-        when(driverMock.findElement(By.xpath("//" + BasicPath.listItem.getXPath().get()))).thenThrow(new NoSuchElementException(""));
-        assertThat( browser.isEnabled(BasicPath.listItem), is(false));
+        when(driverMock.findElement(
+                        By.xpath("//" + BasicPath.listItem.getXPath().get())))
+                .thenThrow(new NoSuchElementException(""));
+        assertThat(browser.isEnabled(BasicPath.listItem), is(false));
     }
-
 }

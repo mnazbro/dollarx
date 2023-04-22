@@ -1,7 +1,12 @@
 package com.github.loyada.jdollarx;
 
+import static java.util.Arrays.asList;
 
 import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,13 +17,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.function.UnaryOperator;
-
-import static java.util.Arrays.asList;
 
 /**
  * A wrapper around Selenium WebDriver, used for interaction with the browser.
@@ -72,7 +70,8 @@ public class InBrowser {
      * @param relationOperator whether we look for exactly the numberOfOccurrences, at least, or at most occurrences
      * @return the first WebElement found
      */
-    public WebElement findPageWithNumberOfOccurrences(final Path el, int numberOfOccurrences, RelationOperator relationOperator) {
+    public WebElement findPageWithNumberOfOccurrences(
+            final Path el, int numberOfOccurrences, RelationOperator relationOperator) {
         return InBrowserFinder.findPageWithNumberOfOccurrences(driver, el, numberOfOccurrences, relationOperator);
     }
 
@@ -95,7 +94,6 @@ public class InBrowser {
      */
     public List<WebElement> findAll(final Path el) {
         return InBrowserFinder.findAll(driver, el);
-
     }
 
     /**
@@ -109,7 +107,6 @@ public class InBrowser {
     public List<?> getAttributeOfAll(final Path el, String attribute) {
         return InBrowserFinder.getAttributeOfAll(driver, el, attribute);
     }
-
 
     /**
      * Count number of elements that are currently present.
@@ -217,14 +214,11 @@ public class InBrowser {
     }
 
     private static String getScriptToFindIfElementIsExposed() {
-        return "const rect=arguments[0].getBoundingClientRect();" +
-                "const x=rect.left;" +
-                "const y=rect.top;" +
-                "topElt=document.elementFromPoint(x,y);" +
-                "return !arguments[0].isSameNode(topElt);";
+        return "const rect=arguments[0].getBoundingClientRect();" + "const x=rect.left;"
+                + "const y=rect.top;"
+                + "topElt=document.elementFromPoint(x,y);"
+                + "return !arguments[0].isSameNode(topElt);";
     }
-
-
 
     ////////////////////////////////////////////////////
     //// actions
@@ -237,16 +231,20 @@ public class InBrowser {
      */
     public WebElement clickOn(Path el) {
         try {
-            return Operations.doWithRetriesForException(() -> {
-                WebElement found = find(el);
-                Wait<WebDriver> wait = getWaiter();
-                wait.until(ExpectedConditions.elementToBeClickable(found));
-                found.click();
-                return found;
-            }, ElementClickInterceptedException.class, 3, 500);
+            return Operations.doWithRetriesForException(
+                    () -> {
+                        WebElement found = find(el);
+                        Wait<WebDriver> wait = getWaiter();
+                        wait.until(ExpectedConditions.elementToBeClickable(found));
+                        found.click();
+                        return found;
+                    },
+                    ElementClickInterceptedException.class,
+                    3,
+                    500);
         } catch (Exception e) {
-            if (e instanceof RuntimeException){
-                throw (RuntimeException)e;
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
             }
             throw new RuntimeException(e);
         }
@@ -399,14 +397,15 @@ public class InBrowser {
 
     private Wait<WebDriver> getWaiter() {
         final Duration duration;
-        if (implicitTimeout!=0 && timeoutUnit!=null) {
+        if (implicitTimeout != 0 && timeoutUnit != null) {
             long implicitTimeoutInMillis = TimeUnit.MILLISECONDS.convert(implicitTimeout, timeoutUnit);
-            duration  = Duration.ofMillis(implicitTimeoutInMillis);
+            duration = Duration.ofMillis(implicitTimeoutInMillis);
         } else {
             duration = Duration.ofMillis(10000);
         }
 
-        return new FluentWait<>(driver).withTimeout(duration)
+        return new FluentWait<>(driver)
+                .withTimeout(duration)
                 .pollingEvery(Duration.ofMillis(50))
                 .ignoring(org.openqa.selenium.NoSuchElementException.class);
     }

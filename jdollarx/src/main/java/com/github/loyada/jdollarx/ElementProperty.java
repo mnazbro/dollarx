@@ -1,12 +1,11 @@
 package com.github.loyada.jdollarx;
 
-
 /**
  * The main interface to add an additional constraint on a {@link Path}.
  * Used with the method {@link Path#that} , and {@link Path#and}.
  */
 public interface ElementProperty {
-    String toXpath() ;
+    String toXpath();
 
     /**
      * returns a new property, that is a combination of the current property OR the given property parameter. Meaning the element
@@ -39,5 +38,7 @@ public interface ElementProperty {
      * @param prop another property to perform a logical "NAND" with
      * @return a new property that is equivalent to: (this property and not prop)
      */
-    default ElementProperty andNot(ElementProperty prop) { return and(new ElementProperties.Not(prop)); }
+    default ElementProperty andNot(ElementProperty prop) {
+        return and(new ElementProperties.Not(prop));
+    }
 }

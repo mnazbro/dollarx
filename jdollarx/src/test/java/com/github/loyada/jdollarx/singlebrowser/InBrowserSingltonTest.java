@@ -1,21 +1,20 @@
 package com.github.loyada.jdollarx.singlebrowser;
 
-import com.github.loyada.jdollarx.BasicPath;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.github.loyada.jdollarx.BasicPath;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class InBrowserSingltonTest {
     private WebDriver driverMock;
@@ -29,7 +28,6 @@ public class InBrowserSingltonTest {
         webElement = mock(WebElement.class);
         when(driverMock.findElement(By.xpath("//div"))).thenReturn(webElement);
         when(driverMock.findElements(By.xpath("//div"))).thenReturn(Arrays.asList(webElement, webElement));
-
     }
 
     @Test

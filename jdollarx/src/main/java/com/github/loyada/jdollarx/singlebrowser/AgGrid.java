@@ -1,31 +1,5 @@
 package com.github.loyada.jdollarx.singlebrowser;
 
-import com.github.loyada.jdollarx.BasicPath;
-import com.github.loyada.jdollarx.ElementProperty;
-import com.github.loyada.jdollarx.Operations;
-import com.github.loyada.jdollarx.Operations.OperationFailedException;
-import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
-import com.google.common.collect.ImmutableList;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.stream.IntStream;
-
 import static com.github.loyada.jdollarx.BasicPath.*;
 import static com.github.loyada.jdollarx.ElementProperties.*;
 import static com.github.loyada.jdollarx.singlebrowser.AgGrid.SortDirection.getAllClasses;
@@ -43,6 +17,31 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+import com.github.loyada.jdollarx.BasicPath;
+import com.github.loyada.jdollarx.ElementProperty;
+import com.github.loyada.jdollarx.Operations;
+import com.github.loyada.jdollarx.Operations.OperationFailedException;
+import com.github.loyada.jdollarx.Path;
+import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
+import com.google.common.collect.ImmutableList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
+
 /**
  * Custom class to validate the presence of an AgGrid, and interact with it, since it can be tricky.
  * It supports virtualized and non-virtualized tables.
@@ -53,11 +52,12 @@ public class AgGrid {
     public static final Path HEADER_CELL = div.that(hasClass("ag-header-cell"));
     public static final Path HEADER_TXT = span.that(hasRef("eText"));
     public static final Path ROW = div.that(hasRole("row"));
-    public static final Path CELL = div.that(hasRole("gridcell").or(hasRole("presentation"))).describedBy("cell");
+    public static final Path CELL =
+            div.that(hasRole("gridcell").or(hasRole("presentation"))).describedBy("cell");
     public static final Path HEADER_MENU = span.withClass("ag-header-cell-menu-button");
     private static final Path MENU = div.withClass("ag-menu");
-    private static final Path POPUP=div.withClass("ag-popup");
-    public  static final Path CHECKBOX = div.withClass("ag-checkbox");
+    private static final Path POPUP = div.withClass("ag-popup");
+    public static final Path CHECKBOX = div.withClass("ag-checkbox");
     public static final Path AgGridRoot = div.withClass("ag-root-wrapper");
     public static final Path AgBody = div.withClass("ag-body-viewport");
     public static final Path AgList = div.that(hasRole("listbox"))
@@ -75,10 +75,9 @@ public class AgGrid {
     private Path tableHorizontalScroll;
     private final Path tableContent;
     private final Path headerWrapper;
-    private final Map<String, String> colIdByHeader  = new HashMap<>();
+    private final Map<String, String> colIdByHeader = new HashMap<>();
     private int operationTimeout = 5, finalTimeout = 5000;
     private static final Pattern columnIdFormat = Pattern.compile("\\{([^}]*.?)\\}");
-
 
     public static AgGridBuilder getBuilder() {
         return new AgGridBuilder();
@@ -100,18 +99,15 @@ public class AgGrid {
         }
 
         static String[] getAllClasses() {
-            return Arrays.stream(values())
-                    .map(SortDirection::getCssClassName)
-                    .toArray(String[]::new);
+            return Arrays.stream(values()).map(SortDirection::getCssClassName).toArray(String[]::new);
         }
 
         static SortDirection byCssClass(String cssClassName) {
             return Arrays.stream(values())
-                    .filter(d->cssClassName.contains(d.getCssClassName()))
+                    .filter(d -> cssClassName.contains(d.getCssClassName()))
                     .findFirst()
                     .orElse(null);
         }
-
     }
 
     public static class AgGridBuilder {
@@ -121,7 +117,7 @@ public class AgGrid {
         private Path container = html;
         private boolean strict = false;
 
-        private AgGridBuilder(){}
+        private AgGridBuilder() {}
 
         /**
          * The headers of the columns
@@ -170,11 +166,14 @@ public class AgGrid {
          * @return AgGridBuilder
          */
         public AgGridBuilder withRowsAsElementPropertiesInOrder(List<List<Map.Entry<String, ElementProperty>>> rows) {
-            this.rows = rows.stream().map(row -> {
-                LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
-                row.forEach((Map.Entry<String, ElementProperty> entry) -> newRow.put(entry.getKey(), entry.getValue()));
-                return newRow;
-            }).collect(toList());
+            this.rows = rows.stream()
+                    .map(row -> {
+                        LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
+                        row.forEach((Map.Entry<String, ElementProperty> entry) ->
+                                newRow.put(entry.getKey(), entry.getValue()));
+                        return newRow;
+                    })
+                    .collect(toList());
             return this;
         }
 
@@ -186,11 +185,13 @@ public class AgGrid {
          * @return AgGridBuilder
          */
         public AgGridBuilder withRowsAsElementProperties(List<Map<String, ElementProperty>> rows) {
-            this.rows = rows.stream().map(row -> {
-                HashMap<String, ElementProperty> newRow = new HashMap<>();
-                row.forEach(newRow::put);
-                return newRow;
-            }).collect(toList());
+            this.rows = rows.stream()
+                    .map(row -> {
+                        HashMap<String, ElementProperty> newRow = new HashMap<>();
+                        row.forEach(newRow::put);
+                        return newRow;
+                    })
+                    .collect(toList());
             return this;
         }
 
@@ -202,14 +203,16 @@ public class AgGrid {
          * @return AgGridBuilder
          */
         public AgGridBuilder withRowsAsStringsInOrder(List<List<Map.Entry<String, String>>> rows) {
-            this.rows = rows.stream().map(row -> {
-                LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
-                row.forEach((Map.Entry<String, String> entry) -> {
-                    String value = entry.getValue();
-                    newRow.put(entry.getKey(), hasAggregatedTextEqualTo(value==null ? "" : value));
-                });
-                return newRow;
-            }).collect(toList());
+            this.rows = rows.stream()
+                    .map(row -> {
+                        LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
+                        row.forEach((Map.Entry<String, String> entry) -> {
+                            String value = entry.getValue();
+                            newRow.put(entry.getKey(), hasAggregatedTextEqualTo(value == null ? "" : value));
+                        });
+                        return newRow;
+                    })
+                    .collect(toList());
             return this;
         }
 
@@ -221,13 +224,15 @@ public class AgGrid {
          * @return AgGridBuilder
          */
         public AgGridBuilder withRowsAsStrings(List<Map<String, String>> rows) {
-            this.rows = rows.stream().map(row -> {
-                LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
-                row.forEach((String key, String text) -> {
-                    newRow.put(key, hasAggregatedTextEqualTo(text==null ? "" : text));
-                });
-                return newRow;
-            }).collect(toList());
+            this.rows = rows.stream()
+                    .map(row -> {
+                        LinkedHashMap<String, ElementProperty> newRow = new LinkedHashMap<>();
+                        row.forEach((String key, String text) -> {
+                            newRow.put(key, hasAggregatedTextEqualTo(text == null ? "" : text));
+                        });
+                        return newRow;
+                    })
+                    .collect(toList());
             return this;
         }
 
@@ -236,23 +241,27 @@ public class AgGrid {
          * @return AgGrid instance
          */
         public AgGrid build() {
-            if (headers==null || rows==null){
+            if (headers == null || rows == null) {
                 throw new IllegalArgumentException();
             }
             return new AgGrid(headers, rows, isVirtualized, strict, container);
         }
     }
 
-    private AgGrid(List<String> headers,
-                   List<Map<String, ElementProperty>> rows,
-                   boolean virtualized,
-                   boolean strict,
-                   Path tableContainer) {
+    private AgGrid(
+            List<String> headers,
+            List<Map<String, ElementProperty>> rows,
+            boolean virtualized,
+            boolean strict,
+            Path tableContainer) {
         this.headers = headers;
         this.rows = rows;
         this.virtualized = virtualized;
-        this.headerWrapper = div.that(hasAnyOfClasses("ag-pinned-right-header", "ag-pinned-left-header","ag-header-viewport")).inside(tableContainer);
-        this.tableContent = div.that(hasAnyOfClasses("ag-body-viewport", "ag-body")).inside(tableContainer);
+        this.headerWrapper = div.that(
+                        hasAnyOfClasses("ag-pinned-right-header", "ag-pinned-left-header", "ag-header-viewport"))
+                .inside(tableContainer);
+        this.tableContent =
+                div.that(hasAnyOfClasses("ag-body-viewport", "ag-body")).inside(tableContainer);
         this.tableViewport = div.withClass("ag-body-viewport").inside(tableContainer);
         this.tableHorizontalScroll = div.withClass("ag-center-cols-viewport").inside(tableContainer);
         this.strict = strict;
@@ -278,7 +287,7 @@ public class AgGrid {
      * @param size step size in pixels
      */
     public void setScrollStep(int size) {
-        stepSize=size;
+        stepSize = size;
     }
 
     /**
@@ -301,10 +310,7 @@ public class AgGrid {
 
     @Override
     public String toString() {
-        return "AgGrid{" +
-                "headers=" + headers +
-                ", rows=" + rows +
-                '}';
+        return "AgGrid{" + "headers=" + headers + ", rows=" + rows + '}';
     }
 
     static ElementProperty hasIndex(int ind) {
@@ -316,26 +322,24 @@ public class AgGrid {
     }
 
     private WebElement getWebElForHeader(Path columnHeader, boolean virtualized) {
-        return virtualized ?
-                findHeader(columnHeader) :
-                InBrowserSinglton.find(columnHeader);
+        return virtualized ? findHeader(columnHeader) : InBrowserSinglton.find(columnHeader);
     }
 
     private void findColumnMapping() {
         checkAndAdaptToCorrectAgGridVersion();
-        headers.forEach( columnText -> {
+        headers.forEach(columnText -> {
             Path columnHeader = getColumnHeaderCell(columnText);
             WebElement headerCell = getWebElForHeader(columnHeader, virtualized);
             String columnId;
             // This hack deals with a re-rendering in AgGrid (defect?)
             try {
-                 columnId = headerCell.getAttribute(COL_ID);
+                columnId = headerCell.getAttribute(COL_ID);
             } catch (StaleElementReferenceException e) {
                 getWebElForHeader(columnHeader, virtualized);
                 columnId = getWebElForHeader(columnHeader, virtualized).getAttribute(COL_ID);
             }
 
-            if (columnId==null)
+            if (columnId == null)
                 throw new UnsupportedOperationException("could not find column id for " + columnHeader);
             colIdByHeader.put(columnText, columnId);
         });
@@ -344,11 +348,10 @@ public class AgGrid {
 
     private Path getColumnHeaderCell(String columnText) {
         Path headerCell = HEADER_CELL.inside(headerWrapper);
-        Path columnHeader =  (columnIdFormat.matcher(columnText).matches()) ?
-             headerCell.that(hasAttribute(COL_ID, columnText.substring(1, columnText.length()-1))) :
-             headerCell.that(
-                     contains(HEADER_TXT.that(hasAggregatedTextEqualTo(columnText))).or(
-                             contains(element.that(hasAriaLabel(columnText)))));
+        Path columnHeader = (columnIdFormat.matcher(columnText).matches())
+                ? headerCell.that(hasAttribute(COL_ID, columnText.substring(1, columnText.length() - 1)))
+                : headerCell.that(contains(HEADER_TXT.that(hasAggregatedTextEqualTo(columnText)))
+                        .or(contains(element.that(hasAriaLabel(columnText)))));
 
         return columnHeader.describedBy(format("header '%s'", columnText));
     }
@@ -360,7 +363,7 @@ public class AgGrid {
             WebElement webElement = scroll.rightUntilElementIsPresent(headerEl);
             // Deal with an issue with how AgGrid is rendered
             Thread.sleep(50);
-            try{
+            try {
                 webElement.getAttribute(COL_ID);
                 return webElement;
             } catch (StaleElementReferenceException e) {
@@ -372,8 +375,7 @@ public class AgGrid {
             if (virtualized) {
                 scroll.toTopLeftCorner();
                 return scroll.rightUntilElementIsPresent(headerEl);
-            }
-             else throw e;
+            } else throw e;
         }
     }
 
@@ -403,9 +405,9 @@ public class AgGrid {
         try {
             checkAndAdaptToCorrectAgGridVersion();
             Path headerEl = getVisibleHeaderPath(headerText);
-            Path sortButton = div.that(hasRef("eLabel")).
-                    inside(div.that(hasClassContaining("ag-header-cell-sort"))).
-                    inside(headerEl);
+            Path sortButton = div.that(hasRef("eLabel"))
+                    .inside(div.that(hasClassContaining("ag-header-cell-sort")))
+                    .inside(headerEl);
             scrollElement(tableHorizontalScroll).rightUntilPredicate(sortButton, getColumnVisiblityTest());
             clickOn(sortButton);
         } finally {
@@ -429,10 +431,10 @@ public class AgGrid {
             // required clicks, so we have to click and check repeatedly until it is sorted correctly, or we give up.
             int maxNumberOfTries = SortDirection.values().length;
             int numberOfClicks = 0;
-            while (numberOfClicks<=maxNumberOfTries) {
+            while (numberOfClicks <= maxNumberOfTries) {
                 String currentSortClass = find(sortElement).getAttribute("class");
                 SortDirection currentSortDirection = SortDirection.byCssClass(currentSortClass);
-                if (currentSortDirection!=direction) {
+                if (currentSortDirection != direction) {
                     clickOnSort(headerText);
                 } else return;
                 numberOfClicks++;
@@ -454,16 +456,16 @@ public class AgGrid {
 
     private Path findTheRightHeader(String headerText) {
         scrollElement(tableViewport).toTopLeftCorner();
-        return (headerText==null) ? HEADER_CELL.inside(headerWrapper) : getVisibleHeaderPath(headerText);
+        return (headerText == null) ? HEADER_CELL.inside(headerWrapper) : getVisibleHeaderPath(headerText);
     }
 
     private Path openColumnMenuAndGetMenu(String headerText, String cssClass) {
         Path columnHeader = findTheRightHeader(headerText);
         clickAt(HEADER_MENU.inside(columnHeader));
         Path headerMenu = MENU.inside(POPUP);
-        Path menuTabHeader = div.that(hasClassContaining("ag-tab"), hasRef("eHeader")).
-                inside(headerMenu).
-                describedBy("column menu header");
+        Path menuTabHeader = div.that(hasClassContaining("ag-tab"), hasRef("eHeader"))
+                .inside(headerMenu)
+                .describedBy("column menu header");
         Path wantedTab = span.withClass("ag-tab").parentOf(span.withClass(cssClass));
         List<String> currentTabClasses = getCssClasses(wantedTab.inside(menuTabHeader));
         if (!currentTabClasses.contains("ag-tab-selected")) {
@@ -526,7 +528,7 @@ public class AgGrid {
 
     private void ensureCheckboxIsSelected(Path selectAllColumns, Path selectAllIcon) {
         int tries = 3;
-        while (!getCssClasses(selectAllIcon).contains("ag-checked") && tries>0) {
+        while (!getCssClasses(selectAllIcon).contains("ag-checked") && tries > 0) {
             tries--;
             clickAt(selectAllColumns);
         }
@@ -551,8 +553,11 @@ public class AgGrid {
         try {
             columns.forEach(column -> {
                 scrollElement(columnList).toTopCorner();
-                Path checkbox = CHECKBOX.beforeSibling(span.that(hasRef("eLabel")).and(hasText(column))).inside(columnList);
-                scrollElementWithStepOverride(columnList, 10).downUntilPredicate(checkbox, getOptionVisiblityTest(columnList));
+                Path checkbox = CHECKBOX.beforeSibling(
+                                span.that(hasRef("eLabel")).and(hasText(column)))
+                        .inside(columnList);
+                scrollElementWithStepOverride(columnList, 10)
+                        .downUntilPredicate(checkbox, getOptionVisiblityTest(columnList));
                 clickAt(checkbox);
             });
             clickAt(BasicPath.body);
@@ -567,7 +572,6 @@ public class AgGrid {
      */
     public void showSpecificColumnsUsingMenuOfColumn(List<String> columns) {
         showSpecificColumnsUsingMenuOfColumn(null, columns);
-
     }
 
     /**
@@ -577,7 +581,6 @@ public class AgGrid {
         showAllColumnsUsingMenuOfColumn(null, true);
         clickAt(BasicPath.body);
     }
-
 
     /**
      * Make sure the given column header is visible, and returns a Path element to access it.
@@ -626,7 +629,7 @@ public class AgGrid {
 
     private Predicate<WebElement> getColumnVisiblityTest() {
         int rightmost = getRightmostOfTable();
-        return el -> el.isDisplayed() && el.getLocation().x < rightmost ;
+        return el -> el.isDisplayed() && el.getLocation().x < rightmost;
     }
 
     /**
@@ -638,15 +641,11 @@ public class AgGrid {
     public Path ensureVisibilityOfRowWithIndex(int n) {
         checkAndAdaptToCorrectAgGridVersion();
         setOperationTimeout();
-        final Path nthRow = ROW.that(hasIndex(n)).inside(tableContent)
-                .describedBy(format("row with index %d", n));
+        final Path nthRow = ROW.that(hasIndex(n)).inside(tableContent).describedBy(format("row with index %d", n));
         Predicate<WebElement> isVisible = getRowVisiblityTest();
 
         try {
-             if(findAll(nthRow).
-                     stream()
-                     .anyMatch(isVisible))
-                return nthRow;
+            if (findAll(nthRow).stream().anyMatch(isVisible)) return nthRow;
         } catch (Exception e) {
             // will have to search through the table
         }
@@ -686,7 +685,8 @@ public class AgGrid {
             Path cell = CELL.inside(nthRow).describedBy(format("cell in %s", nthRow));
             Path cellOfTheColumn = cell.that(hasColumnId(id));
             scrollElement(tableHorizontalScroll).toLeftCorner();
-            scrollElementWithStepOverride(tableHorizontalScroll, stepSize).rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
+            scrollElementWithStepOverride(tableHorizontalScroll, stepSize)
+                    .rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
             return cellOfTheColumn;
         } finally {
             setFinalTimeout();
@@ -703,7 +703,9 @@ public class AgGrid {
         try {
             return parseInt(find(row).getAttribute("row-index"));
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("getRowIndex() requires the row to be present in the DOM. Use another function to ensure it is there first.", e);
+            throw new NoSuchElementException(
+                    "getRowIndex() requires the row to be present in the DOM. Use another function to ensure it is there first.",
+                    e);
         }
     }
 
@@ -724,7 +726,7 @@ public class AgGrid {
      */
     public int findRowIndex(Map<String, ElementProperty> row) {
         if (!virtualized) {
-            Path rowEl =  findNonVirtualizedRowInBrowser(row);
+            Path rowEl = findNonVirtualizedRowInBrowser(row);
             return getRowIndex(rowEl);
         }
 
@@ -739,60 +741,59 @@ public class AgGrid {
             Thread.sleep(50);
             List<Integer> presentRowIndexes = getCurrentIndexes();
             Optional<Integer> matchingIndexInCurrentDOM = tryFindRowIndexWithinList(row, presentRowIndexes);
-            if (matchingIndexInCurrentDOM.isPresent())
-                return matchingIndexInCurrentDOM.get();
+            if (matchingIndexInCurrentDOM.isPresent()) return matchingIndexInCurrentDOM.get();
 
             // couldn't find in current place. have to scan from beginning...
             Set<Integer> checkedIndexes = new HashSet<>(presentRowIndexes);
-               OptionalInt foundRow = range(0, 10000000).
-                       filter(ind -> !checkedIndexes.contains(ind)).
-                       filter(i -> {
-                            try {
-                                Path myRow = findRowInBrowser(i, row);
-                                scrollElementWithStepOverride(tableViewport, stepSize).downUntilPredicate(myRow, getRowVisiblityTest());
-                                return true;
-                            } catch (NoSuchElementException e) {
-                                return false;
-                            }
-                        }).
-                        findFirst();
-                return foundRow.orElseThrow(NotFoundException::new);
-        }  catch (InterruptedException e) {
+            OptionalInt foundRow = range(0, 10000000)
+                    .filter(ind -> !checkedIndexes.contains(ind))
+                    .filter(i -> {
+                        try {
+                            Path myRow = findRowInBrowser(i, row);
+                            scrollElementWithStepOverride(tableViewport, stepSize)
+                                    .downUntilPredicate(myRow, getRowVisiblityTest());
+                            return true;
+                        } catch (NoSuchElementException e) {
+                            return false;
+                        }
+                    })
+                    .findFirst();
+            return foundRow.orElseThrow(NotFoundException::new);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             setFinalTimeout();
         }
     }
 
     private Optional<Integer> tryFindRowIndexWithinList(Map<String, ElementProperty> row, List<Integer> indexes) {
-        return indexes.stream().
-                        filter(index -> {
-                            try {
-                                final Path myRow = ROW.that(hasIndex(index)).inside(tableContent)
-                                        .and(contains(AgGrid.CELL))
-                                        .describedBy(format("row with index %d", index));
-                                validateRowContent(row, myRow);
-                                return true;
-                            } catch (NoSuchElementException e) {
-                                return false;
-                            }
-                        }).
-                        findFirst();
+        return indexes.stream()
+                .filter(index -> {
+                    try {
+                        final Path myRow = ROW.that(hasIndex(index))
+                                .inside(tableContent)
+                                .and(contains(AgGrid.CELL))
+                                .describedBy(format("row with index %d", index));
+                        validateRowContent(row, myRow);
+                        return true;
+                    } catch (NoSuchElementException e) {
+                        return false;
+                    }
+                })
+                .findFirst();
     }
 
     private List<Integer> getCurrentIndexes() {
         final Path anyRow = ROW.inside(tableContent).and(contains(AgGrid.CELL));
         List<String> indexes = InBrowserSinglton.getAttributeOfAll(anyRow, "row-index");
-        return indexes.stream()
-                .map(Integer::parseInt)
-                .collect(toList());
+        return indexes.stream().map(Integer::parseInt).collect(toList());
     }
 
     private Path findRowInBrowser(int index, Map<String, ElementProperty> row) {
         scrollElement(tableViewport).toTopLeftCorner();
         scrollElement(tableHorizontalScroll).toLeftCorner();
-        final Path myRow = ROW.that(hasIndex(index)).inside(tableContent)
-            .describedBy(format("row with index %d", index));
+        final Path myRow =
+                ROW.that(hasIndex(index)).inside(tableContent).describedBy(format("row with index %d", index));
 
         try {
             scrollElement(tableViewport).downUntilElementIsPresent(myRow);
@@ -807,7 +808,7 @@ public class AgGrid {
         scrollElement(tableHorizontalScroll).toLeftCorner();
         Function<String, Path> getCollumn = (String columnTitle) -> {
             String id = colIdByHeader.get(columnTitle);
-            if (id==null) {
+            if (id == null) {
                 throw new IllegalArgumentException(format("column %s was not in grid definition", columnTitle));
             }
             Path cell = CELL.inside(myRow).describedBy(format("cell in %s", myRow));
@@ -818,7 +819,7 @@ public class AgGrid {
             Path columnCell = getCollumn.apply(columnTitle);
             try {
                 scrollToFindCellWithValue(hasExpectedValue, columnCell);
-            } catch(NoSuchElementException e) {
+            } catch (NoSuchElementException e) {
                 scrollElement(tableHorizontalScroll).toLeftCorner();
                 scrollToFindCellWithValue(hasExpectedValue, columnCell);
             }
@@ -830,30 +831,28 @@ public class AgGrid {
         find(columnCell.that(hasExpectedValue));
     }
 
-    private Path findNonVirtualizedRowInBrowser(Path rowWithOptionalIndex, Map<String, ElementProperty> contentByColumn) {
-        Path rowInTable = rowWithOptionalIndex.inside(tableContent)
-                .describedBy(format("%s", rowWithOptionalIndex));
+    private Path findNonVirtualizedRowInBrowser(
+            Path rowWithOptionalIndex, Map<String, ElementProperty> contentByColumn) {
+        Path rowInTable = rowWithOptionalIndex.inside(tableContent).describedBy(format("%s", rowWithOptionalIndex));
 
         // Since the number of columns could be large, keep each separate to allow easier troubleshooting,
         // and avoid huge xpath
-        List<Path> cells = contentByColumn.entrySet().stream().map( entry -> {
-            String columnTitle = entry.getKey();
-            ElementProperty hasExpectedValue = entry.getValue();
+        List<Path> cells = contentByColumn.entrySet().stream()
+                .map(entry -> {
+                    String columnTitle = entry.getKey();
+                    ElementProperty hasExpectedValue = entry.getValue();
 
-            String id = colIdByHeader.get(columnTitle);
-            if (id == null) {
-                throw new IllegalArgumentException(columnTitle);
-            }
-            return CELL.that(hasColumnId(id)).and(hasExpectedValue);
-        }).collect(toList());
-        Path theRow = cells.stream().reduce(
-                rowInTable,
-                (r, cell) -> r.that(contains(cell))
-        );
+                    String id = colIdByHeader.get(columnTitle);
+                    if (id == null) {
+                        throw new IllegalArgumentException(columnTitle);
+                    }
+                    return CELL.that(hasColumnId(id)).and(hasExpectedValue);
+                })
+                .collect(toList());
+        Path theRow = cells.stream().reduce(rowInTable, (r, cell) -> r.that(contains(cell)));
         InBrowserSinglton.find(theRow);
         return theRow;
     }
-
 
     private Path findNonVirtualizedRowInBrowser(Map<String, ElementProperty> contentByColumn) {
         return findNonVirtualizedRowInBrowser(ROW.describedBy("row"), contentByColumn);
@@ -861,7 +860,7 @@ public class AgGrid {
 
     private Path findNonVirtualizedRowInBrowser(Integer index, Map<String, ElementProperty> contentByColumn) {
         Path rowWithIndex = ROW.that(hasIndex(index)).describedBy(format("row with index %d", index));
-        return findNonVirtualizedRowInBrowser(rowWithIndex, contentByColumn );
+        return findNonVirtualizedRowInBrowser(rowWithIndex, contentByColumn);
     }
 
     private void verifyAGridIsPresent() {
@@ -890,10 +889,13 @@ public class AgGrid {
             }
             scrollElement(tableViewport).toTopLeftCorner();
             scrollElement(tableHorizontalScroll).toLeftCorner();
-            Path cellOfTheColumn = CELL.that(hasColumnId(id)).describedBy(String.format("cell in column '%s'", columnTitle));
-            scrollElementWithStepOverride(tableHorizontalScroll, stepSize).rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
+            Path cellOfTheColumn =
+                    CELL.that(hasColumnId(id)).describedBy(String.format("cell in column '%s'", columnTitle));
+            scrollElementWithStepOverride(tableHorizontalScroll, stepSize)
+                    .rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
             Path correctCellInColumn = cellOfTheColumn.that(cellContent);
-            scrollElementWithStepOverride(tableViewport, stepSize).downUntilPredicate(correctCellInColumn, getRowVisiblityTest());
+            scrollElementWithStepOverride(tableViewport, stepSize)
+                    .downUntilPredicate(correctCellInColumn, getRowVisiblityTest());
             return correctCellInColumn;
         } finally {
             setFinalTimeout();
@@ -930,7 +932,8 @@ public class AgGrid {
             }
             scrollElement(tableHorizontalScroll).toLeftCorner();
             Path cellOfTheColumn = CELL.that(hasColumnId(id)).inside(row);
-            scrollElementWithStepOverride(tableHorizontalScroll, stepSize).rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
+            scrollElementWithStepOverride(tableHorizontalScroll, stepSize)
+                    .rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
             return cellOfTheColumn;
         } finally {
             setFinalTimeout();
@@ -950,14 +953,13 @@ public class AgGrid {
         try {
             scrollElement(tableHorizontalScroll).toLeftCorner();
             Path cellOfTheColumn = CELL.that(hasColumnId(columnId)).inside(row);
-            scrollElementWithStepOverride(tableHorizontalScroll, stepSize).rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
+            scrollElementWithStepOverride(tableHorizontalScroll, stepSize)
+                    .rightUntilPredicate(cellOfTheColumn, getColumnVisiblityTest());
             return cellOfTheColumn;
         } finally {
             setFinalTimeout();
         }
     }
-
-
 
     public void findTableInBrowser() {
         verifyAGridIsPresent();
@@ -967,7 +969,7 @@ public class AgGrid {
         findColumnMapping();
         IntStream rowsIndex = range(0, rows.size());
         if (virtualized) {
-            rowsIndex.forEach(i -> findRowInBrowser (i, rows.get(i)));
+            rowsIndex.forEach(i -> findRowInBrowser(i, rows.get(i)));
         } else {
             rowsIndex.forEach(i -> findNonVirtualizedRowInBrowser(i, rows.get(i)));
         }
@@ -978,19 +980,17 @@ public class AgGrid {
     }
 
     private void verifyNoRowWithIndex(int index) {
-        Path myRow = ROW.that(hasIndex(index)).inside(tableContent)
-            .describedBy(format("row with index %d", index));
+        Path myRow = ROW.that(hasIndex(index)).inside(tableContent).describedBy(format("row with index %d", index));
         try {
-            if (virtualized){
+            if (virtualized) {
                 scrollElement(tableViewport).downUntilElementIsPresent(myRow);
             } else {
                 find(myRow);
             }
-        } catch( RuntimeException e) {
+        } catch (RuntimeException e) {
             // Good! no extra rows
             return;
         }
         throw new NoSuchElementException(format("grid with exactly %d rows. Found too many rows.", index));
     }
-
 }

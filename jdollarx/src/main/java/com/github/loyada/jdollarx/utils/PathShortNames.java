@@ -1,9 +1,9 @@
 package com.github.loyada.jdollarx.utils;
 
-import com.github.loyada.jdollarx.Path;
-
 import static com.github.loyada.jdollarx.BasicPath.element;
 import static com.github.loyada.jdollarx.ElementProperties.isSiblingOf;
+
+import com.github.loyada.jdollarx.Path;
 
 public class PathShortNames {
     private PathShortNames() {}
@@ -13,7 +13,7 @@ public class PathShortNames {
      * @param path the element
      * @return the corresponding Path definition
      */
-    public static Path parentOf(Path path){
+    public static Path parentOf(Path path) {
         return element.parentOf(path);
     }
 
@@ -22,7 +22,7 @@ public class PathShortNames {
      * @param path the element
      * @return the corresponding Path definition
      */
-    public static Path childOf(Path path){
+    public static Path childOf(Path path) {
         return element.childOf(path);
     }
 
@@ -31,7 +31,7 @@ public class PathShortNames {
      * @param path the element
      * @return the corresponding Path definition
      */
-    public static Path ancestorOf(Path path){
+    public static Path ancestorOf(Path path) {
         return element.containing(path);
     }
 
@@ -40,7 +40,7 @@ public class PathShortNames {
      * @param path the element
      * @return the corresponding Path definition
      */
-    public static Path siblingOf(Path path){
+    public static Path siblingOf(Path path) {
         return element.that(isSiblingOf(path));
     }
 }

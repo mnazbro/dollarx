@@ -1,12 +1,11 @@
 package com.github.loyada.jdollarx.singlebrowser.highlevelapi;
 
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.highlevelapi.RadioInput;
-
 import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
 
 /**
  * High-level API to define a with high level instance of radio input
@@ -14,7 +13,7 @@ import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
  * to understand the structure of the DOM.
  */
 public final class RadioInputs {
-    private RadioInputs(){}
+    private RadioInputs() {}
 
     /**
      * In case the organization of the DOM is unclear, it will try both labeled input and unlabeled input.
@@ -27,7 +26,7 @@ public final class RadioInputs {
      * @return a RadioInput instance
      */
     public static RadioInput withTextUnknownDOM(String text, int originalImplicitWait, TimeUnit timeUnit) {
-       return RadioInput.withTextUnknownDOM(new InBrowser(driver), text, originalImplicitWait, timeUnit);
+        return RadioInput.withTextUnknownDOM(new InBrowser(driver), text, originalImplicitWait, timeUnit);
     }
 
     /**
@@ -54,14 +53,12 @@ public final class RadioInputs {
         return RadioInput.withUnlabeledText(new InBrowser(driver), text);
     }
 
-
-
     /**
      * return a radio button with some custom properties
      * @param props - some custom properties for the radio button
      * @return a radio input with some custom properties
      */
-    public static RadioInput withProperties(ElementProperty... props){
+    public static RadioInput withProperties(ElementProperty... props) {
         return new RadioInput(new InBrowser(driver), props);
     }
 }

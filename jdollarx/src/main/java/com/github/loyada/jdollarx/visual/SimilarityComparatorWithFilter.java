@@ -1,9 +1,9 @@
 package com.github.loyada.jdollarx.visual;
 
+import static java.lang.String.format;
+
 import java.awt.image.BufferedImage;
 import java.util.function.BiConsumer;
-
-import static java.lang.String.format;
 
 public class SimilarityComparatorWithFilter implements BiConsumer<BufferedImage, BufferedImage> {
     private final BufferedImage filterImage;
@@ -18,25 +18,18 @@ public class SimilarityComparatorWithFilter implements BiConsumer<BufferedImage,
     public void accept(BufferedImage refImage, BufferedImage actualImage) {
         int totalPixels = 0;
         int countOfErrors = 0;
-        for (int y=1; y<refImage.getHeight()-1; y++) {
-            for (int x = 1; x < refImage.getWidth()-1; x++) {
-                if ((filterImage.getRGB(x, y) & 0xffffff) == 0)
-                    continue;
+        for (int y = 1; y < refImage.getHeight() - 1; y++) {
+            for (int x = 1; x < refImage.getWidth() - 1; x++) {
+                if ((filterImage.getRGB(x, y) & 0xffffff) == 0) continue;
 
                 totalPixels += 1;
-                if (SimilarityComparator.pixelMismatch(
-                        refImage,
-                        actualImage,
-                        x,
-                        y)) {
+                if (SimilarityComparator.pixelMismatch(refImage, actualImage, x, y)) {
                     countOfErrors++;
                 }
             }
         }
         int threshold = totalPixels / maxBadPixelsRatio;
-        String errMessage = format(
-                        "found %d significant differences. Allowed %d",
-                countOfErrors, threshold);
+        String errMessage = format("found %d significant differences. Allowed %d", countOfErrors, threshold);
         Images.logger.info(errMessage);
         if (countOfErrors > threshold) {
             Images.logger.info("images have significant differences");

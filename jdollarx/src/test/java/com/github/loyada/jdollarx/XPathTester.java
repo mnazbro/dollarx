@@ -1,10 +1,8 @@
 package com.github.loyada.jdollarx;
 
+import java.util.logging.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.util.logging.Logger;
-
 
 public class XPathTester {
     static Logger logger = Logger.getLogger(XPathTester.class.getName());
@@ -13,7 +11,7 @@ public class XPathTester {
         logger.info(p.getXPath().get());
     }
 
-    public NodeList findAllByXpath(final String html, Path path){
+    public NodeList findAllByXpath(final String html, Path path) {
         try {
             logit(path);
             return PathParsers.findAllByPath("<html>" + html + "</html>", path);
@@ -30,9 +28,7 @@ public class XPathTester {
         return node.getAttributes().getNamedItem("class").getNodeValue();
     }
 
-
     public String getElementName(final Node node) {
         return node.getNodeName();
     }
-
 }

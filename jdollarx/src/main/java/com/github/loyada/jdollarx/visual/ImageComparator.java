@@ -1,11 +1,5 @@
 package com.github.loyada.jdollarx.visual;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
-
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static java.lang.String.format;
@@ -14,8 +8,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
+
 public class ImageComparator {
-    private ImageComparator(){}
+    private ImageComparator() {}
 
     /**
      * Verify images are "similar", given a threshold for the error rate. It allows a shift(offset) of a single pixel.
@@ -24,10 +24,9 @@ public class ImageComparator {
      * @param maxBadPixelsRatio - max error rate (the higher the error rate,
      *                          the more similar the images are required to be)
      */
-    public static void verifyImagesAreSimilar(BufferedImage refImage, BufferedImage actualImage, int maxBadPixelsRatio) {
-        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparator(
-                maxBadPixelsRatio
-        );
+    public static void verifyImagesAreSimilar(
+            BufferedImage refImage, BufferedImage actualImage, int maxBadPixelsRatio) {
+        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparator(maxBadPixelsRatio);
         verifyImagesAreSimilarInternal(verifier, refImage, actualImage, 1);
     }
 
@@ -42,17 +41,10 @@ public class ImageComparator {
      * @param maxShift max allowed shift between the images, in pixels
      */
     public static void verifyImagesAreSimilarWithShift(
-            BufferedImage refImage,
-            BufferedImage actualImage,
-            int maxBadPixelsRatio,
-            int maxShift
-    ) {
-        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparator(
-                maxBadPixelsRatio
-        );
+            BufferedImage refImage, BufferedImage actualImage, int maxBadPixelsRatio, int maxShift) {
+        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparator(maxBadPixelsRatio);
         verifyImagesAreSimilarInternal(verifier, refImage, actualImage, maxShift);
     }
-
 
     /**
      * Similar to verifyImagesAreSimilarWithShift() but also provides a "filter image" that highlights the areas
@@ -71,14 +63,9 @@ public class ImageComparator {
      *                            different.
      */
     public static void verifyImagesAreSimilarFilteringInterestingAreas(
-            BufferedImage filterImage,
-            BufferedImage refImage,
-            BufferedImage img,
-            int maxBadPixelsRatio) {
-        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparatorWithFilter(
-                filterImage,
-                maxBadPixelsRatio
-        );
+            BufferedImage filterImage, BufferedImage refImage, BufferedImage img, int maxBadPixelsRatio) {
+        BiConsumer<BufferedImage, BufferedImage> verifier =
+                new SimilarityComparatorWithFilter(filterImage, maxBadPixelsRatio);
         verifyImagesAreSimilarInternal(verifier, refImage, img, 2);
     }
 
@@ -93,24 +80,26 @@ public class ImageComparator {
         verifyImagesAreSimilarInternal(verifier, refImage, actualImage, maxShift);
     }
 
-
     private static void verifyImagesAreSimilarInternal(
-            BiConsumer<BufferedImage,BufferedImage> verifier,
+            BiConsumer<BufferedImage, BufferedImage> verifier,
             BufferedImage refImage,
             BufferedImage actualImage,
-            int maxShift
-    ) {
+            int maxShift) {
         Images.logger.info(format("ref image dimensions: %d, %d", refImage.getWidth(), refImage.getHeight()));
         Images.logger.info(format("actual image dimensions: %d, %d", actualImage.getWidth(), actualImage.getHeight()));
 
-        assertThat("width", abs(refImage.getWidth() - actualImage.getWidth()), lessThan(maxShift +1));
-        assertThat("height", abs(refImage.getHeight() - actualImage.getHeight()), lessThan(maxShift+1));
-        for (int yShift=0; yShift<=maxShift; yShift++) {
-            for (int xShift=0; xShift<=maxShift; xShift++) {
-                BufferedImage croppedImage1 = refImage.getSubimage(xShift, yShift,
+        assertThat("width", abs(refImage.getWidth() - actualImage.getWidth()), lessThan(maxShift + 1));
+        assertThat("height", abs(refImage.getHeight() - actualImage.getHeight()), lessThan(maxShift + 1));
+        for (int yShift = 0; yShift <= maxShift; yShift++) {
+            for (int xShift = 0; xShift <= maxShift; xShift++) {
+                BufferedImage croppedImage1 = refImage.getSubimage(
+                        xShift,
+                        yShift,
                         min(refImage.getWidth(), actualImage.getWidth()) - xShift,
                         min(refImage.getHeight(), actualImage.getHeight()) - yShift);
-                BufferedImage croppedImage2 = actualImage.getSubimage(0, 0,
+                BufferedImage croppedImage2 = actualImage.getSubimage(
+                        0,
+                        0,
                         min(refImage.getWidth(), actualImage.getWidth()) - xShift,
                         min(refImage.getHeight(), actualImage.getHeight()) - yShift);
                 try {
@@ -119,20 +108,22 @@ public class ImageComparator {
                     Images.logger.info(format("Found correct shift: %d, %d", xShift, yShift));
                     return;
                 } catch (AssertionError e) {
-                    if (maxShift==0)
-                        throw e;
+                    if (maxShift == 0) throw e;
                     //     Images.logger.info(String.format("failed with shift: %d, %d", xShift, yShift));
                 }
             }
-
         }
 
-        for (int yShift=0; yShift<=maxShift; yShift++) {
-            for (int xShift=0; xShift<=maxShift; xShift++) {
-                BufferedImage croppedImage1 = refImage.getSubimage(0, 0,
+        for (int yShift = 0; yShift <= maxShift; yShift++) {
+            for (int xShift = 0; xShift <= maxShift; xShift++) {
+                BufferedImage croppedImage1 = refImage.getSubimage(
+                        0,
+                        0,
                         min(refImage.getWidth(), actualImage.getWidth()) - xShift,
                         min(refImage.getHeight(), actualImage.getHeight()) - yShift);
-                BufferedImage croppedImage2 = actualImage.getSubimage(xShift, yShift,
+                BufferedImage croppedImage2 = actualImage.getSubimage(
+                        xShift,
+                        yShift,
                         min(refImage.getWidth(), actualImage.getWidth()) - xShift,
                         min(refImage.getHeight(), actualImage.getHeight()) - yShift);
                 try {
@@ -141,14 +132,14 @@ public class ImageComparator {
                     Images.logger.info(format("Found correct negative shift: %d, %d", xShift, yShift));
                     return;
                 } catch (AssertionError e) {
-                    //           Images.logger.info(String.format("failed with negative shift: %d, %d", xShift, yShift));
+                    //           Images.logger.info(String.format("failed with negative shift: %d, %d", xShift,
+                    // yShift));
                 }
             }
         }
 
         throw new AssertionError("could not find any shift");
     }
-
 
     /**
      * Capture an error image for an assertion of equality of
@@ -162,20 +153,18 @@ public class ImageComparator {
     public static Optional<BufferedImage> getErrorImage(BufferedImage img1, BufferedImage img2) {
         assertThat("width", img1.getWidth(), equalTo(img2.getWidth()));
         assertThat("height", img1.getHeight(), equalTo(img2.getHeight()));
-        BufferedImage errImage = new BufferedImage(img1.getWidth(), img1.getHeight(),BufferedImage.TYPE_INT_RGB);
+        BufferedImage errImage = new BufferedImage(img1.getWidth(), img1.getHeight(), BufferedImage.TYPE_INT_RGB);
         AtomicReference<Boolean> foundDiff = new AtomicReference<>(false);
-        range(0, img1.getHeight()).forEach(y ->
-                range(0, img1.getWidth()).forEach(x -> {
-                            if (img1.getRGB(x, y) == img2.getRGB(x, y)) {
-                                Color oldColor = new Color(img1.getRGB(x, y), img1.isAlphaPremultiplied());
-                                Color newColor = new Color(oldColor.getRed() / 4, oldColor.getGreen() / 4, oldColor.getBlue() / 4);
-                                errImage.setRGB(x, y, newColor.getRGB());
-                            } else {
-                                foundDiff.set(true);
-                                errImage.setRGB(x, y, 0xff0000);
-                            }
-                        }
-                ));
+        range(0, img1.getHeight()).forEach(y -> range(0, img1.getWidth()).forEach(x -> {
+            if (img1.getRGB(x, y) == img2.getRGB(x, y)) {
+                Color oldColor = new Color(img1.getRGB(x, y), img1.isAlphaPremultiplied());
+                Color newColor = new Color(oldColor.getRed() / 4, oldColor.getGreen() / 4, oldColor.getBlue() / 4);
+                errImage.setRGB(x, y, newColor.getRGB());
+            } else {
+                foundDiff.set(true);
+                errImage.setRGB(x, y, 0xff0000);
+            }
+        }));
         return foundDiff.get() ? Optional.of(errImage) : Optional.empty();
     }
 
@@ -195,12 +184,10 @@ public class ImageComparator {
         return SimilarityComparator.getErrorImage(img1, img2);
     }
 
-
     public static void verifyImagesAreEqual(BufferedImage img1, BufferedImage img2) {
         BiConsumer<BufferedImage, BufferedImage> verifier = new IdentityComparator();
         verifyImagesAreSimilarInternal(verifier, img1, img2, 0);
     }
-
 
     /**
      * Verify equality to a reference image, ignoring areas that we are uninterested in.
@@ -211,11 +198,9 @@ public class ImageComparator {
      * @param img1 - captured image
      * @param img2 - reference image
      */
-    public static void verifyImagesAreEqualFilteringInterestingAreas(BufferedImage filterImg, BufferedImage img1, BufferedImage img2) {
-        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparatorWithFilter(
-                filterImg,
-                1000000
-        );
+    public static void verifyImagesAreEqualFilteringInterestingAreas(
+            BufferedImage filterImg, BufferedImage img1, BufferedImage img2) {
+        BiConsumer<BufferedImage, BufferedImage> verifier = new SimilarityComparatorWithFilter(filterImg, 1000000);
         verifyImagesAreSimilarInternal(verifier, img1, img2, 1);
     }
 }

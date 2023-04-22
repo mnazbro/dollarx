@@ -1,19 +1,16 @@
 package com.github.loyada.jdollarx.singlebrowser;
 
-
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.visual.Images;
-import com.google.common.eventbus.Subscribe;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 /**
  * A simplified API built to interact with a single instance of a running browser.
@@ -28,7 +25,9 @@ public final class InBrowserSinglton {
      * Convert from a InBrowserSinglton to an non-singleton instance of InBrowser
      * @return a new instance of InBrowser
      */
-    private static InBrowser getBrowser() { return InBrowser.fromSingleton();}
+    private static InBrowser getBrowser() {
+        return InBrowser.fromSingleton();
+    }
 
     /**
      * Equivalent to WebDriver.findElement(). If the Path contains a WebElement than it will look for an element inside that WebElement.
@@ -51,7 +50,6 @@ public final class InBrowserSinglton {
     public static List<WebElement> findAll(final Path el) {
         return getBrowser().findAll(el);
     }
-
 
     /**
      * Get a specific attribute of all the elements matching the given path.
@@ -108,7 +106,9 @@ public final class InBrowserSinglton {
      * @param el the wanted element
      * @return is it covered
      */
-    public static boolean isCovered(final Path el) { return getBrowser().isCovered(el);}
+    public static boolean isCovered(final Path el) {
+        return getBrowser().isCovered(el);
+    }
 
     /**
      * Relies on Selenium WebElement::isSelected, thus non-atomic.
@@ -125,9 +125,8 @@ public final class InBrowserSinglton {
      * @return true if the element is present and displayed
      */
     public static boolean isDisplayed(final Path el) {
-       return getBrowser().isDisplayed(el);
+        return getBrowser().isDisplayed(el);
     }
-
 
     ////////////////////////////////////////////////////
     //// actions
@@ -203,7 +202,6 @@ public final class InBrowserSinglton {
     public static Operations.Scroll scroll() {
         return getBrowser().scroll();
     }
-
 
     /**
      * scroll within the given element. Useful especially when working with grids.
@@ -307,9 +305,8 @@ public final class InBrowserSinglton {
      * @return a list of classes
      */
     public static List<String> getCssClasses(final Path el) {
-       return getBrowser().getCssClasses(el);
+        return getBrowser().getCssClasses(el);
     }
-
 
     public static int waitUntilStable(Path el, int waitBetweenChecksInMillis) {
         int currentCount = countAll(el);
@@ -324,10 +321,9 @@ public final class InBrowserSinglton {
             }
             currentCount = countAll(el);
             iterations += 1;
-        } while (currentCount!=previousCount);
+        } while (currentCount != previousCount);
         return iterations;
     }
-
 
     /**
      * Manager implicit timeouts

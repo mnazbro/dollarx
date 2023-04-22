@@ -1,6 +1,6 @@
 package com.github.loyada.jdollarx;
 
-
+import static com.github.loyada.jdollarx.PathUtils.transformXpathToCorrectAxis;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.loyada.jdollarx.PathUtils.transformXpathToCorrectAxis;
-
 /**
  * Various constrains  on {@link Path} instances, that are used with the methods {@link Path#that}
  * and {@link Path#and}.
  */
 public final class ElementProperties {
 
-    private ElementProperties() {
-    }
+    private ElementProperties() {}
 
     /**
      * The element is the last sibling (ie: last child) of its parent.
@@ -294,11 +291,11 @@ public final class ElementProperties {
      * @param txt - the text to match to
      * @return an element property that can be applied with Path::that
      */
-    public static ElementProperty hasAriaLabel(String txt) { {
-        return hasAttribute("aria-label", txt);
+    public static ElementProperty hasAriaLabel(String txt) {
+        {
+            return hasAttribute("aria-label", txt);
+        }
     }
-    }
-
 
     /**
      * Element has text equals to the given string parameter.
@@ -387,7 +384,9 @@ public final class ElementProperties {
      * @param src the URI of the image
      * @return a element property that can be applied with Path::that
      */
-    public static ElementProperty hasSource(String src) { return hasAttribute("src", src); }
+    public static ElementProperty hasSource(String src) {
+        return hasAttribute("src", src);
+    }
 
     /**
      * Element with a "role" attribute equal to the given role.
@@ -564,7 +563,7 @@ public final class ElementProperties {
      * @param className the class the element has
      * @return An element property that can be applied with Path::that
      */
-    static public ElementProperty hasClass(String className) {
+    public static ElementProperty hasClass(String className) {
         return new ElementProperty() {
             @Override
             public String toXpath() {
@@ -702,7 +701,6 @@ public final class ElementProperties {
         }
     };
 
-
     /**
      * Element has non-empty text
      */
@@ -716,7 +714,6 @@ public final class ElementProperties {
             return "has some text";
         }
     };
-
 
     ///////////////////////////////////////////////////////////
     // relationships
@@ -763,12 +760,15 @@ public final class ElementProperties {
      * @return An element property that can be applied with Path::that
      */
     public static ElementProperty isParentOf(Path... paths) {
-        return new RelationBetweenMultiElement("child", Arrays.asList(paths))  {
+        return new RelationBetweenMultiElement("child", Arrays.asList(paths)) {
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
+
             @Override
             public String toString() {
-                String relation = String.format("has %s", paths.length==1 ?  "child" : "children");
+                String relation = String.format("has %s", paths.length == 1 ? "child" : "children");
                 return asString(relation);
             }
         };
@@ -866,8 +866,11 @@ public final class ElementProperties {
             public String toString() {
                 return asString("is after");
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -881,14 +884,18 @@ public final class ElementProperties {
      * @param nPath - at-least/at-most/exactly the given number of the given element
      * @return An element property that can be applied with Path::that
      */
-    public static ElementProperty isAfter(NPath nPath){
-        return new RelationBetweenMultiElement("preceding", nPath ) {
+    public static ElementProperty isAfter(NPath nPath) {
+        return new RelationBetweenMultiElement("preceding", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("is after%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "is after%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -902,14 +909,18 @@ public final class ElementProperties {
      * @param nPath - at-least/at-most/exactly the given number of the given element
      * @return An element property that can be applied with Path::that
      */
-    public static ElementProperty contains(NPath nPath){
-        return new RelationBetweenMultiElement("descendant", nPath ) {
+    public static ElementProperty contains(NPath nPath) {
+        return new RelationBetweenMultiElement("descendant", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("containing%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "containing%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -923,14 +934,18 @@ public final class ElementProperties {
      * @param nPath - at-least/at-most/exactly the given number of the given element
      * @return An element property that can be applied with Path::that
      */
-    public static ElementProperty isParentOf(NPath nPath){
-        return new RelationBetweenMultiElement("child", nPath ) {
+    public static ElementProperty isParentOf(NPath nPath) {
+        return new RelationBetweenMultiElement("child", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("parent of%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "parent of%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -945,8 +960,11 @@ public final class ElementProperties {
             public String toString() {
                 return asString("is before");
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -957,7 +975,7 @@ public final class ElementProperties {
      *    import static com.github.loyada.jdollarx.isBefore;
      *    input.that(isBefore(atLeast(2).occurrencesOf(div)));
      * </pre>
-      *
+     *
      * @param nPath - at-least/at-most/exactly the given number of the given element
      * @return An element property that can be applied with Path::that
      */
@@ -965,10 +983,14 @@ public final class ElementProperties {
         return new RelationBetweenMultiElement("following", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("is before%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "is before%s%d occurrences of", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
+
             @Override
-            protected String plural(final String relation){return relation;}
+            protected String plural(final String relation) {
+                return relation;
+            }
         };
     }
 
@@ -981,8 +1003,10 @@ public final class ElementProperties {
         return new RelationBetweenMultiElement("", Arrays.asList(paths)) {
             @Override
             protected String getXpathExpressionForSingle(Path path) {
-                return "(" + isAfterSibling(path).toXpath() + ") or (" + isBeforeSibling(path).toXpath() + ")";
+                return "(" + isAfterSibling(path).toXpath() + ") or ("
+                        + isBeforeSibling(path).toXpath() + ")";
             }
+
             @Override
             public String toString() {
                 return asString("has sibling");
@@ -1019,7 +1043,8 @@ public final class ElementProperties {
         return new RelationBetweenMultiElement("preceding-sibling", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("is after%s%d siblings of type", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "is after%s%d siblings of type", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
         };
     }
@@ -1052,7 +1077,8 @@ public final class ElementProperties {
         return new RelationBetweenMultiElement("following-sibling", nPath) {
             @Override
             public String toString() {
-                return asString(String.format("is before%s%d siblings of type", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
+                return asString(String.format(
+                        "is before%s%d siblings of type", RelationOperator.opAsEnglish(nPath.qualifier), nPath.n));
             }
         };
     }
@@ -1074,8 +1100,7 @@ public final class ElementProperties {
         }
 
         public String toString() {
-            if (p.toString().startsWith("is "))
-                return "is not " + p.toString().substring(3);
+            if (p.toString().startsWith("is ")) return "is not " + p.toString().substring(3);
             else if (p.toString().startsWith("has "))
                 return "has no " + p.toString().substring(4);
             else return "not (" + p + ")";
@@ -1086,7 +1111,6 @@ public final class ElementProperties {
             return XpathUtils.doesNotExist(p.toXpath());
         }
     }
-
 
     static final class And implements ElementProperty {
         private final ElementProperty p1, p2;
@@ -1124,7 +1148,7 @@ public final class ElementProperties {
         }
     }
 
-    private static class RelationBetweenMultiElement implements ElementProperty{
+    private static class RelationBetweenMultiElement implements ElementProperty {
         private final String relation;
         private final List<Path> paths;
         private final Optional<NPath> nPath;
@@ -1146,11 +1170,8 @@ public final class ElementProperties {
         }
 
         protected String asString(final String prefix) {
-            String asList = paths.stream().
-                    map(this::rValueToString).
-                    collect(Collectors.joining(", "));
-            return String.format("%s: %s", plural(prefix),
-                    (paths.size() > 1) ? String.format("[%s]", asList) : asList);
+            String asList = paths.stream().map(this::rValueToString).collect(Collectors.joining(", "));
+            return String.format("%s: %s", plural(prefix), (paths.size() > 1) ? String.format("[%s]", asList) : asList);
         }
 
         protected String plural(final String relation) {
@@ -1158,29 +1179,29 @@ public final class ElementProperties {
         }
 
         protected String getXpathExpressionForSingle(final Path path) {
-            return String.format("%s::%s", relation, transformXpathToCorrectAxis(path).get());
+            return String.format(
+                    "%s::%s", relation, transformXpathToCorrectAxis(path).get());
         }
-
 
         private String getRelationForSingleXpath(final Path path) {
             if (path.getUnderlyingSource().isPresent() || !path.getXPath().isPresent())
                 throw new IllegalArgumentException("must use a pure xpath Path");
             if (path.getXPath().get().startsWith("(")) {
-                throw new IllegalArgumentException("The expression not compile to a proper xpath." +
-                "Please use Path methods instead to express the relation.");
+                throw new IllegalArgumentException("The expression not compile to a proper xpath."
+                        + "Please use Path methods instead to express the relation.");
             }
             String expressionForSingle = getXpathExpressionForSingle(path);
             return nPath.map(np -> addNPathQualifier(expressionForSingle)).orElse(expressionForSingle);
         }
 
         private String addNPathQualifier(String path) {
-            return String.format("count(%s)%s%d", path, RelationOperator.opAsXpathString(nPath.get().qualifier), nPath.get().n);
+            return String.format(
+                    "count(%s)%s%d", path, RelationOperator.opAsXpathString(nPath.get().qualifier), nPath.get().n);
         }
 
         private String getRelationXpath() {
-            final String result = paths.stream().
-                    map(this::getRelationForSingleXpath).
-                    collect(Collectors.joining(") and ("));
+            final String result =
+                    paths.stream().map(this::getRelationForSingleXpath).collect(Collectors.joining(") and ("));
             return (paths.size() > 1) ? String.format("(%s)", result) : result;
         }
 

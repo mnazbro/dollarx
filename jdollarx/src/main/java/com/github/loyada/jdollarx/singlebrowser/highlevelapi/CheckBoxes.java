@@ -1,13 +1,11 @@
 package com.github.loyada.jdollarx.singlebrowser.highlevelapi;
 
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.highlevelapi.CheckBox;
-
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-
-
 
 /**
  * High-level wrapper to define a checkbox input.
@@ -15,7 +13,7 @@ import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
  * to understand the structure of the DOM.
  */
 public final class CheckBoxes {
-    private CheckBoxes(){}
+    private CheckBoxes() {}
 
     /**
      * input of type "checkbox" with a label
@@ -44,6 +42,4 @@ public final class CheckBoxes {
     public static CheckBox checkBoxWithProperties(ElementProperty... props) {
         return new CheckBox(new InBrowser(driver), props);
     }
-
-
 }

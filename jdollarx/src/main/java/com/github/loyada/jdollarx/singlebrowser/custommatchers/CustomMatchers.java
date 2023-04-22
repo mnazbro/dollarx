@@ -1,5 +1,8 @@
 package com.github.loyada.jdollarx.singlebrowser.custommatchers;
 
+import static com.github.loyada.jdollarx.BasicPath.html;
+import static com.github.loyada.jdollarx.ElementProperties.contains;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementSelectionStateToBe;
 
 import com.github.loyada.jdollarx.ElementProperties;
 import com.github.loyada.jdollarx.InBrowser;
@@ -7,6 +10,7 @@ import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.custommatchers.HasText;
 import com.github.loyada.jdollarx.custommatchers.IsPresent;
 import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import java.util.concurrent.TimeUnit;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -16,12 +20,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.github.loyada.jdollarx.BasicPath.html;
-import static com.github.loyada.jdollarx.ElementProperties.contains;
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementSelectionStateToBe;
-
 /**
  * A collection of Hamcrest custom matchers, that are optimized to be as atomic as possible when interacting with the browser or a W3C document,
  * and return useful error messages in case of a failure.
@@ -30,10 +28,10 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementSelection
 public final class CustomMatchers {
 
     private static Wait<WebDriver> getWaiter() {
-         return new FluentWait<>(InBrowserSinglton.driver).
-        withTimeout(1, TimeUnit.SECONDS)
-        .pollingEvery(100, TimeUnit.MILLISECONDS)
-        .ignoring(NoSuchElementException.class);
+        return new FluentWait<>(InBrowserSinglton.driver)
+                .withTimeout(1, TimeUnit.SECONDS)
+                .pollingEvery(100, TimeUnit.MILLISECONDS)
+                .ignoring(NoSuchElementException.class);
     }
 
     /**
@@ -65,7 +63,7 @@ public final class CustomMatchers {
      * @return a matcher that checks if an element is present in the browser
      */
     public static Matcher<Path> isPresent() {
-        return  new IsPresent().in(new InBrowser(InBrowserSinglton.driver));
+        return new IsPresent().in(new InBrowser(InBrowserSinglton.driver));
     }
 
     /**
@@ -107,8 +105,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not displayed");
             }
 
@@ -125,7 +122,6 @@ public final class CustomMatchers {
             }
         };
     }
-
 
     /**
      * Successful if given element is either not present, or present and not displayed in the browser. Relies on WebElement.isDisplayed(), thus non-atomic.
@@ -150,8 +146,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is displayed");
             }
 
@@ -194,8 +189,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not selected");
             }
 
@@ -236,8 +230,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is selected, or is not in the DOM");
             }
 
@@ -246,8 +239,7 @@ public final class CustomMatchers {
                 this.el = el;
                 Wait<WebDriver> wait = getWaiter();
                 try {
-                    wait.until(elementSelectionStateToBe(
-                            browser.find(el), false));
+                    wait.until(elementSelectionStateToBe(browser.find(el), false));
                     return true;
                 } catch (Throwable ex) {
                     return false;
@@ -279,8 +271,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el + " is not enabled, or is not in the DOM");
             }
 
@@ -317,8 +308,7 @@ public final class CustomMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(el.toString() + " is present");
             }
 

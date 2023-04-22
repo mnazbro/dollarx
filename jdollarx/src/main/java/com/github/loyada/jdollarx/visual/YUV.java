@@ -32,7 +32,7 @@ class YUV {
         float ydiff = (y - other.y);
         float udiff = (u - other.u);
         float vdiff = (v - other.v);
-     //   return (ydiff > 0.1 && (ydiff/y>2 || ydiff/other.y>2) ||  udiff>0.25 || vdiff > 0.25);
-        return (ydiff > 0.05 ||  udiff>0.15 || vdiff > 0.15);
+        //   return (ydiff > 0.1 && (ydiff/y>2 || ydiff/other.y>2) ||  udiff>0.25 || vdiff > 0.25);
+        return (ydiff > 0.05 || udiff > 0.15 || vdiff > 0.15);
     }
 }

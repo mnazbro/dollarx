@@ -4,7 +4,9 @@ package com.github.loyada.jdollarx;
  * Internal implementation.
  */
 public enum RelationOperator {
-    exactly, orMore, orLess;
+    exactly,
+    orMore,
+    orLess;
 
     public static String opAsXpathString(RelationOperator op) {
         switch (op) {
@@ -31,5 +33,4 @@ public enum RelationOperator {
                 throw new IllegalArgumentException();
         }
     }
-
 }

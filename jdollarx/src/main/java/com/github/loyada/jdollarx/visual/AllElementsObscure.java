@@ -1,19 +1,17 @@
 package com.github.loyada.jdollarx.visual;
 
+import static java.lang.String.format;
+
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.google.common.collect.ImmutableList;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.lang.String.format;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 
 /**
  * An AutoCloseable that allows to make a list of given elements temporarily
@@ -29,7 +27,6 @@ public class AllElementsObscure implements AutoCloseable {
     final boolean strict;
     final JavascriptExecutor js;
     final List<Path> obscuredElements = new ArrayList<>();
-
 
     public AllElementsObscure(InBrowser browser, Path element) {
         this(browser, List.of(element), false);
@@ -51,8 +48,10 @@ public class AllElementsObscure implements AutoCloseable {
                 webEls.forEach(webEl -> {
                     String oldStyle = webEl.getAttribute("style");
                     styleByElement.put(webEl, oldStyle);
-                    js.executeScript("arguments[0].setAttribute('style', arguments[1] + ' display: none;');",
-                            webEl, Optional.ofNullable(oldStyle).orElse(""));
+                    js.executeScript(
+                            "arguments[0].setAttribute('style', arguments[1] + ' display: none;');",
+                            webEl,
+                            Optional.ofNullable(oldStyle).orElse(""));
                 });
             }
         });

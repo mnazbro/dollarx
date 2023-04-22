@@ -1,9 +1,16 @@
 package com.github.loyada.jdollarx.custommatchers;
 
+import static com.github.loyada.jdollarx.RelationOperator.opAsEnglish;
+import static java.lang.String.format;
+
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.PathParsers;
 import com.github.loyada.jdollarx.RelationOperator;
+import java.io.IOException;
+import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.openqa.selenium.NoSuchElementException;
@@ -11,21 +18,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
-import java.util.Optional;
-
-import static com.github.loyada.jdollarx.RelationOperator.opAsEnglish;
-import static java.lang.String.format;
-
 /**
  * Internal implementation.
  */
 public final class CustomMatchersUtil {
 
-
-    static public String wrap(Path el) {
+    public static String wrap(Path el) {
         String asString = el.toString();
         return (asString.contains(" ")) ? format("(%s)", asString) : asString;
     }
@@ -34,7 +32,7 @@ public final class CustomMatchersUtil {
      * Internal implementation
      */
     public static class NTimesMatcher extends TypeSafeMatcher<Path> {
-        private  Path path;
+        private Path path;
         private final int nTimes;
         private final RelationOperator relationOperator;
         private final InBrowser browser;
@@ -48,26 +46,28 @@ public final class CustomMatchersUtil {
 
         @Override
         public String toString() {
-            return format("browser page contains the given path %s%d time%s",
+            return format(
+                    "browser page contains the given path %s%d time%s",
                     opAsEnglish(relationOperator), nTimes, nTimes != 1 ? "s" : "");
         }
 
         @Override
         public void describeTo(final Description description) {
-            description.appendText( format("browser page contains %s%s%d time%s",
+            description.appendText(format(
+                    "browser page contains %s%s%d time%s",
                     CustomMatchersUtil.wrap(path), opAsEnglish(relationOperator), nTimes, nTimes != 1 ? "s" : ""));
         }
 
         @Override
-        protected void describeMismatchSafely(final Path el, final
-        Description mismatchDescription) {
-            mismatchDescription.appendText(CustomMatchersUtil.wrap(el) + " appears " + foundNTimes + " time" + (foundNTimes!=1 ? "s" : ""));
+        protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
+            mismatchDescription.appendText(
+                    CustomMatchersUtil.wrap(el) + " appears " + foundNTimes + " time" + (foundNTimes != 1 ? "s" : ""));
         }
 
         @Override
         protected boolean matchesSafely(final Path el) {
             this.path = el;
-            try{
+            try {
                 browser.findPageWithNumberOfOccurrences(el, nTimes, relationOperator);
                 return true;
             } catch (NoSuchElementException e) {
@@ -81,13 +81,15 @@ public final class CustomMatchersUtil {
      * Internal implementation
      */
     public static class ISPresentNTimesMatcherForDocument extends TypeSafeMatcher<Path> {
-        private  Path path;
+        private Path path;
         private final int nTimes;
         private final RelationOperator relationOperator;
         private final Document doc;
         int foundNTimes;
 
-        public ISPresentNTimesMatcherForDocument(final int nTimes, final RelationOperator relationOperator, final Document doc) throws ParserConfigurationException, IOException, SAXException {
+        public ISPresentNTimesMatcherForDocument(
+                final int nTimes, final RelationOperator relationOperator, final Document doc)
+                throws ParserConfigurationException, IOException, SAXException {
             this.nTimes = nTimes;
             this.relationOperator = relationOperator;
             this.doc = doc;
@@ -95,20 +97,22 @@ public final class CustomMatchersUtil {
 
         @Override
         public String toString() {
-            return format("browser page contains the given path %s%d time%s",
+            return format(
+                    "browser page contains the given path %s%d time%s",
                     opAsEnglish(relationOperator), nTimes, nTimes != 1 ? "s" : "");
         }
 
         @Override
         public void describeTo(final Description description) {
-            description.appendText( format("document contains %s%s%d time%s",
+            description.appendText(format(
+                    "document contains %s%s%d time%s",
                     CustomMatchersUtil.wrap(path), opAsEnglish(relationOperator), nTimes, nTimes != 1 ? "s" : ""));
         }
 
         @Override
-        protected void describeMismatchSafely(final Path el, final
-        Description mismatchDescription) {
-            mismatchDescription.appendText(CustomMatchersUtil.wrap(el) + " appears " + foundNTimes + " time" + (foundNTimes!=1 ? "s" : ""));
+        protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
+            mismatchDescription.appendText(
+                    CustomMatchersUtil.wrap(el) + " appears " + foundNTimes + " time" + (foundNTimes != 1 ? "s" : ""));
         }
 
         @Override
@@ -125,13 +129,14 @@ public final class CustomMatchersUtil {
                 throw new RuntimeException("could not parse");
             }
             foundNTimes = nodes.getLength();
-            switch (relationOperator){
-                case exactly: return foundNTimes==nTimes;
-                case orMore: return foundNTimes>=nTimes;
-                default: return foundNTimes<=nTimes;
+            switch (relationOperator) {
+                case exactly:
+                    return foundNTimes == nTimes;
+                case orMore:
+                    return foundNTimes >= nTimes;
+                default:
+                    return foundNTimes <= nTimes;
             }
         }
     }
-
-
 }

@@ -1,17 +1,16 @@
 package com.github.loyada.jdollarx.custommatchers;
 
-import com.github.loyada.jdollarx.InBrowser;
-import com.github.loyada.jdollarx.Path;
-import org.hamcrest.Matcher;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-
 import static com.github.loyada.jdollarx.RelationOperator.*;
 import static com.github.loyada.jdollarx.custommatchers.CustomMatchersUtil.ISPresentNTimesMatcherForDocument;
 import static com.github.loyada.jdollarx.custommatchers.CustomMatchersUtil.NTimesMatcher;
+
+import com.github.loyada.jdollarx.InBrowser;
+import com.github.loyada.jdollarx.Path;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.hamcrest.Matcher;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Internal implementation - not to be instantiated directly.
@@ -25,24 +24,22 @@ import static com.github.loyada.jdollarx.custommatchers.CustomMatchersUtil.NTime
 public class IsPresentNTimes {
     private final int nTimes;
 
-    public IsPresentNTimes(int nTimes){
-        if (nTimes<=0) {
+    public IsPresentNTimes(int nTimes) {
+        if (nTimes <= 0) {
             throw new IllegalArgumentException("use isAbsent() for asserting an element is not present");
         }
         this.nTimes = nTimes;
     }
 
-
-
-    public Matcher<Path> timesIn(InBrowser browser){
+    public Matcher<Path> timesIn(InBrowser browser) {
         return new NTimesMatcher(nTimes, exactly, browser);
     }
 
-    public Matcher<Path> timesOrMoreIn(InBrowser browser){
+    public Matcher<Path> timesOrMoreIn(InBrowser browser) {
         return new NTimesMatcher(nTimes, orMore, browser);
     }
 
-    public Matcher<Path> timesOrLessIn(InBrowser browser){
+    public Matcher<Path> timesOrLessIn(InBrowser browser) {
         return new NTimesMatcher(nTimes, orLess, browser);
     }
 

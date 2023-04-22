@@ -1,13 +1,12 @@
 package com.github.loyada.jdollarx.singlebrowser.sizing;
 
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-
-import java.util.Map;
-
 import static com.github.loyada.jdollarx.BasicPath.html;
 import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.*;
 import static com.github.loyada.jdollarx.singlebrowser.sizing.SizingUtils.*;
+
+import java.util.Map;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 
 /**
  * An AutoCloseable resizer for the browser.
@@ -29,11 +28,11 @@ public class WindowResizer implements AutoCloseable {
         Long originalWidth = dimensions.get(WIDTH);
         originalStyling = SizingUtils.getStylingDimensions(html);
 
-        totalOriginalDimensions  = driver.manage().window().getSize();
+        totalOriginalDimensions = driver.manage().window().getSize();
         int heightOverhead = totalOriginalDimensions.getHeight() - originalHeight.intValue();
         int widthOverhead = totalOriginalDimensions.getWidth() - originalWidth.intValue();
 
-        driver.manage().window().setPosition(new Point(1,1));
+        driver.manage().window().setPosition(new Point(1, 1));
         driver.manage().window().setSize(new Dimension(expectedWidth + widthOverhead, expectedHeight + heightOverhead));
         SizingUtils.setDimensions(html, expectedWidth, expectedHeight);
     }
@@ -74,11 +73,8 @@ public class WindowResizer implements AutoCloseable {
      * Revert state
      */
     @Override
-    public void close()  {
-        SizingUtils.setDimensions(html,
-                    originalStyling.get(WIDTH), originalStyling.get(HEIGHT));
+    public void close() {
+        SizingUtils.setDimensions(html, originalStyling.get(WIDTH), originalStyling.get(HEIGHT));
         driver.manage().window().setSize(totalOriginalDimensions);
     }
-
-
 }

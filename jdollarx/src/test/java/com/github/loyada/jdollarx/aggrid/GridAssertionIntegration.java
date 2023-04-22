@@ -1,17 +1,5 @@
 package com.github.loyada.jdollarx.aggrid;
 
-import com.github.loyada.jdollarx.*;
-import com.github.loyada.jdollarx.singlebrowser.AgGrid;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
-import org.hamcrest.Matchers;
-import org.junit.*;
-
-import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-
 import static com.github.loyada.jdollarx.BasicPath.button;
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.image;
@@ -22,8 +10,19 @@ import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.AgGridMatchers.isPresent;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.github.loyada.jdollarx.*;
+import com.github.loyada.jdollarx.singlebrowser.AgGrid;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import org.hamcrest.Matchers;
+import org.junit.*;
+
 public class GridAssertionIntegration {
-    Path container  = div.that(hasId("myGrid"));
+    Path container = div.that(hasId("myGrid"));
 
     @BeforeClass
     public static void setup() {
@@ -32,27 +31,26 @@ public class GridAssertionIntegration {
         InBrowserSinglton.setImplicitTimeout(1, TimeUnit.MILLISECONDS);
     }
 
-
     @Before
     public void refresh() {
         driver.navigate().refresh();
-        try(TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
+        try (TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
             clickOn(button.withText("accept all cookies"));
         } catch (Exception ex) {
             // no such button
         }
     }
 
-
     @Test
     public void nonVirtualizedGridSuccess() {
         Map<String, ElementProperty> rowWithProperties = new HashMap<>();
         rowWithProperties.put("{name}", hasAggregatedTextEqualTo("tony smith"));
         rowWithProperties.put("language", hasAggregatedTextEqualTo("english"));
-        rowWithProperties.put("country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png"))));
+        rowWithProperties.put(
+                "country", contains(image.that(hasSource("https://flags.fmcdn.net/data/flags/mini/ie.png"))));
 
         AgGrid nonVirtualizedGrid = AgGrid.getBuilder()
-                .withHeaders(Arrays.asList( "language", "{name}", "country"))
+                .withHeaders(Arrays.asList("language", "{name}", "country"))
                 .withRowsAsElementProperties(Arrays.asList(rowWithProperties))
                 .containedIn(container)
                 .withoutVirtualization()
@@ -65,13 +63,13 @@ public class GridAssertionIntegration {
         Map<String, String> row1 = new LinkedHashMap<>();
         row1.put("name", "tony smith");
         row1.put("language", "english");
-        row1.put("jan","$38,031");
-        row1.put("dec","$86,416");
+        row1.put("jan", "$38,031");
+        row1.put("dec", "$86,416");
         Map<String, String> row2 = new LinkedHashMap<>();
         row2.put("name", "Andrew Connell");
         row2.put("language", "swedish");
-        row2.put("jan","$17,697");
-        row2.put("dec","$83,386");
+        row2.put("jan", "$17,697");
+        row2.put("dec", "$83,386");
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "name"))
                 .withRowsAsStrings(Arrays.asList(row1, row2))
@@ -82,19 +80,17 @@ public class GridAssertionIntegration {
     }
 
     @Test
-    public  void orderedSuccessWithListOfEntries() {
+    public void orderedSuccessWithListOfEntries() {
         List<Entry<String, String>> row1 = Arrays.asList(
                 new SimpleEntry<>("name", "tony smith"),
                 new SimpleEntry<>("language", "english"),
-                new SimpleEntry<>("jan","$38,031"),
-                new SimpleEntry<>("dec","$86,416")
-        );
+                new SimpleEntry<>("jan", "$38,031"),
+                new SimpleEntry<>("dec", "$86,416"));
         List<Entry<String, String>> row2 = Arrays.asList(
                 new SimpleEntry<>("name", "Andrew Connell"),
                 new SimpleEntry<>("language", "swedish"),
-                new SimpleEntry<>("jan","$17,697"),
-                new SimpleEntry<>("dec","$83,386")
-        );
+                new SimpleEntry<>("jan", "$17,697"),
+                new SimpleEntry<>("dec", "$83,386"));
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "name"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
@@ -108,15 +104,13 @@ public class GridAssertionIntegration {
         List<Entry<String, String>> row1 = Arrays.asList(
                 new SimpleEntry<>("{name}", "tony smith"),
                 new SimpleEntry<>("language", "english"),
-                new SimpleEntry<>("jan","$38,031"),
-                new SimpleEntry<>("dec","$86,416")
-        );
+                new SimpleEntry<>("jan", "$38,031"),
+                new SimpleEntry<>("dec", "$86,416"));
         List<Entry<String, String>> row2 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Andrew Connell"),
                 new SimpleEntry<>("language", "swedish"),
-                new SimpleEntry<>("jan","$17,697"),
-                new SimpleEntry<>("dec","$83,386")
-        );
+                new SimpleEntry<>("jan", "$17,697"),
+                new SimpleEntry<>("dec", "$83,386"));
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "{name}"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
@@ -131,15 +125,13 @@ public class GridAssertionIntegration {
         List<Entry<String, ElementProperty>> row1 = Arrays.asList(
                 new SimpleEntry<>("{name}", hasAggregatedTextEqualTo("tony smith")),
                 new SimpleEntry<>("language", hasAggregatedTextEqualTo("english")),
-                new SimpleEntry<>("jan",hasAggregatedTextEqualTo("$38,031")),
-                new SimpleEntry<>("dec",hasAggregatedTextEqualTo("$86,416"))
-        );
+                new SimpleEntry<>("jan", hasAggregatedTextEqualTo("$38,031")),
+                new SimpleEntry<>("dec", hasAggregatedTextEqualTo("$86,416")));
         List<Entry<String, ElementProperty>> row2 = Arrays.asList(
                 new SimpleEntry<>("{name}", hasAggregatedTextEqualTo("Andrew Connell")),
                 new SimpleEntry<>("language", hasAggregatedTextEqualTo("swedish")),
-                new SimpleEntry<>("jan",hasAggregatedTextEqualTo("$17,697")),
-                new SimpleEntry<>("dec",hasAggregatedTextEqualTo("$83,386"))
-        );
+                new SimpleEntry<>("jan", hasAggregatedTextEqualTo("$17,697")),
+                new SimpleEntry<>("dec", hasAggregatedTextEqualTo("$83,386")));
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "{name}"))
                 .withRowsAsElementPropertiesInOrder(Arrays.asList(row1, row2))
@@ -150,19 +142,17 @@ public class GridAssertionIntegration {
     }
 
     @Test(expected = AssertionError.class)
-    public void orderedFailureRowsInWrongOrder(){
+    public void orderedFailureRowsInWrongOrder() {
         List<Entry<String, String>> row1 = Arrays.asList(
-                new SimpleEntry<> ("name", "tony smith"),
-                new SimpleEntry<> ("language", "english"),
-                new SimpleEntry<> ("jan","$38,031"),
-                new SimpleEntry<> ("dec","$86,416")
-        );
+                new SimpleEntry<>("name", "tony smith"),
+                new SimpleEntry<>("language", "english"),
+                new SimpleEntry<>("jan", "$38,031"),
+                new SimpleEntry<>("dec", "$86,416"));
         List<Entry<String, String>> row2 = Arrays.asList(
-                new SimpleEntry<> ("name", "Andrew Connell"),
-                new SimpleEntry<> ("language", "swedish"),
-                new SimpleEntry<> ("jan","$17,697"),
-                new SimpleEntry<> ("dec","$83,386")
-        );
+                new SimpleEntry<>("name", "Andrew Connell"),
+                new SimpleEntry<>("language", "swedish"),
+                new SimpleEntry<>("jan", "$17,697"),
+                new SimpleEntry<>("dec", "$83,386"));
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "name"))
                 .withRowsAsStringsInOrder(Arrays.asList(row2, row1))
@@ -172,19 +162,17 @@ public class GridAssertionIntegration {
     }
 
     @Test
-    public void orderedFailureInStrictModeWithoutAllRows(){
+    public void orderedFailureInStrictModeWithoutAllRows() {
         List<Entry<String, String>> row1 = Arrays.asList(
-                new SimpleEntry<> ("name", "tony smith"),
-                new SimpleEntry<> ("language", "english"),
-                new SimpleEntry<> ("jan","$38,031"),
-                new SimpleEntry<> ("dec","$86,416")
-        );
+                new SimpleEntry<>("name", "tony smith"),
+                new SimpleEntry<>("language", "english"),
+                new SimpleEntry<>("jan", "$38,031"),
+                new SimpleEntry<>("dec", "$86,416"));
         List<Entry<String, String>> row2 = Arrays.asList(
-                new SimpleEntry<> ("name", "Andrew Connell"),
-                new SimpleEntry<> ("language", "swedish"),
-                new SimpleEntry<> ("jan","$17,697"),
-                new SimpleEntry<> ("dec","$83,386")
-        );
+                new SimpleEntry<>("name", "Andrew Connell"),
+                new SimpleEntry<>("language", "swedish"),
+                new SimpleEntry<>("jan", "$17,697"),
+                new SimpleEntry<>("dec", "$83,386"));
         AgGrid grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "name"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
@@ -194,15 +182,16 @@ public class GridAssertionIntegration {
         try {
             assertThat(grid, isPresent());
             Assert.fail();
-        } catch(AssertionError e) {
-            assertThat(e.getMessage(), Matchers.containsString("could not find grid with exactly 2 rows. Found too many rows."));
+        } catch (AssertionError e) {
+            assertThat(
+                    e.getMessage(),
+                    Matchers.containsString("could not find grid with exactly 2 rows. Found too many rows."));
         }
     }
 
-
-
     @AfterClass
     public static void tearDown() {
-       driver.quit();;
+        driver.quit();
+        ;
     }
 }

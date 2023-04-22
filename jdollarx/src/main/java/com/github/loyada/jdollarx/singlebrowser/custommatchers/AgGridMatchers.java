@@ -1,23 +1,22 @@
 package com.github.loyada.jdollarx.singlebrowser.custommatchers;
 
+import static java.lang.String.format;
+
 import com.github.loyada.jdollarx.ElementProperties;
 import com.github.loyada.jdollarx.ElementProperty;
 import com.github.loyada.jdollarx.Operations;
 import com.github.loyada.jdollarx.singlebrowser.AgGrid;
 import com.github.loyada.jdollarx.singlebrowser.AgGridHighLevelOperations;
 import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.openqa.selenium.NoSuchElementException;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.lang.String.format;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Hamcrest matchers for an AgGrid
@@ -48,8 +47,7 @@ public class AgGridMatchers {
             }
 
             @Override
-            protected void describeMismatchSafely(final AgGrid el,
-                                                  final Description mismatchDescription) {
+            protected void describeMismatchSafely(final AgGrid el, final Description mismatchDescription) {
                 mismatchDescription.appendText(
                         format("%s is absent.\n Reason: could not find %s", grid, this.ex.getMessage()));
             }
@@ -59,17 +57,14 @@ public class AgGridMatchers {
                 this.grid = grid;
                 try {
                     int timeout = getTimeoutInMillis() / 4;
-                    Operations.doWithRetries(grid::findTableInBrowser,
-                            4,
-                            timeout);
+                    Operations.doWithRetries(grid::findTableInBrowser, 4, timeout);
                     return true;
-                } catch(NoSuchElementException e) {
+                } catch (NoSuchElementException e) {
                     this.ex = e;
                     return false;
                 } finally {
                     // return implicit timeout to a more reasonable value
-                    if (grid.isVirtualized())
-                        grid.setFinalTimeout();
+                    if (grid.isVirtualized()) grid.setFinalTimeout();
                 }
             }
         };
@@ -95,10 +90,8 @@ public class AgGridMatchers {
 
             @Override
             protected void describeMismatchSafely(
-                    final AgGridHighLevelOperations agGridHighLevelOperations,
-                    final Description mismatchDescription) {
-                mismatchDescription.appendText(
-                        format("there is no grid with the row %s in the grid", row.toString()));
+                    final AgGridHighLevelOperations agGridHighLevelOperations, final Description mismatchDescription) {
+                mismatchDescription.appendText(format("there is no grid with the row %s in the grid", row.toString()));
             }
 
             @Override
@@ -108,14 +101,12 @@ public class AgGridMatchers {
                 Map<String, ElementProperty> transformedRow = row.entrySet().stream()
                         .map(e -> new AbstractMap.SimpleEntry<>(
                                 e.getKey(),
-                                ElementProperties.hasAggregatedTextEqualTo(e.getValue()==null ? "" : e.getValue())))
+                                ElementProperties.hasAggregatedTextEqualTo(e.getValue() == null ? "" : e.getValue())))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
                 try {
                     int timeout = getTimeoutInMillis() / 4;
-                    Operations.doWithRetries(() -> grid.findRowIndex(transformedRow),
-                            4,
-                            timeout);
+                    Operations.doWithRetries(() -> grid.findRowIndex(transformedRow), 4, timeout);
                     return true;
                 } catch (Exception e) {
                     return false;
@@ -125,8 +116,8 @@ public class AgGridMatchers {
     }
 
     private static int getTimeoutInMillis() {
-        return (timeoutMillisecOverride >= 0 ?
-                timeoutMillisecOverride :
-                (int)InBrowserSinglton.getImplicitTimeoutInMillisec());
+        return (timeoutMillisecOverride >= 0
+                ? timeoutMillisecOverride
+                : (int) InBrowserSinglton.getImplicitTimeoutInMillisec());
     }
 }

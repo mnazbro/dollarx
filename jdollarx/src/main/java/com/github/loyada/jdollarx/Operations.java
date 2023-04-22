@@ -1,10 +1,6 @@
 package com.github.loyada.jdollarx;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import static java.lang.Thread.sleep;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,9 +8,11 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-
-import static java.lang.Thread.sleep;
-
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  * Internal implementation of various browser operations
@@ -25,6 +23,7 @@ public class Operations {
         public OperationFailedException(String message, Throwable cause) {
             super(message, cause);
         }
+
         public OperationFailedException(String message) {
             super(message);
         }
@@ -76,7 +75,6 @@ public class Operations {
             }
         }
     }
-
 
     /**
      * internal implementation not be instantiated directly - Action of  key-down
@@ -144,8 +142,6 @@ public class Operations {
         }
     }
 
-
-
     /**
      * internal implementation not be instantiated directly - Action of scroll
      */
@@ -167,7 +163,6 @@ public class Operations {
 
         private void scrollInternal(Integer x, Integer y) {
             ((JavascriptExecutor) driver).executeScript(String.format("scroll(%d,%d)", x, y));
-
         }
 
         /**
@@ -201,7 +196,6 @@ public class Operations {
         public void down(Integer n) {
             scrollInternal(0, n);
         }
-
     }
 
     /**
@@ -212,14 +206,14 @@ public class Operations {
         private final WebDriver driver;
         private final Path wrapper;
         private int step;
-        private final int LARGE_NUM=100000;
+        private final int LARGE_NUM = 100000;
 
         private static final Predicate<WebElement> TRUTHY = e -> true;
 
         public ScrollElement(final WebDriver driver, Path wrapper) {
             this.driver = driver;
             this.wrapper = wrapper;
-            step=60;
+            step = 60;
         }
 
         public ScrollElement(final WebDriver driver, Path wrapper, int stepSizeOverride) {
@@ -353,13 +347,8 @@ public class Operations {
          * @param maxNumberOfScrolls maximum number of scroll operations
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement downUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls ) {
-            return downUntilPredicate(
-                    expectedElement,
-                    scrollStep,
-                    maxNumberOfScrolls,
-                    TRUTHY
-            );
+        public WebElement downUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls) {
+            return downUntilPredicate(expectedElement, scrollStep, maxNumberOfScrolls, TRUTHY);
         }
 
         /**
@@ -371,7 +360,8 @@ public class Operations {
          * @param predicate - a condition regarding the expected element that is required to be met
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement downUntilPredicate(Path expectedElement, int scrollStep, int maxNumberOfScrolls,Predicate<WebElement> predicate) {
+        public WebElement downUntilPredicate(
+                Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
             return scrollWrapperUntilElementConditional(
                     expectedElement,
                     scrollStep,
@@ -389,7 +379,8 @@ public class Operations {
          * @param predicate - a condition regarding the expected element that is required to be met
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement upUntilPredicate(Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
+        public WebElement upUntilPredicate(
+                Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
             return scrollWrapperUntilElementConditional(
                     expectedElement,
                     scrollStep,
@@ -398,7 +389,6 @@ public class Operations {
                     "elem = arguments[0];elem.scrollTop = elem.scrollTop-arguments[1];return elem.scrollTop;");
         }
 
-
         /**
          * Scroll up until the virtualized DOM contains the expect element.
          * @param expectedElement - the element we are looking for
@@ -406,13 +396,8 @@ public class Operations {
          * @param maxNumberOfScrolls maximum number of scroll operations
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement upUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls ) {
-            return upUntilPredicate(
-                    expectedElement,
-                    scrollStep,
-                    maxNumberOfScrolls,
-                    TRUTHY
-            );
+        public WebElement upUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls) {
+            return upUntilPredicate(expectedElement, scrollStep, maxNumberOfScrolls, TRUTHY);
         }
 
         /**
@@ -422,13 +407,8 @@ public class Operations {
          * @param maxNumberOfScrolls maximum number of scroll operations
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement rightUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls ) {
-            return rightUntilPredicate(
-                    expectedElement,
-                    scrollStep,
-                    maxNumberOfScrolls,
-                    TRUTHY
-            );
+        public WebElement rightUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls) {
+            return rightUntilPredicate(expectedElement, scrollStep, maxNumberOfScrolls, TRUTHY);
         }
 
         /**
@@ -439,7 +419,8 @@ public class Operations {
          * @param predicate - a condition regarding the expected element that is required to be met
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement rightUntilPredicate(Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
+        public WebElement rightUntilPredicate(
+                Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
             return scrollWrapperUntilElementConditional(
                     expectedElement,
                     scrollStep,
@@ -456,7 +437,8 @@ public class Operations {
          * @param predicate - a condition regarding the expected element that is required to be met
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement leftUntilPredicate(Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
+        public WebElement leftUntilPredicate(
+                Path expectedElement, int scrollStep, int maxNumberOfScrolls, Predicate<WebElement> predicate) {
             return scrollWrapperUntilElementConditional(
                     expectedElement,
                     scrollStep,
@@ -472,22 +454,12 @@ public class Operations {
          * @param maxNumberOfScrolls maximum number of scroll operations
          * @return the WebElement or throws an exception of not found
          */
-        public WebElement leftUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls ) {
-            return leftUntilPredicate(
-                    expectedElement,
-                    scrollStep,
-                    maxNumberOfScrolls,
-                    TRUTHY
-            );
+        public WebElement leftUntilElementIsPresent(Path expectedElement, int scrollStep, int maxNumberOfScrolls) {
+            return leftUntilPredicate(expectedElement, scrollStep, maxNumberOfScrolls, TRUTHY);
         }
 
-        private WebElement leftUntilElementIsDisplayed(Path expectedElement, int scrollStep, int maxNumberOfScrolls ) {
-            return leftUntilPredicate(
-                    expectedElement,
-                    scrollStep,
-                    maxNumberOfScrolls,
-                    WebElement::isDisplayed
-            );
+        private WebElement leftUntilElementIsDisplayed(Path expectedElement, int scrollStep, int maxNumberOfScrolls) {
+            return leftUntilPredicate(expectedElement, scrollStep, maxNumberOfScrolls, WebElement::isDisplayed);
         }
 
         private WebElement scrollWrapperUntilElementConditional(
@@ -501,38 +473,37 @@ public class Operations {
             WebElement wrapperEl = browser.find(wrapper);
 
             try {
-                return doWithRetries(() -> {
-                    long left = 1;
-                    final int MAX_FAILURES = 5;
-                    int failures = 0;
-                    for (int i = 0; i < maxNumberOfScrolls; i++) {
-                        List<WebElement> els = browser.findAll(expectedElement);
-                        Optional<WebElement> foundOne = els.stream()
-                                .filter(elementPredicate)
-                                .findFirst();
-                        if (foundOne.isPresent())
-                            return foundOne.get();
-                        if (left <= 0)
-                            break;
+                return doWithRetries(
+                        () -> {
+                            long left = 1;
+                            final int MAX_FAILURES = 5;
+                            int failures = 0;
+                            for (int i = 0; i < maxNumberOfScrolls; i++) {
+                                List<WebElement> els = browser.findAll(expectedElement);
+                                Optional<WebElement> foundOne =
+                                        els.stream().filter(elementPredicate).findFirst();
+                                if (foundOne.isPresent()) return foundOne.get();
+                                if (left <= 0) break;
 
-                        try {
-                            Object ret = js.executeScript(script, wrapperEl, scrollStep);
-                            left = (ret.getClass() == Double.class) ? ((Double) ret).longValue() : (long) ret;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            failures++;
-                            if (failures >= MAX_FAILURES) {
-                                throw new RuntimeException(e);
+                                try {
+                                    Object ret = js.executeScript(script, wrapperEl, scrollStep);
+                                    left = (ret.getClass() == Double.class) ? ((Double) ret).longValue() : (long) ret;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    failures++;
+                                    if (failures >= MAX_FAILURES) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
                             }
-                        }
-                    }
-                    throw new NoSuchElementException(expectedElement.toString());
-                }, 3, 200);
+                            throw new NoSuchElementException(expectedElement.toString());
+                        },
+                        3,
+                        200);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-
 
         /**
          * Scroll to top-left corner
@@ -600,16 +571,14 @@ public class Operations {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             InBrowser browser = new InBrowser(driver);
             WebElement wrapperEl = browser.find(wrapper);
-            if (y!=0) {
+            if (y != 0) {
                 js.executeScript("elem = arguments[0];elem.scrollTop = elem.scrollTop+arguments[1];", wrapperEl, y);
             }
-            if (x!=0) {
+            if (x != 0) {
                 js.executeScript("elem = arguments[0];elem.scrollLeft = elem.scrollLeft+arguments[1];", wrapperEl, x);
             }
         }
-
     }
-
 
     /**
      * internal implementation not be instantiated directly - Action of drag-and-drop
@@ -631,7 +600,9 @@ public class Operations {
         public void to(Path target) throws OperationFailedException {
             try {
                 WebElement to = InBrowserFinder.find(driver, target);
-                preformActions(driver, a -> a.clickAndHold(InBrowserFinder.find(driver, path)).moveToElement(to).release(to));
+                preformActions(driver, a -> a.clickAndHold(InBrowserFinder.find(driver, path))
+                        .moveToElement(to)
+                        .release(to));
             } catch (Exception e) {
                 throw new OperationFailedException("could not drag and drop " + path + " to " + target, e);
             }
@@ -645,7 +616,9 @@ public class Operations {
          */
         public void to(Integer x, Integer y) throws OperationFailedException {
             try {
-                preformActions(driver, a -> a.clickAndHold(InBrowserFinder.find(driver, path)).moveByOffset(x, y).release());
+                preformActions(driver, a -> a.clickAndHold(InBrowserFinder.find(driver, path))
+                        .moveByOffset(x, y)
+                        .release());
             } catch (Exception e) {
                 throw new OperationFailedException("could not drag and drop " + path, e);
             }
@@ -664,27 +637,23 @@ public class Operations {
      * @param numberOfRetries - maximum number of retries
      * @param sleepInMillisec - delay between consecutive retries
      */
-    public static  void doWithRetries(
-            Runnable action,
-            int numberOfRetries,
-            int sleepInMillisec
-            ){
-            int triesLeft = numberOfRetries;
-            while (true) {
-                try {
-                    action.run();
-                    return;
-                } catch (Exception|AssertionError e) {
-                    triesLeft-=1;
-                    if (triesLeft<=0) {
-                        throw e;
-                    }
-                    try {
-                        sleep(sleepInMillisec);
-                    } catch (InterruptedException intEx) {
-                        throw new RuntimeException(intEx);
-                    }
+    public static void doWithRetries(Runnable action, int numberOfRetries, int sleepInMillisec) {
+        int triesLeft = numberOfRetries;
+        while (true) {
+            try {
+                action.run();
+                return;
+            } catch (Exception | AssertionError e) {
+                triesLeft -= 1;
+                if (triesLeft <= 0) {
+                    throw e;
                 }
+                try {
+                    sleep(sleepInMillisec);
+                } catch (InterruptedException intEx) {
+                    throw new RuntimeException(intEx);
+                }
+            }
         }
     }
 
@@ -703,18 +672,14 @@ public class Operations {
      * @return returns the result of the callable
      * @throws Exception the exception thrown by the last try in case it exceeded the number of retries.
      */
-    public static <T> T doWithRetries(
-            Callable<T> action,
-            int numberOfRetries,
-            int sleepInMillisec
-    ) throws Exception {
+    public static <T> T doWithRetries(Callable<T> action, int numberOfRetries, int sleepInMillisec) throws Exception {
         int triesLeft = numberOfRetries;
         while (true) {
             try {
                 return action.call();
-            } catch (Exception|AssertionError e) {
-                triesLeft-=1;
-                if (triesLeft<=0) {
+            } catch (Exception | AssertionError e) {
+                triesLeft -= 1;
+                if (triesLeft <= 0) {
                     throw e;
                 }
                 try {
@@ -726,13 +691,8 @@ public class Operations {
         }
     }
 
-
     public static <T, V extends Exception> T doWithRetriesForException(
-            Callable<T> action,
-            Class<V> exceptionClass,
-            int numberOfRetries,
-            int sleepInMillisec
-    ) throws Exception {
+            Callable<T> action, Class<V> exceptionClass, int numberOfRetries, int sleepInMillisec) throws Exception {
         int triesLeft = numberOfRetries;
         while (true) {
             try {

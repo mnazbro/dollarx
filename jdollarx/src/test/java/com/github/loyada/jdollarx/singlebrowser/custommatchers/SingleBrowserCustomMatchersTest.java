@@ -1,18 +1,5 @@
 package com.github.loyada.jdollarx.singlebrowser.custommatchers;
 
-
-import com.github.loyada.jdollarx.BasicPath;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import java.util.Collections;
-import java.util.List;
-
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.hasText;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isAbsent;
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isDisplayed;
@@ -30,6 +17,17 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.github.loyada.jdollarx.BasicPath;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import java.util.Collections;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class SingleBrowserCustomMatchersTest {
 
@@ -59,12 +57,12 @@ public class SingleBrowserCustomMatchersTest {
             assertThat(BasicPath.div, hasText("foo"));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\n" +
-                    "Expected: browser page contains div, that has the text \"foo\"\n" +
-                    "     but: (div, that has the text \"foo\") is absent")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\n" + "Expected: browser page contains div, that has the text \"foo\"\n"
+                            + "     but: (div, that has the text \"foo\") is absent")));
         }
     }
-
 
     @Test
     public void isAbsentFailed() {
@@ -73,7 +71,9 @@ public class SingleBrowserCustomMatchersTest {
             assertThat(BasicPath.div, isAbsent());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: browser page does not contain div\n     but: div is present")));
         }
     }
 
@@ -92,7 +92,11 @@ public class SingleBrowserCustomMatchersTest {
             assertThat(BasicPath.span.inside(BasicPath.div), isPresent(5).times());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: browser page contains (span, inside div) 5 times\n     but: (span, inside div) appears 1 time")));
+            assertThat(
+                    e.getMessage(),
+                    is(
+                            equalTo(
+                                    "\nExpected: browser page contains (span, inside div) 5 times\n     but: (span, inside div) appears 1 time")));
         }
     }
 
@@ -217,7 +221,6 @@ public class SingleBrowserCustomMatchersTest {
         assertThat(BasicPath.div, isNotSelected());
     }
 
-
     @Test
     public void isNotSelecteddNotInDOM() {
         WebElement mockedElement = mock(WebElement.class);
@@ -239,7 +242,9 @@ public class SingleBrowserCustomMatchersTest {
             assertThat(BasicPath.div, isEnabled());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: div is enabled\n     but: div is not enabled, or is not in the DOM")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: div is enabled\n     but: div is not enabled, or is not in the DOM")));
         }
     }
 
@@ -259,8 +264,9 @@ public class SingleBrowserCustomMatchersTest {
             assertThat(BasicPath.div, isEnabled());
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: div is enabled\n     but: div is not enabled, or is not in the DOM")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: div is enabled\n     but: div is not enabled, or is not in the DOM")));
         }
     }
-
 }

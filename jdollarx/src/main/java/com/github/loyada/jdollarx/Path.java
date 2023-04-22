@@ -1,11 +1,8 @@
 package com.github.loyada.jdollarx;
 
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 import java.util.List;
 import java.util.Optional;
+import org.openqa.selenium.WebElement;
 
 /**
  * The heart of DollarX is the definition of Paths that represent W3C elements, whether in the browser or in a document.

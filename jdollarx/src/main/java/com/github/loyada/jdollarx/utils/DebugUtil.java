@@ -1,17 +1,11 @@
 package com.github.loyada.jdollarx.utils;
 
-import com.github.loyada.jdollarx.Path;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
+import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.findAll;
+import static java.lang.String.format;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.ArrayList;
+import com.github.loyada.jdollarx.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +13,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.find;
-import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.findAll;
-import static java.lang.String.format;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * Several utilities that are useful for troubleshooting of existing browser pages.
@@ -32,8 +29,7 @@ import static java.lang.String.format;
  */
 public final class DebugUtil {
 
-    private DebugUtil() {
-    }
+    private DebugUtil() {}
 
     /**
      * Get all matches of the path as a list of {@link Element}.
@@ -45,10 +41,11 @@ public final class DebugUtil {
      * @return all the elements that match it in the current page
      */
     public static List<Element> getDOMOfAll(final Path el) {
-        List <WebElement> els = findAll(el);
-        return els.stream().map(we -> we.getAttribute("outerHTML")).
-                        map(outerHTML -> Jsoup.parseBodyFragment(outerHTML).body().child(0)).
-                        collect(Collectors.toList());
+        List<WebElement> els = findAll(el);
+        return els.stream()
+                .map(we -> we.getAttribute("outerHTML"))
+                .map(outerHTML -> Jsoup.parseBodyFragment(outerHTML).body().child(0))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -68,7 +65,9 @@ public final class DebugUtil {
         try {
             WebElement webEl = find(el);
             highlight_webel_list_internal(Arrays.asList(webEl));
-        } finally {};
+        } finally {
+        }
+        ;
     }
 
     /**
@@ -76,11 +75,11 @@ public final class DebugUtil {
      * @param el - the definition of the elements to highlight
      */
     public static void highlightAll(final Path el) {
-        List <WebElement> els = findAll(el);
+        List<WebElement> els = findAll(el);
         highlight_webel_list_internal(els);
     }
 
-    private static void highlight_webel_list_internal(List<WebElement> els){
+    private static void highlight_webel_list_internal(List<WebElement> els) {
         List<String> oldStyles = els.stream().map(e -> highlight_internal(e)).collect(Collectors.toList());
         try {
             Thread.sleep(2000);
@@ -88,17 +87,19 @@ public final class DebugUtil {
             throw new RuntimeException(e);
         }
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        IntStream.range(0, els.size()).forEach(ind ->
-            js.executeScript(format("arguments[0].setAttribute('style', '%s');", oldStyles.get(ind))
-                , els.get(ind)));
+        IntStream.range(0, els.size())
+                .forEach(ind -> js.executeScript(
+                        format("arguments[0].setAttribute('style', '%s');", oldStyles.get(ind)), els.get(ind)));
     }
 
     private static String highlight_internal(WebElement webEl) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         String oldStyle = webEl.getAttribute("style");
 
-        js.executeScript("arguments[0].setAttribute('style', arguments[1] + ' background: yellow; border: 4px solid red;');",
-                webEl, Optional.ofNullable(oldStyle).orElse(""));
+        js.executeScript(
+                "arguments[0].setAttribute('style', arguments[1] + ' background: yellow; border: 4px solid red;');",
+                webEl,
+                Optional.ofNullable(oldStyle).orElse(""));
         return oldStyle;
     }
     /**
@@ -107,8 +108,8 @@ public final class DebugUtil {
      *
      * @return a W3C document
      */
-    public static  org.w3c.dom.Document getPageAsW3CDoc() {
-        String html = (String)((JavascriptExecutor) driver).executeScript("return document.documentElement.outerHTML");
+    public static org.w3c.dom.Document getPageAsW3CDoc() {
+        String html = (String) ((JavascriptExecutor) driver).executeScript("return document.documentElement.outerHTML");
         org.jsoup.nodes.Document jsoupDoc = Jsoup.parse(html);
         return DOMBuilder.jsoup2DOM(jsoupDoc);
     }
@@ -136,13 +137,13 @@ public final class DebugUtil {
 
             try {
 
-      /* Obtain the document builder for the configured XML parser. */
+                /* Obtain the document builder for the configured XML parser. */
                 DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 
-      /* Create a document to contain the content. */
+                /* Create a document to contain the content. */
                 document = docBuilder.newDocument();
-                createDOM(jsoupDocument, document, document, new HashMap<String,String>());
+                createDOM(jsoupDocument, document, document, new HashMap<String, String>());
 
             } catch (ParserConfigurationException pce) {
                 throw new RuntimeException(pce);
@@ -156,13 +157,13 @@ public final class DebugUtil {
          * @param node The Jsoup node containing the content to copy to the specified W3C {@link Node}.
          * @param out The W3C {@link Node} that receives the DOM content.
          */
-        private static void createDOM(org.jsoup.nodes.Node node, Node out, Document doc, Map<String,String> ns) {
+        private static void createDOM(org.jsoup.nodes.Node node, Node out, Document doc, Map<String, String> ns) {
 
             if (node instanceof org.jsoup.nodes.Document) {
 
                 org.jsoup.nodes.Document d = ((org.jsoup.nodes.Document) node);
                 for (org.jsoup.nodes.Node n : d.childNodes()) {
-                    createDOM(n, out,doc,ns);
+                    createDOM(n, out, doc, ns);
                 }
 
             } else if (node instanceof org.jsoup.nodes.Element) {
@@ -172,9 +173,9 @@ public final class DebugUtil {
                 out.appendChild(_e);
                 org.jsoup.nodes.Attributes atts = e.attributes();
 
-                for(org.jsoup.nodes.Attribute a : atts){
+                for (org.jsoup.nodes.Attribute a : atts) {
                     String attName = a.getKey();
-                    //omit xhtml namespace
+                    // omit xhtml namespace
                     if (attName.equals("xmlns")) {
                         continue;
                     }
@@ -182,12 +183,11 @@ public final class DebugUtil {
                     if (attPrefix != null) {
                         if (attPrefix.equals("xmlns")) {
                             ns.put(getLocalName(attName), a.getValue());
-                        }
-                        else if (!attPrefix.equals("xml")) {
+                        } else if (!attPrefix.equals("xml")) {
                             String namespace = ns.get(attPrefix);
                             if (namespace == null) {
-                                //fix attribute names looking like qnames
-                                attName = attName.replace(':','_');
+                                // fix attribute names looking like qnames
+                                attName = attName.replace(':', '_');
                             }
                         }
                     }
@@ -195,7 +195,7 @@ public final class DebugUtil {
                 }
 
                 for (org.jsoup.nodes.Node n : e.childNodes()) {
-                    createDOM(n, _e, doc,ns);
+                    createDOM(n, _e, doc, ns);
                 }
 
             } else if (node instanceof org.jsoup.nodes.TextNode) {
@@ -212,7 +212,7 @@ public final class DebugUtil {
             if (name != null) {
                 int pos = name.indexOf(':');
                 if (pos > 0) {
-                    return name.substring(0,pos);
+                    return name.substring(0, pos);
                 }
             }
             return null;
@@ -222,11 +222,10 @@ public final class DebugUtil {
             if (name != null) {
                 int pos = name.lastIndexOf(':');
                 if (pos > 0) {
-                    return name.substring(pos+1);
+                    return name.substring(pos + 1);
                 }
             }
             return name;
         }
-
     }
 }

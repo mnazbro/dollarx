@@ -1,16 +1,15 @@
 package com.github.loyada.jdollarxexample;
 
 import com.github.loyada.jdollarx.Operations;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-
-import java.util.List;
 
 public class NoDollarxExampleTest {
     private static final String driverPath = System.getenv().get("CHROMEDRIVERPATH");
@@ -28,17 +27,18 @@ public class NoDollarxExampleTest {
 
     @Test
     public void googleForAmazonAndVerifyFirstResult() throws Operations.OperationFailedException {
-        //Given
+        // Given
         WebElement google = driver.findElement(By.xpath("//*[(@id='searchform' and descendant::form)]//input"));
 
-        //When
+        // When
         Actions actionBuilder = new Actions(driver);
         actionBuilder.sendKeys(google, "amazon").build().perform();
 
-        //Then
+        // Then
         List<WebElement> resultsLinks = driver.findElements(By.xpath("//div[@id='search']//a"));
         WebElement firstSearchResult = resultsLinks.get(0);
-        firstSearchResult.findElement(By.xpath("//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') ='amazon']"));
+        firstSearchResult.findElement(By.xpath(
+                "//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') ='amazon']"));
     }
 
     @AfterClass

@@ -1,15 +1,13 @@
 package com.github.loyada.dollarx;
 
-import com.github.loyada.jdollarx.Path;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-
 import static com.github.loyada.jdollarx.BasicPath.*;
 import static com.github.loyada.jdollarx.ElementProperties.*;
 
+import com.github.loyada.jdollarx.Path;
+
 public class FlexibleGrammar {
 
-    public static void main(String[] argc){
+    public static void main(String[] argc) {
         Path contactsTable = div.withClasses("ag-table", "contacts");
         Path row = div.withClass("ag-row");
 
@@ -40,5 +38,4 @@ public class FlexibleGrammar {
         row = condition.inside(dialog);
         System.out.println(row);
     }
-
 }

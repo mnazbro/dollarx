@@ -1,26 +1,5 @@
 package com.github.loyada.jdollarx.aggrid;
 
-import com.github.loyada.jdollarx.DriverSetup;
-import com.github.loyada.jdollarx.Operations;
-import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.AgGrid;
-import com.github.loyada.jdollarx.singlebrowser.AgGridHighLevelOperations;
-import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
-import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
-import com.github.loyada.jdollarx.singlebrowser.custommatchers.AgGridMatchers;
-import com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers;
-import org.hamcrest.Matchers;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import static com.github.loyada.jdollarx.BasicPath.button;
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.ElementProperties.hasAggregatedTextEqualTo;
@@ -36,6 +15,26 @@ import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.findAll
 import static com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers.isPresent;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.github.loyada.jdollarx.DriverSetup;
+import com.github.loyada.jdollarx.Operations;
+import com.github.loyada.jdollarx.Path;
+import com.github.loyada.jdollarx.singlebrowser.AgGrid;
+import com.github.loyada.jdollarx.singlebrowser.AgGridHighLevelOperations;
+import com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton;
+import com.github.loyada.jdollarx.singlebrowser.TemporaryChangedTimeout;
+import com.github.loyada.jdollarx.singlebrowser.custommatchers.AgGridMatchers;
+import com.github.loyada.jdollarx.singlebrowser.custommatchers.CustomMatchers;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import org.hamcrest.Matchers;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 public class GridMenuOperationsIntegrationX {
     private AgGrid grid;
     private List<Map.Entry<String, String>> row1, row2;
@@ -46,34 +45,32 @@ public class GridMenuOperationsIntegrationX {
         driver.get("https://www.ag-grid.com/example.php");
     }
 
-
     @Before
     public void refresh() {
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        find( div.withClass("ag-body-viewport"));
-        InBrowserSinglton.setImplicitTimeout(20,  TimeUnit.MILLISECONDS);
+        find(div.withClass("ag-body-viewport"));
+        InBrowserSinglton.setImplicitTimeout(20, TimeUnit.MILLISECONDS);
         row1 = Arrays.asList(
                 new SimpleEntry<>("{name}", "tony smith"),
                 new SimpleEntry<>("language", "english"),
-                new SimpleEntry<>("jan","$38,031"),
-                new SimpleEntry<>("dec","$86,416")
-        );
+                new SimpleEntry<>("jan", "$38,031"),
+                new SimpleEntry<>("dec", "$86,416"));
         row2 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Andrew Connell"),
                 new SimpleEntry<>("language", "swedish"),
-                new SimpleEntry<>("jan","$17,697"),
-                new SimpleEntry<>("dec","$83,386")
-        );        grid = AgGrid.getBuilder()
+                new SimpleEntry<>("jan", "$17,697"),
+                new SimpleEntry<>("dec", "$83,386"));
+        grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("dec", "jan", "language", "{name}"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
                 .containedIn(div.that(hasId("myGrid")))
                 .build();
 
-        try(TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
-                clickOn(button.withText("accept all cookies"));
+        try (TemporaryChangedTimeout timeout = new TemporaryChangedTimeout(10, TimeUnit.SECONDS)) {
+            clickOn(button.withText("accept all cookies"));
         } catch (Exception ex) {
-                // no such button
+            // no such button
         }
     }
 
@@ -87,7 +84,7 @@ public class GridMenuOperationsIntegrationX {
     public void showSpecificColumnsUsingMenuOfFirstColumn() {
         grid.showSpecificColumnsUsingMenuOfColumn(List.of("dec", "language"));
         Path header = HEADER_CELL.withClass("ag-header-cell-sortable");
-        assertThat( header, isPresent(2).times());
+        assertThat(header, isPresent(2).times());
     }
 
     @Test
@@ -116,13 +113,11 @@ public class GridMenuOperationsIntegrationX {
         row1 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Sophie Dane"),
                 new SimpleEntry<>("language", "Norwegian"),
-                new SimpleEntry<>("jan","$84,878")
-        );
+                new SimpleEntry<>("jan", "$84,878"));
         row2 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Jessica Smith"),
                 new SimpleEntry<>("language", "Portuguese"),
-                new SimpleEntry<>("jan","$66,642")
-        );
+                new SimpleEntry<>("jan", "$66,642"));
         grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("jan", "language", "{name}"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
@@ -137,13 +132,11 @@ public class GridMenuOperationsIntegrationX {
         row1 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Charlotte Cole"),
                 new SimpleEntry<>("language", "French"),
-                new SimpleEntry<>("jan","$51,737")
-        );
+                new SimpleEntry<>("jan", "$51,737"));
         row2 = Arrays.asList(
                 new SimpleEntry<>("{name}", "Isla Bryson"),
                 new SimpleEntry<>("language", "English"),
-                new SimpleEntry<>("jan","$40,820")
-        );
+                new SimpleEntry<>("jan", "$40,820"));
         grid = AgGrid.getBuilder()
                 .withHeaders(Arrays.asList("jan", "language", "{name}"))
                 .withRowsAsStringsInOrder(Arrays.asList(row1, row2))
@@ -165,7 +158,7 @@ public class GridMenuOperationsIntegrationX {
     public void hoverOverCell() throws Operations.OperationFailedException {
         grid.sortBy("Nov", ascending);
         AgGridHighLevelOperations agGridHighLevelOperations = new AgGridHighLevelOperations(div.that(hasId("myGrid")));
-        agGridHighLevelOperations.hoverOverCell(3, "Nov" );
+        agGridHighLevelOperations.hoverOverCell(3, "Nov");
     }
 
     @Test
@@ -190,8 +183,8 @@ public class GridMenuOperationsIntegrationX {
 
         // then
         AgGrid minimalGrid = agGridHighLevelOperations.getMinimalGrid("Bank Balance");
-        minimalGrid.ensureVisibilityOfCellInColumn("Bank Balance",
-                hasAggregatedTextEqualTo("$9,999"));    }
+        minimalGrid.ensureVisibilityOfCellInColumn("Bank Balance", hasAggregatedTextEqualTo("$9,999"));
+    }
 
     @Test
     public void editInputInCellByRowIndexAndColumn() throws Operations.OperationFailedException {
@@ -203,9 +196,8 @@ public class GridMenuOperationsIntegrationX {
 
         // then
         AgGrid minimalGrid = agGridHighLevelOperations.getMinimalGrid("Bank Balance");
-        minimalGrid.ensureVisibilityOfCellInColumn("Bank Balance",
-                hasAggregatedTextEqualTo("$999,999"));    }
-
+        minimalGrid.ensureVisibilityOfCellInColumn("Bank Balance", hasAggregatedTextEqualTo("$999,999"));
+    }
 
     @Test
     public void ensureCellValueIsPresentWorks() {
@@ -216,14 +208,12 @@ public class GridMenuOperationsIntegrationX {
     @Test
     public void containsRowNegativeCase() {
         AgGridHighLevelOperations agGridHighLevelOperations = new AgGridHighLevelOperations(div.that(hasId("myGrid")));
-        Map <String, String> row = Map.of(
+        Map<String, String> row = Map.of(
                 "{name}", "Sophie Foo",
                 "language", "Norwegian",
-                "jan","$84,878"
-        );
+                "jan", "$84,878");
         assertThat(agGridHighLevelOperations, Matchers.not(AgGridMatchers.containsRow(row)));
     }
-
 
     @AfterClass
     public static void tearDown() {

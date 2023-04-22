@@ -1,10 +1,9 @@
 package com.github.loyada.jdollarx.singlebrowser.sizing;
 
-import com.github.loyada.jdollarx.Path;
-
-import java.util.Map;
-
 import static com.github.loyada.jdollarx.singlebrowser.sizing.SizingUtils.*;
+
+import com.github.loyada.jdollarx.Path;
+import java.util.Map;
 
 /**
  * An AutoCloseable of a resizer for a Path element.
@@ -13,7 +12,6 @@ import static com.github.loyada.jdollarx.singlebrowser.sizing.SizingUtils.*;
 public class ElementResizer implements AutoCloseable {
     private Path path;
     private Map<String, String> originalStylingDimensions;
-
 
     /**
      * Resize an element in the browser
@@ -79,7 +77,7 @@ public class ElementResizer implements AutoCloseable {
      */
     @Override
     public void close() {
-        if (originalStylingDimensions!=null) {
+        if (originalStylingDimensions != null) {
             setDimensions(path, originalStylingDimensions.get(WIDTH), originalStylingDimensions.get(HEIGHT));
         }
     }

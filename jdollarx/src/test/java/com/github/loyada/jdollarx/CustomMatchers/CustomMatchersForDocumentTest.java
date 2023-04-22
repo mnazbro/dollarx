@@ -1,20 +1,19 @@
 package com.github.loyada.jdollarx.CustomMatchers;
 
-import com.github.loyada.jdollarx.PathParsers;
-import com.github.loyada.jdollarx.custommatchers.CustomMatchers;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.span;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import com.github.loyada.jdollarx.PathParsers;
+import com.github.loyada.jdollarx.custommatchers.CustomMatchers;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class CustomMatchersForDocumentTest {
 
@@ -31,7 +30,10 @@ public class CustomMatchersForDocumentTest {
             assertThat(div.inside(span), CustomMatchers.isPresentIn(doc));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: document contains div, inside span\n     but: div, inside span is absent")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo(
+                            "\nExpected: document contains div, inside span\n     but: div, inside span is absent")));
         }
     }
 
@@ -48,7 +50,11 @@ public class CustomMatchersForDocumentTest {
             assertThat(span.inside(div), CustomMatchers.isAbsentFrom(doc));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: document does not contain span, inside div\n     but: span, inside div is present")));
+            assertThat(
+                    e.getMessage(),
+                    is(
+                            equalTo(
+                                    "\nExpected: document does not contain span, inside div\n     but: span, inside div is present")));
         }
     }
 
@@ -59,7 +65,9 @@ public class CustomMatchersForDocumentTest {
             assertThat(div, CustomMatchers.isPresent(5).timesIn(doc));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: document contains div 5 times\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: document contains div 5 times\n     but: div appears 2 times")));
         }
     }
 
@@ -76,7 +84,9 @@ public class CustomMatchersForDocumentTest {
             assertThat(div, CustomMatchers.isPresent(5).timesOrMoreIn(doc));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: document contains div at least 5 times\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: document contains div at least 5 times\n     but: div appears 2 times")));
         }
     }
 
@@ -86,7 +96,6 @@ public class CustomMatchersForDocumentTest {
         assertThat(div, CustomMatchers.isPresent(2).timesOrMoreIn(doc));
     }
 
-
     @Test
     public void isPresentNTimesOrLessFailed() throws IOException, SAXException, ParserConfigurationException {
         Document doc = PathParsers.getDocumentFromString("<div><span><div/></span></div>");
@@ -94,7 +103,9 @@ public class CustomMatchersForDocumentTest {
             assertThat(div, CustomMatchers.isPresent(1).timesOrLessIn(doc));
             fail("should fail");
         } catch (AssertionError e) {
-            assertThat(e.getMessage(), is(equalTo("\nExpected: document contains div at most 1 time\n     but: div appears 2 times")));
+            assertThat(
+                    e.getMessage(),
+                    is(equalTo("\nExpected: document contains div at most 1 time\n     but: div appears 2 times")));
         }
     }
 

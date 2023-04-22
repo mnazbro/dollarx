@@ -1,24 +1,5 @@
 package com.github.loyada.jdollarx.visual;
 
-import com.github.loyada.jdollarx.DriverSetup;
-import com.github.loyada.jdollarx.Path;
-import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
-import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.Dimension;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
 import static com.github.loyada.jdollarx.BasicPath.div;
 import static com.github.loyada.jdollarx.BasicPath.header;
 import static com.github.loyada.jdollarx.BasicPath.paragraph;
@@ -27,6 +8,24 @@ import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.driver;
 import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scroll;
 import static com.github.loyada.jdollarx.singlebrowser.InBrowserSinglton.scrollTo;
 import static java.util.Objects.requireNonNull;
+
+import com.github.loyada.jdollarx.DriverSetup;
+import com.github.loyada.jdollarx.Path;
+import com.github.loyada.jdollarx.singlebrowser.SingltonBrowserImage;
+import com.github.loyada.jdollarx.singlebrowser.sizing.ElementResizer;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import javax.imageio.ImageIO;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.Dimension;
 
 public class VisualAssertSimilarityIntegration {
     private static InputStream referenceChartImage;
@@ -46,18 +45,19 @@ public class VisualAssertSimilarityIntegration {
     }
 
     @AfterClass
-    public static void teardown(){
+    public static void teardown() {
         driver.quit();
     }
-
 
     @Before
     public void setup() throws FileNotFoundException {
         ClassLoader classLoader = VisualAssertSimilarityIntegration.class.getClassLoader();
-        referenceChartImage = new FileInputStream(requireNonNull(classLoader.getResource("chart-1-edited.png")).getFile());
-        filterChartImage = new FileInputStream(requireNonNull(classLoader.getResource("filter-for-chart.jpg")).getFile());
+        referenceChartImage = new FileInputStream(
+                requireNonNull(classLoader.getResource("chart-1-edited.png")).getFile());
+        filterChartImage = new FileInputStream(
+                requireNonNull(classLoader.getResource("filter-for-chart.jpg")).getFile());
         load_html_file("paths.html");
-        driver.manage().window().setSize(new Dimension(1920,1400));
+        driver.manage().window().setSize(new Dimension(1920, 1400));
         scroll().to(header.that(hasAggregatedTextContaining("introduction")));
     }
 
@@ -76,9 +76,11 @@ public class VisualAssertSimilarityIntegration {
     @Test
     public void saveErr() throws IOException {
         ClassLoader classLoader = VisualAssertSimilarityIntegration.class.getClassLoader();
-        BufferedImage otherImage = ImageIO.read(new FileInputStream(requireNonNull(classLoader.getResource("chart-ref.png")).getFile()));
-        BufferedImage first =  ImageIO.read(referenceChartImage);
-        BufferedImage errImage = ImageComparator.getFuzzyErrorImage(first, otherImage).get();
+        BufferedImage otherImage = ImageIO.read(new FileInputStream(
+                requireNonNull(classLoader.getResource("chart-ref.png")).getFile()));
+        BufferedImage first = ImageIO.read(referenceChartImage);
+        BufferedImage errImage =
+                ImageComparator.getFuzzyErrorImage(first, otherImage).get();
         ImageIO.write(errImage, "png", new File("chart-error.png"));
     }
 
@@ -92,5 +94,4 @@ public class VisualAssertSimilarityIntegration {
             img.assertImageIsEqualToExpectedWithShiftAndCrop(referenceChartImage, 1);
         }
     }
-
 }

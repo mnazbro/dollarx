@@ -1,16 +1,15 @@
 package com.github.loyada.jdollarx;
 
+import static com.github.loyada.jdollarx.XpathUtils.nOccurances;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.loyada.jdollarx.XpathUtils.nOccurances;
 
 /**
  * Internal implementation.
@@ -36,7 +35,6 @@ public class InBrowserFinder {
         }
     }
 
-
     static WebElement findPageWithout(WebDriver driver, final Path el) {
         if (!el.getXPath().isPresent()) {
             throw new UnsupportedOperationException("findPageWithout requires a path");
@@ -46,7 +44,8 @@ public class InBrowserFinder {
         try {
             if (el.getUnderlyingSource().isPresent()) {
                 final WebElement underlying = el.getUnderlyingSource().get();
-                return underlying.findElement(By.xpath("//" + PathOperators.not(el).getXPath().get()));
+                return underlying.findElement(
+                        By.xpath("//" + PathOperators.not(el).getXPath().get()));
             } else {
                 String processedPath = XpathUtils.doesNotExistInEntirePage(path);
                 return driver.findElement(By.xpath(processedPath));
@@ -87,11 +86,10 @@ public class InBrowserFinder {
                 try {
                     Object res = ((JavascriptExecutor) driver).executeScript(script);
                     return Long.valueOf((long) res).intValue();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    throw e;
                 }
-                catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        throw e;
-                    }
             } else {
                 throw new UnsupportedOperationException();
             }
@@ -121,7 +119,7 @@ public class InBrowserFinder {
                 String pathForAttribute = String.format("%s/@%s", path.get(), attribute);
                 String script = getScriptToExtractAttributes(pathForAttribute);
                 Object res = ((JavascriptExecutor) driver).executeScript(script);
-                return (List<?>)res;
+                return (List<?>) res;
             } else {
                 String value = underlying.getAttribute(attribute);
                 return Collections.singletonList(value);
@@ -132,7 +130,7 @@ public class InBrowserFinder {
                 String pathForAttribute = String.format("%s/@%s", processedPath, attribute);
                 String script = getScriptToExtractAttributes(pathForAttribute);
                 Object res = ((JavascriptExecutor) driver).executeScript(script);
-                return (List<?>)res;
+                return (List<?>) res;
 
             } else {
                 throw new IllegalArgumentException("webel is empty"); // should never happen
@@ -141,28 +139,28 @@ public class InBrowserFinder {
     }
 
     private static String getScriptToExtractAttributes(String pathForAttribute) {
-       return String.format(
-               "values = document.evaluate(\"%s\", document, null, XPathResult.ANY_TYPE, null);" +
-               "const res = [];" +
-               "var latest = values.iterateNext();" +
-               "while (latest) {" +
-                       "     res.push(latest.value);" +
-                       "     latest = values.iterateNext();" +
-               "}" +
-               "return res;", pathForAttribute);
+        return String.format(
+                "values = document.evaluate(\"%s\", document, null, XPathResult.ANY_TYPE, null);" + "const res = [];"
+                        + "var latest = values.iterateNext();"
+                        + "while (latest) {"
+                        + "     res.push(latest.value);"
+                        + "     latest = values.iterateNext();"
+                        + "}"
+                        + "return res;",
+                pathForAttribute);
     }
-
 
     public static WebElement findPageWithNumberOfOccurrences(WebDriver driver, final Path el, int numberOfOccurrences) {
         return findPageWithNumberOfOccurrences(driver, el, numberOfOccurrences, RelationOperator.exactly);
     }
 
-    public static WebElement findPageWithNumberOfOccurrences(WebDriver driver, final Path el, int numberOfOccurrences, RelationOperator relationOperator) {
+    public static WebElement findPageWithNumberOfOccurrences(
+            WebDriver driver, final Path el, int numberOfOccurrences, RelationOperator relationOperator) {
         final Optional<String> path = el.getXPath();
         if (!path.isPresent()) {
             throw new UnsupportedOperationException("findPageWithNumberOfOccurrences requires a path");
         }
-        String pathWithNOccurrences =  nOccurances(path.get(), numberOfOccurrences, relationOperator);
+        String pathWithNOccurrences = nOccurances(path.get(), numberOfOccurrences, relationOperator);
         if (el.getUnderlyingSource().isPresent()) {
             WebElement underlying = el.getUnderlyingSource().get();
             return underlying.findElement(By.xpath("." + pathWithNOccurrences));
@@ -182,11 +180,10 @@ public class InBrowserFinder {
         } else if (path.startsWith("body")) {
             return String.format(("/html/%s"), path);
         } else {
-                final String prefix =  (path.startsWith("/") || path.startsWith("(/")) ? "" :
-                        (path.startsWith("(")) ? "(//" :
-                                "//";
-                final int chopn = (path.startsWith("(") && !path.startsWith("(/")) ? 1 : 0;
-                return prefix + path.substring(chopn);
+            final String prefix =
+                    (path.startsWith("/") || path.startsWith("(/")) ? "" : (path.startsWith("(")) ? "(//" : "//";
+            final int chopn = (path.startsWith("(") && !path.startsWith("(/")) ? 1 : 0;
+            return prefix + path.substring(chopn);
         }
     }
 }

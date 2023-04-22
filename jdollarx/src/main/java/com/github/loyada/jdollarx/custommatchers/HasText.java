@@ -1,18 +1,17 @@
 package com.github.loyada.jdollarx.custommatchers;
 
+import static com.github.loyada.jdollarx.ElementProperties.hasText;
+import static java.lang.String.format;
+
 import com.github.loyada.jdollarx.InBrowser;
 import com.github.loyada.jdollarx.Path;
 import com.github.loyada.jdollarx.PathParsers;
+import javax.xml.xpath.XPathExpressionException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-import javax.xml.xpath.XPathExpressionException;
-
-import static com.github.loyada.jdollarx.ElementProperties.hasText;
-import static java.lang.String.format;
 
 /**
  * Internal implementation.
@@ -20,7 +19,7 @@ import static java.lang.String.format;
 public class HasText {
     private final String text;
 
-    public HasText(String text){
+    public HasText(String text) {
         this.text = text;
     }
 
@@ -38,8 +37,7 @@ public class HasText {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(CustomMatchersUtil.wrap(this.el) + " is absent");
             }
 
@@ -50,7 +48,6 @@ public class HasText {
             }
         };
     }
-
 
     public Matcher<Path> in(final Document document) {
         return new TypeSafeMatcher<Path>() {
@@ -66,8 +63,7 @@ public class HasText {
             }
 
             @Override
-            protected void describeMismatchSafely(final Path el, final
-            Description mismatchDescription) {
+            protected void describeMismatchSafely(final Path el, final Description mismatchDescription) {
                 mismatchDescription.appendText(CustomMatchersUtil.wrap(this.el) + " is absent");
             }
 
